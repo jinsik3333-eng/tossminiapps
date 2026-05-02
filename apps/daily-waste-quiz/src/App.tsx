@@ -264,11 +264,20 @@ function App() {
           <div className="timer-track" aria-label={getCountdownCopy(secondsLeft)}>
             <span style={{ width: `${(secondsLeft / QUESTION_TIME_LIMIT) * 100}%` }} />
           </div>
-          <div className="monster-stage" aria-hidden="true">
+          <div className="defense-stage" aria-hidden="true">
+            <span className="stage-timer">05</span>
+            <span className="wallet-visual"><span>지갑</span></span>
+            <span className="coin-flow" />
+            <span className="coin coin-a">₩</span>
+            <span className="coin coin-b">₩</span>
+            <span className="impact-burst">튕김</span>
+            <span className="trap-monster">
+              <span className="trap-coupon">1+1</span>
+              <span className="monster-mouth" />
+              <span className="monster-label">{today.enemy}</span>
+            </span>
+            <span className="defense-shield">막기</span>
             <span className="hp-label floating-hp">괴물 HP {monsterHp}%</span>
-            <span className="monster">{today.enemy}</span>
-            <span className="slash slash-a" />
-            <span className="slash slash-b" />
           </div>
           <h1>{question.title}</h1>
           <div className="quick-choice-grid">
@@ -339,10 +348,17 @@ function App() {
         <p className="eyebrow">{completedToday ? "오늘 이미 잡음" : getTodayMissionLabel(today.enemy)}</p>
         <h1>{today.enemy}<br />5초 방어</h1>
         <p>{today.hook}</p>
-        <div className="monster-stage home-stage" aria-hidden="true">
-          <span className="monster big">{today.enemy}</span>
-          <span className="slash slash-a" />
-          <span className="slash slash-b" />
+        <div className="defense-stage home-stage" aria-hidden="true">
+          <span className="stage-timer">05</span>
+          <span className="wallet-visual"><span>지갑</span></span>
+          <span className="coin coin-a">₩</span>
+          <span className="coin coin-b">₩</span>
+          <span className="trap-monster big">
+            <span className="trap-coupon">1+1</span>
+            <span className="monster-mouth" />
+            <span className="monster-label">{today.enemy}</span>
+          </span>
+          <span className="defense-shield">막기</span>
         </div>
         <Button onClick={startQuiz}>{completedToday ? "오늘 기록 다시 깨기" : "5초 카운트다운 시작"}</Button>
       </section>
