@@ -1,6 +1,7 @@
 import { Button, Top, useToast } from "@toss/tds-mobile";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
+import { TossBannerAd } from "./components/TossBannerAd";
 import {
   DAILY_BOARD_DAYS,
   QUESTION_TIME_LIMIT,
@@ -35,7 +36,10 @@ type DaySet = {
   questions: Question[];
 };
 
-const AD_GROUP_ID = "ait-ad-test-rewarded-id";
+const REWARDED_AD_GROUP_ID =
+  import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "ait-ad-test-rewarded-id";
+const BANNER_AD_GROUP_ID =
+  import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "ait-ad-test-banner-id";
 const STAMP_KEY = "daily-waste-quiz-stamps-v2";
 
 const daySets: DaySet[] = [
@@ -1385,12 +1389,14 @@ function App() {
   const [answers, setAnswers] = useState<Choice[]>([]);
   const [stamps, setStamps] = useState<string[]>(() => readStamps());
   const [bonusOpen, setBonusOpen] = useState(false);
-  const [pendingBonus, setPendingBonus] = useState(false);
+  const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(
+    null,
+  );
   const [lastReply, setLastReply] = useState<string | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(QUESTION_TIME_LIMIT);
   const [isLocked, setIsLocked] = useState(false);
   const toast = useToast();
-  const ads = useInAppAds(AD_GROUP_ID);
+  const ads = useInAppAds(REWARDED_AD_GROUP_ID);
   const today = useMemo(() => daySets[getTodayIndex()], []);
   const tomorrow = useMemo(
     () => daySets[(getTodayIndex() + 1) % daySets.length],
@@ -1405,17 +1411,18 @@ function App() {
   const boardSlots = getMonthlyBoardSlots(stamps);
 
   useEffect(() => {
-    if (pendingBonus && ads.lastReward) {
+    if (pendingRewardCount !== null && ads.rewardCount > pendingRewardCount) {
       setBonusOpen(true);
-      setPendingBonus(false);
+      setPendingRewardCount(null);
       toast.openToast("저장용 혜택 루틴 열림");
     }
-  }, [ads.lastReward, pendingBonus, toast]);
+  }, [ads.rewardCount, pendingRewardCount, toast]);
 
   const startQuiz = () => {
     setStep(0);
     setAnswers([]);
     setBonusOpen(false);
+    setPendingRewardCount(null);
     setLastReply(null);
     setSecondsLeft(QUESTION_TIME_LIMIT);
     setIsLocked(false);
@@ -1476,10 +1483,11 @@ function App() {
 
   const openBonus = () => {
     if (ads.isSupported && ads.isAdLoaded) {
-      setPendingBonus(true);
+      setPendingRewardCount(ads.rewardCount);
       ads.showAd();
       return;
     }
+    setPendingRewardCount(null);
     setBonusOpen(true);
     toast.openToast("테스트 환경이라 바로 열었어요");
   };
@@ -1556,6 +1564,11 @@ function App() {
           </div>
           {lastReply ? <div className="hit-toast">{lastReply}</div> : null}
         </section>
+        <TossBannerAd
+          adGroupId={BANNER_AD_GROUP_ID}
+          className="quiz-bottom-ad"
+          label="5초 방어전 하단 광고"
+        />
       </main>
     );
   }
@@ -1609,6 +1622,11 @@ function App() {
             ))}
           </div>
         </section>
+        <TossBannerAd
+          adGroupId={BANNER_AD_GROUP_ID}
+          className="result-inline-ad"
+          label="결과 하단 광고"
+        />
         <section className="tip-card reward-card benefit-ticket">
           <div className="ticket-head">
             <span className="ticket-icon" aria-hidden="true">
@@ -1688,6 +1706,11 @@ function App() {
           {completedToday ? "오늘 기록 다시 깨기" : "5초 카운트다운 시작"}
         </Button>
       </section>
+      <TossBannerAd
+        adGroupId={BANNER_AD_GROUP_ID}
+        className="home-inline-ad"
+        label="홈 하단 광고"
+      />
       <section className="daily-panel compact-panel reward-preview benefit-preview">
         <div className="benefit-row">
           <span className="benefit-icon" aria-hidden="true">

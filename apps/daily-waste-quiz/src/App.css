@@ -910,6 +910,56 @@ button {
   gap: 10px;
 }
 
+.ad-banner-shell {
+  position: relative;
+  flex: 0 0 auto;
+  width: calc(100% + 40px);
+  min-height: 96px;
+  margin: 0 -20px;
+  overflow: hidden;
+  border-top: 1px solid rgba(139, 149, 161, 0.14);
+  border-bottom: 1px solid rgba(139, 149, 161, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.ad-banner-slot {
+  width: 100%;
+  min-height: 96px;
+}
+
+.ad-banner-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f6fb 100%);
+  color: #8b95a1;
+  text-align: center;
+}
+
+.ad-banner-fallback span {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.ad-banner-fallback strong {
+  color: #4e5968;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.quiz-bottom-ad {
+  margin-top: auto;
+  margin-bottom: calc(-40px - env(safe-area-inset-bottom));
+}
+
+.home-inline-ad,
+.result-inline-ad {
+  border-radius: 0;
+}
+
 @media (min-width: 481px) {
   #root {
     background-color: #ffffff !important;
