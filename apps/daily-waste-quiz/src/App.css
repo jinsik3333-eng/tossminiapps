@@ -88,12 +88,12 @@ button {
 
 .defense-stage {
   position: relative;
-  height: 150px;
+  height: 156px;
   margin: 16px 0;
   border-radius: 28px;
   background:
-    radial-gradient(circle at 18% 72%, rgba(255, 214, 107, 0.42), transparent 20%),
-    radial-gradient(circle at 76% 18%, rgba(49, 130, 246, 0.2), transparent 24%),
+    radial-gradient(circle at 18% 72%, rgba(255, 214, 107, 0.32), transparent 20%),
+    radial-gradient(circle at 76% 18%, rgba(49, 130, 246, 0.18), transparent 24%),
     linear-gradient(135deg, #eaf4ff 0%, #eefbf4 100%);
   overflow: hidden;
 }
@@ -106,7 +106,7 @@ button {
   position: absolute;
   left: 14px;
   top: 14px;
-  z-index: 3;
+  z-index: 6;
   display: grid;
   place-items: center;
   width: 46px;
@@ -127,62 +127,155 @@ button {
   font-weight: 950;
 }
 
-.wallet-visual {
+.source-visual {
   position: absolute;
-  left: 24px;
-  bottom: 24px;
-  width: 86px;
-  height: 58px;
+  left: 22px;
+  bottom: 22px;
+  z-index: 2;
+  width: 84px;
+  height: 56px;
   border-radius: 18px;
   background: linear-gradient(145deg, #2b3440, #596579);
   box-shadow: 0 16px 28px rgba(25, 31, 40, 0.18);
 }
 
-.wallet-visual::before {
+.source-visual::before,
+.source-visual::after {
   content: "";
   position: absolute;
+}
+
+.source-visual::before {
   left: 18px;
   right: 18px;
   top: -14px;
   height: 24px;
+  border: 2px solid #d6e4f5;
   border-radius: 16px 16px 6px 6px;
   background: #fff;
-  border: 2px solid #d6e4f5;
 }
 
-.wallet-visual span {
-  position: absolute;
-  left: 16px;
+.source-visual::after {
+  left: 14px;
+  right: 14px;
+  bottom: 15px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.visual-delivery .source-visual {
+  border-radius: 18px 18px 26px 26px;
+  background: linear-gradient(145deg, #ff8a3d, #ffb85c);
+}
+
+.visual-delivery .source-visual::before {
+  left: 15px;
+  right: auto;
+  top: -18px;
+  width: 50px;
+  height: 36px;
+  border-color: #ffd8a8;
+  border-radius: 18px 18px 12px 12px;
+  background: #fff7e6;
+  transform: rotate(-7deg);
+}
+
+.visual-delivery .source-visual::after {
+  left: 20px;
+  right: 20px;
   bottom: 12px;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 900;
+  height: 10px;
+  background: radial-gradient(circle, #fff 0 3px, transparent 3.5px) left center / 14px 10px repeat-x;
+}
+
+.visual-delivery .trap-monster {
+  background: linear-gradient(145deg, #7a3414, #c2410c);
+}
+
+.visual-delivery .trap-coupon {
+  background: #fff4e6;
+  color: #f76707;
+}
+
+.visual-subscription .source-visual {
+  border-radius: 18px;
+  background: linear-gradient(145deg, #243b6b, #5c7cfa);
+}
+
+.visual-subscription .source-visual::before {
+  left: 13px;
+  right: 13px;
+  top: 13px;
+  height: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.visual-subscription .source-visual::after {
+  left: 18px;
+  right: auto;
+  bottom: 13px;
+  width: 42px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 18px 0 0 rgba(255, 255, 255, 0.18);
+}
+
+.visual-subscription .trap-monster {
+  border-radius: 46% 46% 32px 32px;
+  background: linear-gradient(145deg, #495057, #868e96);
+}
+
+.visual-subscription .trap-coupon {
+  background: #edf2ff;
+  color: #4263eb;
+}
+
+.visual-subscription .monster-mouth {
+  background: #364fc7;
+}
+
+.visual-convenience .source-visual {
+  background: linear-gradient(145deg, #2b3440, #596579);
+}
+
+.visual-convenience .source-visual::after {
+  left: 58px;
+  right: auto;
+  top: 18px;
+  bottom: auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffd43b;
 }
 
 .coin-flow {
   position: absolute;
-  left: 102px;
-  top: 74px;
+  left: 104px;
+  top: 82px;
   z-index: 1;
-  width: 128px;
-  height: 34px;
-  border-top: 4px dotted rgba(255, 193, 7, 0.78);
-  transform: rotate(-18deg);
+  width: 118px;
+  height: 30px;
+  border-top: 4px dotted rgba(255, 193, 7, 0.66);
+  transform: rotate(-14deg);
 }
 
 .impact-burst {
   position: absolute;
-  left: calc(46% + 16px);
-  top: 42%;
+  left: calc(48% + 10px);
+  top: 45%;
   z-index: 5;
-  padding: 5px 7px;
-  border-radius: 999px;
-  background: #fff;
-  color: #3182f6;
-  font-size: 11px;
-  font-weight: 950;
-  transform: rotate(-9deg);
-  box-shadow: 0 10px 18px rgba(49, 130, 246, 0.16);
+  width: 26px;
+  height: 26px;
+  transform: rotate(18deg);
+  background:
+    linear-gradient(90deg, transparent 42%, #3182f6 42% 58%, transparent 58%),
+    linear-gradient(0deg, transparent 42%, #3182f6 42% 58%, transparent 58%);
+  opacity: 0.72;
 }
 
 .coin {
@@ -201,23 +294,23 @@ button {
 }
 
 .coin-a {
-  left: 112px;
-  top: 78px;
+  left: 116px;
+  top: 84px;
 }
 
 .coin-b {
-  left: 136px;
-  top: 52px;
+  left: 142px;
+  top: 62px;
   transform: scale(0.86);
 }
 
 .trap-monster {
   position: absolute;
-  right: 26px;
+  right: 20px;
   top: 46%;
   display: grid;
   place-items: center;
-  width: 118px;
+  width: 112px;
   height: 82px;
   transform: translateY(-50%) rotate(-3deg);
   border-radius: 30px 30px 24px 24px;
@@ -226,8 +319,8 @@ button {
   box-shadow: 0 18px 34px rgba(25, 31, 40, 0.2);
 }
 
-.trap-monster.big {
-  width: 132px;
+.trap-monster.is-big {
+  width: 126px;
   height: 92px;
 }
 
@@ -247,14 +340,14 @@ button {
 
 .trap-coupon {
   position: absolute;
-  left: -16px;
-  top: -16px;
+  left: -8px;
+  top: -12px;
   z-index: 2;
-  padding: 7px 10px;
+  padding: 6px 9px;
   border-radius: 12px;
   background: #fff0f0;
   color: #e03131;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 950;
   transform: rotate(-10deg);
   box-shadow: 0 10px 18px rgba(224, 49, 49, 0.16);
@@ -278,7 +371,7 @@ button {
   bottom: 10px;
   overflow: hidden;
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 950;
   text-align: center;
   text-overflow: ellipsis;
@@ -287,20 +380,17 @@ button {
 
 .defense-shield {
   position: absolute;
-  left: 46%;
+  left: 48%;
   top: 50%;
   z-index: 4;
   display: grid;
   place-items: center;
-  width: 62px;
-  height: 72px;
+  width: 58px;
+  height: 68px;
   clip-path: polygon(50% 0%, 92% 16%, 84% 72%, 50% 100%, 16% 72%, 8% 16%);
   transform: translate(-50%, -50%);
   border-radius: 24px 24px 28px 28px;
   background: linear-gradient(145deg, #3182f6, #00c773);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 950;
   box-shadow: 0 18px 28px rgba(49, 130, 246, 0.25);
 }
 
@@ -310,6 +400,18 @@ button {
   inset: 9px;
   border: 2px solid rgba(255, 255, 255, 0.54);
   clip-path: polygon(50% 0%, 92% 16%, 84% 72%, 50% 100%, 16% 72%, 8% 16%);
+}
+
+.defense-shield::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  width: 4px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  transform: translateX(-50%);
 }
 
 .monster-stage {
@@ -323,7 +425,7 @@ button {
   overflow: hidden;
 }
 
-.home-stage {
+.monster-stage.home-stage {
   height: 152px;
 }
 
@@ -468,12 +570,13 @@ button {
 
 .floating-hp {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 2;
-  padding: 7px 10px;
+  top: 8px;
+  right: 16px;
+  z-index: 6;
+  padding: 6px 9px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
 }
 
 @keyframes pulseTimer {

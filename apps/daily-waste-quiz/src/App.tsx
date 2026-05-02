@@ -15,7 +15,12 @@ import { InAppAdsPage } from "./pages/InAppAdsPage";
 type Screen = "home" | "quiz" | "result" | "iaa";
 type Choice = { label: string; value: number; reply: string };
 type Question = { leak: string; title: string; choices: Choice[] };
-type DaySet = { theme: string; enemy: string; hook: string; questions: Question[] };
+type VisualType = "delivery" | "subscription" | "convenience";
+type BattleVisual = {
+  type: VisualType;
+  trapBadge: string;
+};
+type DaySet = { theme: string; enemy: string; hook: string; visual: BattleVisual; questions: Question[] };
 
 const AD_GROUP_ID = "ait-ad-test-rewarded-id";
 const STAMP_KEY = "daily-waste-quiz-stamps-v2";
@@ -25,6 +30,10 @@ const daySets: DaySet[] = [
     theme: "배달비 습격",
     enemy: "배달비 괴물",
     hook: "오늘 카드값을 괴롭히는 배달비 괴물 잡기",
+    visual: {
+      type: "delivery",
+      trapBadge: "배달비",
+    },
     questions: [
       {
         leak: "퇴근 직후",
@@ -56,6 +65,10 @@ const daySets: DaySet[] = [
     theme: "구독료 잠복",
     enemy: "구독료 유령",
     hook: "안 보는 구독 하나만 찾아도 오늘은 성공",
+    visual: {
+      type: "subscription",
+      trapBadge: "월정액",
+    },
     questions: [
       {
         leak: "자동결제",
@@ -87,6 +100,10 @@ const daySets: DaySet[] = [
     theme: "편의점 함정",
     enemy: "1+1 함정",
     hook: "작은 결제 3번이면 점심값 하나가 사라져요",
+    visual: {
+      type: "convenience",
+      trapBadge: "1+1",
+    },
     questions: [
       {
         leak: "입구 컷",
@@ -133,6 +150,26 @@ function readStamps(): string[] {
   } catch {
     return [];
   }
+}
+
+function BattleScene({ daySet, hp, compact = false }: { daySet: DaySet; hp?: number; compact?: boolean }) {
+  const visual = daySet.visual;
+  return (
+    <div className={`defense-stage ${compact ? "home-stage" : ""} visual-${visual.type}`} aria-hidden="true">
+      <span className="stage-timer">05</span>
+      <span className="source-visual" />
+      <span className="coin-flow" />
+      <span className="coin coin-a">₩</span>
+      <span className="coin coin-b">₩</span>
+      <span className="impact-burst" />
+      <span className={`trap-monster ${compact ? "is-big" : ""}`}>
+        <span className="trap-coupon">{visual.trapBadge}</span>
+        <span className="monster-mouth" />
+      </span>
+      <span className="defense-shield" />
+      {typeof hp === "number" ? <span className="hp-label floating-hp">괴물 HP {hp}%</span> : null}
+    </div>
+  );
 }
 
 function App() {
@@ -264,21 +301,7 @@ function App() {
           <div className="timer-track" aria-label={getCountdownCopy(secondsLeft)}>
             <span style={{ width: `${(secondsLeft / QUESTION_TIME_LIMIT) * 100}%` }} />
           </div>
-          <div className="defense-stage" aria-hidden="true">
-            <span className="stage-timer">05</span>
-            <span className="wallet-visual"><span>지갑</span></span>
-            <span className="coin-flow" />
-            <span className="coin coin-a">₩</span>
-            <span className="coin coin-b">₩</span>
-            <span className="impact-burst">튕김</span>
-            <span className="trap-monster">
-              <span className="trap-coupon">1+1</span>
-              <span className="monster-mouth" />
-              <span className="monster-label">{today.enemy}</span>
-            </span>
-            <span className="defense-shield">막기</span>
-            <span className="hp-label floating-hp">괴물 HP {monsterHp}%</span>
-          </div>
+          <BattleScene daySet={today} hp={monsterHp} />
           <h1>{question.title}</h1>
           <div className="quick-choice-grid">
             {question.choices.map((choice) => (
@@ -348,18 +371,7 @@ function App() {
         <p className="eyebrow">{completedToday ? "오늘 이미 잡음" : getTodayMissionLabel(today.enemy)}</p>
         <h1>{today.enemy}<br />5초 방어</h1>
         <p>{today.hook}</p>
-        <div className="defense-stage home-stage" aria-hidden="true">
-          <span className="stage-timer">05</span>
-          <span className="wallet-visual"><span>지갑</span></span>
-          <span className="coin coin-a">₩</span>
-          <span className="coin coin-b">₩</span>
-          <span className="trap-monster big">
-            <span className="trap-coupon">1+1</span>
-            <span className="monster-mouth" />
-            <span className="monster-label">{today.enemy}</span>
-          </span>
-          <span className="defense-shield">막기</span>
-        </div>
+        <BattleScene compact daySet={today} />
         <Button onClick={startQuiz}>{completedToday ? "오늘 기록 다시 깨기" : "5초 카운트다운 시작"}</Button>
       </section>
       <section className="daily-panel compact-panel">
