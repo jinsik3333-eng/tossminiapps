@@ -550,24 +550,44 @@ function App() {
 
   return (
     <main className="app-shell intro-shell">
-      <section className="page-title intro-title">
-        <h1>내 월급, 어디서 새고 있을까?</h1>
-        <p>8문항만 답하면 내 소비 구멍이랑 오늘 막을 방법을 바로 알려줄게.</p>
+      <section className="intro-hero" aria-label="돈 새는 구멍 테스트 소개">
+        <div className="intro-hero__copy">
+          <p className="intro-kicker">요즘 카드값 보고 뜨끔했다면</p>
+          <h1>월급이 새는 구멍, 60초 만에 찾아봐</h1>
+          <p>배달비, 구독료, 편의점, 택시비 중 어디서 제일 새는지 바로 보여줄게.</p>
+        </div>
+        <div className="intro-leak-visual" aria-hidden="true">
+          <span className="intro-wallet">월급</span>
+          <span className="intro-straw" />
+          <span className="intro-hole">돈구멍</span>
+          <span className="intro-coin intro-coin--one" />
+          <span className="intro-coin intro-coin--two" />
+        </div>
+        <button className="hero-start-button" type="button" onClick={startQuiz}>
+          내 돈구멍 60초 진단하기
+        </button>
+        <p className="intro-microcopy">가입 없음 · 8문항 · 결과 카드 바로 공유</p>
       </section>
 
       <section className="intro-card">
         <p className="routine-name">오늘의 머니루틴</p>
-        <h1>돈 새는 구멍 테스트</h1>
+        <h2>테스트 끝나면 바로 받는 것</h2>
         <ul>
-          <li>8문항으로 1분 안에 끝나요</li>
-          <li>“나는 ○○형!” 결과 카드가 나와요</li>
-          <li>친구에게 공유하기 좋은 문구를 같이 만들어요</li>
+          <li>내 돈을 새게 하는 대표 소비 유형</li>
+          <li>친구에게 보내기 좋은 “나는 ○○형” 결과 카드</li>
+          <li>마지막에 눌러서 받는 오늘의 절약 배지</li>
         </ul>
+      </section>
+
+      <section className="intro-teaser" aria-label="결과 유형 예시">
+        <span>배달 누수형</span>
+        <span>구독 방치형</span>
+        <span>편의점 새는형</span>
       </section>
 
       <section className="action-stack">
         <Button color="dark" onClick={startQuiz}>
-          테스트 시작하기
+          내 돈구멍 60초 진단하기
         </Button>
         {SHOW_DEV_TOOLS && (
           <TextButton size="small" onClick={() => setStep("ads")}>
