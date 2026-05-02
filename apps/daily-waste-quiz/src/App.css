@@ -21,7 +21,7 @@ button {
 
 .app-shell {
   min-height: 100vh;
-  padding: 0 20px 32px;
+  padding: 0 20px calc(40px + env(safe-area-inset-bottom));
   background:
     radial-gradient(circle at 80% 8%, rgba(49, 130, 246, 0.16), transparent 30%),
     linear-gradient(180deg, #f8fbff 0%, #eef5ff 52%, #f7f8fa 100%);
@@ -53,6 +53,10 @@ button {
   padding: 24px 22px 20px;
 }
 
+.hero-card button {
+  width: 100%;
+}
+
 .compact-hero h1 {
   font-size: 38px;
 }
@@ -75,6 +79,8 @@ button {
 
 .hero-card p:not(.eyebrow),
 .result-copy,
+.tomorrow-copy,
+.next-monster,
 .tip-card p {
   color: #4e5968;
   line-height: 1.45;
@@ -177,7 +183,8 @@ button {
 }
 
 .section-title span,
-.hp-label {
+.hp-label,
+.timer-chip {
   color: #6b7684;
   font-size: 13px;
   font-weight: 800;
@@ -204,6 +211,50 @@ button {
   color: #2563eb;
 }
 
+.timer-chip {
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #fff4e6;
+  color: #f76707;
+}
+
+.timer-chip.is-danger {
+  background: #fff0f0;
+  color: #e03131;
+  animation: pulseTimer 0.8s ease-in-out infinite;
+}
+
+.timer-track {
+  height: 9px;
+  margin: -2px 2px 12px;
+  border-radius: 999px;
+  background: #edf2f7;
+  overflow: hidden;
+}
+
+.timer-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3182f6, #f76707);
+  transition: width 0.24s ease;
+}
+
+.floating-hp {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+@keyframes pulseTimer {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
 .stamp-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -219,6 +270,17 @@ button {
   color: #8b95a1;
   font-size: 11px;
   font-weight: 900;
+}
+
+.monthly-grid {
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+}
+
+.monthly-grid .stamp {
+  min-height: 30px;
+  border-radius: 11px;
+  font-size: 11px;
 }
 
 .stamp.is-filled {
@@ -255,6 +317,12 @@ button {
   letter-spacing: -0.03em;
   box-shadow: 0 14px 28px rgba(49, 130, 246, 0.22);
   cursor: pointer;
+}
+
+.quick-choice:disabled {
+  cursor: default;
+  opacity: 0.68;
+  transform: scale(0.98);
 }
 
 .quick-choice:nth-child(2) {
@@ -299,6 +367,17 @@ button {
 .score-ring span {
   margin-top: -28px;
   color: #6b7684;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.tomorrow-copy,
+.next-monster {
+  margin: 10px 0 0;
+  padding: 12px;
+  border-radius: 16px;
+  background: #f2f7ff;
+  color: #2563eb;
   font-size: 14px;
   font-weight: 900;
 }
