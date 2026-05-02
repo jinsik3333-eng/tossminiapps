@@ -33,6 +33,8 @@ interface ResultProfile {
   leakPattern: string;
   prescription: string;
   detail: string;
+  shareLine: string;
+  visualLabel: string;
 }
 
 const DETAIL_AD_GROUP_ID = "ait-ad-test-rewarded-id";
@@ -124,54 +126,65 @@ const questions: Question[] = [
 const resultProfiles: Record<LeakType, ResultProfile> = {
   delivery: {
     title: "배달 누수형",
-    badge: "월급이 배달 봉투에 조금씩 담겨 나가요",
-    summary: "쿠폰을 잘 쓰는 것 같지만, 주문 빈도와 배달비가 같이 커지는 타입이에요.",
-    leakPattern: "무료배송 기준, 최소 주문 금액, 사이드 메뉴 추가가 대표 누수 패턴이에요.",
-    prescription: "오늘은 배달앱을 열기 전 냉장고 사진을 먼저 찍어보세요.",
-    detail: "이번 주 배달 가능 횟수를 2회처럼 숫자로 정해두면 매번 참는 결심보다 훨씬 덜 피곤해요. 남은 횟수를 메모장 첫 줄에 적어두는 것만으로도 주문 전 멈춤이 생깁니다.",
+    badge: "나는 배달 누수형!",
+    summary: "쿠폰은 잘 챙기는데, 배달앱을 여는 횟수가 월급 구멍을 키우는 타입이야.",
+    leakPattern: "무료배송 기준 맞추기, 사이드 추가, 최소 주문 금액 채우기가 자주 반복돼.",
+    prescription: "오늘은 배달앱 열기 전에 냉장고 사진부터 한 장 찍어보자.",
+    detail: "이번 주 배달 가능 횟수를 2회처럼 숫자로 딱 정해두면 좋아. 남은 횟수를 메모장 첫 줄에 적어두면 주문 전 한 번 멈추게 돼.",
+    shareLine: "쿠폰왕인 줄 알았는데 배달비가 내 월급을 데려가고 있었음",
+    visualLabel: "배달 봉투",
   },
   subscription: {
     title: "구독 방치형",
-    badge: "작은 자동결제가 조용히 월급을 갉아먹어요",
-    summary: "한 달에 몇 번 쓰는지 모르는 서비스가 카드 내역에서 계속 살아있는 타입이에요.",
-    leakPattern: "무료 체험 종료, 중복 콘텐츠 서비스, 가끔 쓰는 생산성 앱이 대표 누수 패턴이에요.",
-    prescription: "오늘 결제 문자에서 '정기'와 '구독'을 검색해 1개만 해지해보세요.",
-    detail: "구독은 의지보다 날짜 관리가 중요해요. 다음 결제일 하루 전 알림을 걸고, 그날 10분 안에 계속 쓸지 결정하는 방식이 가장 현실적입니다.",
+    badge: "나는 구독 방치형!",
+    summary: "안 쓰는 서비스가 조용히 살아남아서 매달 월급을 조금씩 데려가는 타입이야.",
+    leakPattern: "무료 체험 종료, 중복 콘텐츠 서비스, 가끔 쓰는 멤버십이 대표 구멍이야.",
+    prescription: "오늘 결제 문자에서 ‘정기’와 ‘구독’을 검색해서 1개만 정리해보자.",
+    detail: "구독은 의지보다 날짜 관리가 중요해. 다음 결제일 하루 전 알림을 걸고, 그날 10분 안에 계속 쓸지 결정하는 방식이 제일 현실적이야.",
+    shareLine: "내 월급에는 조용히 자동결제되는 구독 생태계가 살고 있었음",
+    visualLabel: "구독 카드",
   },
   convenience: {
     title: "편의점 새는형",
-    badge: "작은 결제가 자주 모이면 꽤 큰 구멍이 돼요",
-    summary: "한 번 결제는 가볍지만 하루에도 여러 번 새는 생활 밀착형 소비가 많은 타입이에요.",
-    leakPattern: "커피, 간식, 2+1 상품, 급한 생필품이 대표 누수 패턴이에요.",
-    prescription: "오늘 편의점에 가기 전 살 것 2개만 메모하고 들어가세요.",
-    detail: "편의점 소비는 금지보다 입장 규칙이 효과적이에요. 들어가기 전 품목 수를 정하고, 계산대 앞 추가 상품은 다음 방문으로 미루는 식으로 마찰을 만들면 됩니다.",
+    badge: "나는 편의점 새는형!",
+    summary: "한 번은 가볍지만, 자주 들르면 생각보다 큰 구멍이 되는 생활 밀착형 타입이야.",
+    leakPattern: "커피, 간식, 2+1 상품, 급한 생필품이 자주 쌓여.",
+    prescription: "오늘 편의점에 가기 전 살 것 2개만 정하고 들어가자.",
+    detail: "편의점 소비는 금지보다 입장 규칙이 효과적이야. 들어가기 전 품목 수를 정하고, 계산대 앞 추가 상품은 다음 방문으로 미루는 식으로 마찰을 만들면 돼.",
+    shareLine: "작은 결제라 괜찮다 했는데 편의점이 월급에 빨대를 꽂고 있었음",
+    visualLabel: "스낵 바구니",
   },
   lateNight: {
     title: "야식 합리화형",
-    badge: "하루의 피로가 밤마다 결제 버튼을 눌러요",
-    summary: "밤이 깊을수록 내일의 예산보다 오늘의 보상이 더 크게 느껴지는 타입이에요.",
-    leakPattern: "심야 배달, 편의점 간식, 늦은 시간 과식이 대표 누수 패턴이에요.",
-    prescription: "오늘 밤 먹고 싶어지면 물 한 컵 후 10분만 늦춰보세요.",
-    detail: "야식은 배고픔보다 루틴인 경우가 많아요. 밤 10시 이후 선택지를 '차, 과일, 바로 양치'처럼 미리 정해두면 배달앱을 열 확률이 줄어듭니다.",
+    badge: "나는 야식 합리화형!",
+    summary: "하루가 힘들수록 ‘오늘은 먹어도 돼’가 강해지는 밤 소비 타입이야.",
+    leakPattern: "심야 배달, 편의점 간식, 늦은 시간 과식이 반복돼.",
+    prescription: "오늘 밤 먹고 싶어지면 물 한 컵 마시고 10분만 늦춰보자.",
+    detail: "야식은 배고픔보다 루틴인 경우가 많아. 밤 10시 이후 선택지를 ‘차, 과일, 바로 양치’처럼 미리 정해두면 배달앱을 여는 확률이 줄어들어.",
+    shareLine: "내 월급은 밤 11시에 제일 약해지는 편",
+    visualLabel: "야식 달",
   },
   discount: {
     title: "할인 착각형",
-    badge: "아낀 줄 알았는데 안 사도 될 걸 산 적이 많아요",
-    summary: "할인율을 잘 보는 편이지만, 필요 여부보다 기회비용에 마음이 흔들리는 타입이에요.",
-    leakPattern: "마감 세일, 무료배송 기준, 쿠폰 소멸 알림이 대표 누수 패턴이에요.",
-    prescription: "오늘 장바구니에서 '정가여도 살 것'만 남겨보세요.",
-    detail: "할인은 필요한 물건에 붙을 때만 절약이에요. 결제 전 '이걸 어제도 원했나?'라고 한 번만 물어보면 충동성 구매를 꽤 많이 걸러낼 수 있습니다.",
+    badge: "나는 할인 착각형!",
+    summary: "아낀 줄 알았는데, 사실 안 사도 될 걸 산 적이 많은 타입이야.",
+    leakPattern: "마감 세일, 무료배송 기준, 쿠폰 소멸 알림에 마음이 흔들려.",
+    prescription: "오늘 장바구니에서 ‘정가여도 살 것’만 남겨보자.",
+    detail: "할인은 필요한 물건에 붙을 때만 절약이야. 결제 전 ‘이걸 어제도 원했나?’라고 한 번만 물어보면 충동 구매를 꽤 많이 걸러낼 수 있어.",
+    shareLine: "할인으로 돈 아낀 줄 알았는데 장바구니가 이겼음",
+    visualLabel: "세일 태그",
   },
   taxi: {
     title: "택시 자기합리화형",
-    badge: "시간을 산 줄 알았는데 피곤함이 결제 명분이 됐어요",
-    summary: "택시가 꼭 필요한 날도 있지만, 반복되면 월말에 존재감이 커지는 타입이에요.",
-    leakPattern: "막차 포기, 가까운 거리 이동, 피곤함 보상 택시가 대표 누수 패턴이에요.",
-    prescription: "오늘 택시 호출 전 대중교통 경로를 5분만 확인해보세요.",
-    detail: "택시는 기준을 정하면 죄책감 없이 줄일 수 있어요. 늦은 밤, 짐이 많은 날, 비 오는 날처럼 허용 조건을 3개만 정하고 나머지는 한 번 더 비교해보세요.",
+    badge: "나는 택시 자기합리화형!",
+    summary: "시간을 산 줄 알았는데, 피곤함이 자주 결제 명분이 되는 타입이야.",
+    leakPattern: "막차 포기, 가까운 거리 이동, 피곤함 보상 택시가 대표 구멍이야.",
+    prescription: "오늘 택시 호출 전 대중교통 경로를 5분만 확인해보자.",
+    detail: "택시는 기준을 정하면 죄책감 없이 줄일 수 있어. 늦은 밤, 짐이 많은 날, 비 오는 날처럼 허용 조건을 3개만 정하고 나머지는 한 번 더 비교해보자.",
+    shareLine: "내 월급은 이동할 때마다 조금씩 미터기가 올라가는 타입",
+    visualLabel: "택시 미터기",
   },
 };
-
 const leakTypeOrder: LeakType[] = [
   "delivery",
   "subscription",
@@ -196,12 +209,26 @@ function getResultType(answers: LeakType[]): LeakType {
   );
 }
 
+function ResultVisual({ type, label }: { type: LeakType; label: string }) {
+  return (
+    <div className={`result-visual result-visual--${type}`} aria-label={label}>
+      <span className="visual-orb visual-orb--back" />
+      <span className="visual-card" />
+      <span className="visual-coin visual-coin--one" />
+      <span className="visual-coin visual-coin--two" />
+      <span className="visual-coin visual-coin--three" />
+      <span className="visual-shadow" />
+    </div>
+  );
+}
+
 function App() {
   const [step, setStep] = useState<Step>("intro");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<LeakType[]>([]);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isDetailWaitingReward, setIsDetailWaitingReward] = useState(false);
+  const [patchCount, setPatchCount] = useState(0);
   const detailAd = useInAppAds(DETAIL_AD_GROUP_ID);
   const toast = useToast();
 
@@ -211,12 +238,16 @@ function App() {
     ((currentQuestionIndex + 1) / questions.length) * 100,
   );
   const currentQuestion = questions[currentQuestionIndex];
+  const patchGoal = 5;
+  const patchPercent = Math.round((patchCount / patchGoal) * 100);
+  const isPatchComplete = patchCount >= patchGoal;
 
   const startQuiz = () => {
     setAnswers([]);
     setCurrentQuestionIndex(0);
     setIsDetailOpen(false);
     setIsDetailWaitingReward(false);
+    setPatchCount(0);
     setStep("quiz");
   };
 
@@ -229,6 +260,7 @@ function App() {
       setStep("result");
       setIsDetailOpen(false);
       setIsDetailWaitingReward(false);
+      setPatchCount(0);
       return;
     }
 
@@ -262,8 +294,23 @@ function App() {
     setIsDetailOpen(true);
   };
 
+
+  const patchLeak = () => {
+    setPatchCount((count) => {
+      const nextCount = Math.min(count + 1, patchGoal);
+
+      if (nextCount === patchGoal && count < patchGoal) {
+        toast.openToast("오늘 막을 소비 구멍을 정했어요.");
+      }
+
+      return nextCount;
+    });
+  };
+
   const shareResult = async () => {
-    const text = `나는 ${result.title}! ${result.summary} 돈 새는 구멍 테스트에서 60초 진단해봤어요.`;
+    const text = `${result.badge} ${result.shareLine}
+
+돈 새는 구멍 테스트에서 60초 진단해봤어.`;
 
     try {
       if (navigator.share) {
@@ -336,9 +383,12 @@ function App() {
   if (step === "result") {
     return (
       <main className="app-shell result-shell">
-        <section className="page-title result-title">
+        <section className="share-card" aria-label="공유용 결과 카드">
+          <div className="share-card__topline">돈 새는 구멍 테스트 결과</div>
+          <ResultVisual type={resultType} label={result.visualLabel} />
+          <p className="share-card__badge">{result.badge}</p>
           <h1>{result.title}</h1>
-          <p>{result.badge}</p>
+          <p className="share-card__line">“{result.shareLine}”</p>
         </section>
 
         <section className="result-panel">
@@ -352,6 +402,42 @@ function App() {
             <strong>오늘의 처방</strong>
             <p>{result.prescription}</p>
           </div>
+        </section>
+
+        <section className="patch-card" aria-label="오늘의 소비 구멍 막기">
+          <div className="patch-card__header">
+            <span>오늘 막은 구멍</span>
+            <strong>{patchCount}/{patchGoal}</strong>
+          </div>
+          <div
+            className="patch-progress"
+            role="progressbar"
+            aria-label="소비 구멍 막기 진행률"
+            aria-valuenow={patchPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div style={{ width: `${patchPercent}%` }} />
+          </div>
+          <div className="patch-slots" aria-hidden="true">
+            {Array.from({ length: patchGoal }, (_, index) => (
+              <span
+                className={index < patchCount ? "patch-slot is-filled" : "patch-slot"}
+                key={index}
+              >
+                {index < patchCount ? "💰" : ""}
+              </span>
+            ))}
+          </div>
+          <button
+            className="patch-button"
+            type="button"
+            onClick={patchLeak}
+            disabled={isPatchComplete}
+          >
+            {isPatchComplete ? "오늘의 절약 배지 획득" : "눌러서 소비 구멍 막기"}
+          </button>
+          <p>5번 누르면 오늘 막을 구멍이 채워지고, 상세 처방을 확인할 준비가 끝나요.</p>
         </section>
 
         <section className="action-stack">
@@ -395,17 +481,17 @@ function App() {
   return (
     <main className="app-shell intro-shell">
       <section className="page-title intro-title">
-        <h1>내 월급은 어디서 새고 있을까?</h1>
-        <p>60초 만에 돈 새는 유형을 진단하고 오늘 바로 막을 구멍을 찾아보세요.</p>
+        <h1>내 월급, 어디서 새고 있을까?</h1>
+        <p>8문항만 답하면 내 소비 구멍이랑 오늘 막을 방법을 바로 알려줄게.</p>
       </section>
 
       <section className="intro-card">
         <p className="routine-name">오늘의 머니루틴</p>
         <h1>돈 새는 구멍 테스트</h1>
         <ul>
-          <li>8문항으로 가볍게 진단해요</li>
-          <li>결과 유형 6개 중 하나가 나와요</li>
-          <li>결과 공유와 상세 처방 지점을 확인해요</li>
+          <li>8문항으로 1분 안에 끝나요</li>
+          <li>“나는 ○○형!” 결과 카드가 나와요</li>
+          <li>친구에게 공유하기 좋은 문구를 같이 만들어요</li>
         </ul>
       </section>
 
