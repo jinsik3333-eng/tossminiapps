@@ -268,6 +268,193 @@ button {
   background: #ffd43b;
 }
 
+.visual-transport .source-visual {
+  width: 92px;
+  height: 48px;
+  border-radius: 22px 26px 18px 18px;
+  background: linear-gradient(145deg, #343a40, #74c0fc);
+}
+
+.visual-transport .source-visual::before {
+  left: 16px;
+  right: 18px;
+  top: 8px;
+  height: 15px;
+  border: 0;
+  border-radius: 12px 12px 4px 4px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.visual-transport .source-visual::after {
+  left: 14px;
+  right: auto;
+  bottom: -7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #191f28;
+  box-shadow: 48px 0 0 #191f28;
+}
+
+.visual-transport .trap-monster {
+  background: linear-gradient(145deg, #1c3d5a, #1971c2);
+}
+
+.visual-transport .trap-coupon {
+  background: #e7f5ff;
+  color: #1971c2;
+}
+
+.visual-shopping .source-visual {
+  border-radius: 18px 18px 28px 28px;
+  background: linear-gradient(145deg, #e64980, #f783ac);
+}
+
+.visual-shopping .source-visual::before {
+  left: 22px;
+  right: 22px;
+  top: -16px;
+  height: 28px;
+  border: 3px solid #ffd6e8;
+  border-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  background: transparent;
+}
+
+.visual-shopping .source-visual::after {
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.visual-shopping .trap-monster {
+  background: linear-gradient(145deg, #862e9c, #d6336c);
+}
+
+.visual-shopping .trap-coupon {
+  background: #fff0f6;
+  color: #c2255c;
+}
+
+.visual-food .source-visual {
+  width: 72px;
+  height: 70px;
+  border-radius: 18px 18px 28px 28px;
+  background: linear-gradient(145deg, #f59f00, #ffd43b);
+}
+
+.visual-food .source-visual::before {
+  left: 12px;
+  right: 12px;
+  top: -10px;
+  height: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff4e6;
+}
+
+.visual-food .source-visual::after {
+  left: 44px;
+  right: auto;
+  top: 10px;
+  bottom: auto;
+  width: 22px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  transform: rotate(-12deg);
+}
+
+.visual-food .trap-monster {
+  background: linear-gradient(145deg, #a61e4d, #f06595);
+}
+
+.visual-food .trap-coupon {
+  background: #fff0f6;
+  color: #d6336c;
+}
+
+.visual-social .source-visual {
+  width: 86px;
+  height: 60px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #0ca678, #63e6be);
+}
+
+.visual-social .source-visual::before {
+  left: 14px;
+  top: 12px;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 28px 0 0 rgba(255, 255, 255, 0.82);
+}
+
+.visual-social .source-visual::after {
+  left: 18px;
+  right: 18px;
+  bottom: 10px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.visual-social .trap-monster {
+  background: linear-gradient(145deg, #087f5b, #20c997);
+}
+
+.visual-social .trap-coupon {
+  background: #e6fcf5;
+  color: #087f5b;
+}
+
+.visual-digital .source-visual {
+  width: 78px;
+  height: 66px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #364fc7, #748ffc);
+}
+
+.visual-digital .source-visual::before {
+  left: 14px;
+  right: 14px;
+  top: 12px;
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 15px 0 rgba(255, 255, 255, 0.3);
+}
+
+.visual-digital .source-visual::after {
+  left: 31px;
+  right: auto;
+  bottom: 7px;
+  width: 16px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.visual-digital .trap-monster {
+  border-radius: 46% 46% 32px 32px;
+  background: linear-gradient(145deg, #343a40, #7048e8);
+}
+
+.visual-digital .trap-coupon {
+  background: #edf2ff;
+  color: #5f3dc4;
+}
+
+.visual-digital .monster-mouth {
+  background: #3b0a70;
+}
+
 .coin-flow {
   position: absolute;
   left: 104px;

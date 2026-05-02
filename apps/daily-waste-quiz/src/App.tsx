@@ -16,7 +16,15 @@ import { InAppAdsPage } from "./pages/InAppAdsPage";
 type Screen = "home" | "quiz" | "result" | "iaa";
 type Choice = { label: string; value: number; reply: string };
 type Question = { leak: string; title: string; choices: Choice[] };
-type VisualType = "delivery" | "subscription" | "convenience";
+type VisualType =
+  | "delivery"
+  | "subscription"
+  | "convenience"
+  | "transport"
+  | "shopping"
+  | "food"
+  | "social"
+  | "digital";
 type BattleVisual = {
   type: VisualType;
   trapBadge: string;
@@ -176,7 +184,7 @@ const daySets: DaySet[] = [
     theme: "택시비 급습",
     enemy: "택시비 괴물",
     hook: "늦은 밤 한 번의 호출이 하루 예산을 흔들어요",
-    visual: { type: "delivery", trapBadge: "택시비" },
+    visual: { type: "transport", trapBadge: "택시비" },
     reward: {
       title: "막차 체크 루틴",
       checklist: [
@@ -219,7 +227,7 @@ const daySets: DaySet[] = [
     theme: "카페값 잠복",
     enemy: "카페값 괴물",
     hook: "습관처럼 사는 커피 한 잔을 오늘만 막아봐요",
-    visual: { type: "convenience", trapBadge: "커피" },
+    visual: { type: "food", trapBadge: "커피" },
     reward: {
       title: "카페 패스 루틴",
       checklist: [
@@ -262,7 +270,7 @@ const daySets: DaySet[] = [
     theme: "새벽쇼핑 침투",
     enemy: "새벽쇼핑 괴물",
     hook: "잠들기 전 장바구니가 가장 위험해요",
-    visual: { type: "subscription", trapBadge: "쇼핑" },
+    visual: { type: "shopping", trapBadge: "쇼핑" },
     reward: {
       title: "장바구니 잠금 루틴",
       checklist: [
@@ -305,7 +313,7 @@ const daySets: DaySet[] = [
     theme: "배송비 덫",
     enemy: "배송비 괴물",
     hook: "무료배송 맞추려다 더 쓰는 순간을 막아요",
-    visual: { type: "delivery", trapBadge: "배송비" },
+    visual: { type: "shopping", trapBadge: "배송비" },
     reward: {
       title: "배송비 역전 루틴",
       checklist: [
@@ -348,7 +356,7 @@ const daySets: DaySet[] = [
     theme: "앱결제 잠복",
     enemy: "앱결제 유령",
     hook: "작은 인앱결제가 반복되면 생각보다 커져요",
-    visual: { type: "subscription", trapBadge: "앱결제" },
+    visual: { type: "digital", trapBadge: "앱결제" },
     reward: {
       title: "인앱결제 잠금 루틴",
       checklist: [
@@ -391,7 +399,7 @@ const daySets: DaySet[] = [
     theme: "간식비 습격",
     enemy: "간식비 괴물",
     hook: "작은 간식 결제가 하루 예산을 자주 갉아먹어요",
-    visual: { type: "convenience", trapBadge: "간식" },
+    visual: { type: "food", trapBadge: "간식" },
     reward: {
       title: "간식 예산 루틴",
       checklist: [
@@ -434,7 +442,7 @@ const daySets: DaySet[] = [
     theme: "쿠폰 미끼",
     enemy: "쿠폰 괴물",
     hook: "쿠폰은 절약처럼 보이지만 지출 시작점이 되기도 해요",
-    visual: { type: "delivery", trapBadge: "쿠폰" },
+    visual: { type: "shopping", trapBadge: "쿠폰" },
     reward: {
       title: "쿠폰 역이용 루틴",
       checklist: [
@@ -477,7 +485,7 @@ const daySets: DaySet[] = [
     theme: "세일 알림",
     enemy: "세일 유령",
     hook: "오늘만 세일이라는 말에 예산이 흔들려요",
-    visual: { type: "subscription", trapBadge: "SALE" },
+    visual: { type: "shopping", trapBadge: "SALE" },
     reward: {
       title: "세일 알림 끄기 루틴",
       checklist: [
@@ -520,7 +528,7 @@ const daySets: DaySet[] = [
     theme: "점심 추가금",
     enemy: "점심값 괴물",
     hook: "메뉴 하나 추가가 매일 쌓이면 꽤 커져요",
-    visual: { type: "convenience", trapBadge: "추가" },
+    visual: { type: "food", trapBadge: "추가" },
     reward: {
       title: "점심 추가금 컷 루틴",
       checklist: [
@@ -563,7 +571,7 @@ const daySets: DaySet[] = [
     theme: "취미장비 욕심",
     enemy: "장비병 괴물",
     hook: "시작보다 장비부터 사는 순간을 막아요",
-    visual: { type: "delivery", trapBadge: "장비" },
+    visual: { type: "shopping", trapBadge: "장비" },
     reward: {
       title: "장비 7일 대기 루틴",
       checklist: [
@@ -606,7 +614,7 @@ const daySets: DaySet[] = [
     theme: "모임비 과속",
     enemy: "모임비 괴물",
     hook: "분위기에 휩쓸린 추가 주문을 막아요",
-    visual: { type: "convenience", trapBadge: "추가" },
+    visual: { type: "social", trapBadge: "추가" },
     reward: {
       title: "모임비 브레이크 루틴",
       checklist: [
@@ -649,7 +657,7 @@ const daySets: DaySet[] = [
     theme: "OTT 겹침",
     enemy: "OTT 유령",
     hook: "비슷한 구독이 겹치면 조용히 새요",
-    visual: { type: "subscription", trapBadge: "OTT" },
+    visual: { type: "digital", trapBadge: "OTT" },
     reward: {
       title: "OTT 하나만 보기 루틴",
       checklist: [
@@ -692,7 +700,7 @@ const daySets: DaySet[] = [
     theme: "마트 특가",
     enemy: "특가 괴물",
     hook: "특가 코너에서 필요 없는 지출이 늘어요",
-    visual: { type: "convenience", trapBadge: "특가" },
+    visual: { type: "shopping", trapBadge: "특가" },
     reward: {
       title: "마트 동선 루틴",
       checklist: [
@@ -735,7 +743,7 @@ const daySets: DaySet[] = [
     theme: "라이브커머스",
     enemy: "라이브 괴물",
     hook: "실시간 마감 말에 결제가 빨라져요",
-    visual: { type: "subscription", trapBadge: "LIVE" },
+    visual: { type: "shopping", trapBadge: "LIVE" },
     reward: {
       title: "라이브 결제 지연 루틴",
       checklist: [
@@ -778,7 +786,7 @@ const daySets: DaySet[] = [
     theme: "교통비 새는 길",
     enemy: "교통비 괴물",
     hook: "작은 이동 선택이 하루 지출을 바꿔요",
-    visual: { type: "delivery", trapBadge: "교통" },
+    visual: { type: "transport", trapBadge: "교통" },
     reward: {
       title: "교통 루트 루틴",
       checklist: [
@@ -821,7 +829,7 @@ const daySets: DaySet[] = [
     theme: "배달 디저트",
     enemy: "디저트 괴물",
     hook: "밥 먹고 디저트 배달까지 이어지는 루프를 막아요",
-    visual: { type: "delivery", trapBadge: "디저트" },
+    visual: { type: "food", trapBadge: "디저트" },
     reward: {
       title: "디저트 대기 루틴",
       checklist: [
@@ -864,7 +872,7 @@ const daySets: DaySet[] = [
     theme: "휴대폰 소액결제",
     enemy: "소액결제 유령",
     hook: "작게 눌린 결제가 다음 달에 나타나요",
-    visual: { type: "subscription", trapBadge: "소액" },
+    visual: { type: "digital", trapBadge: "소액" },
     reward: {
       title: "소액결제 차단 루틴",
       checklist: [
@@ -907,7 +915,7 @@ const daySets: DaySet[] = [
     theme: "프리미엄 업셀",
     enemy: "업셀 유령",
     hook: "기본으로 충분한데 프리미엄을 누르게 만들어요",
-    visual: { type: "subscription", trapBadge: "PRO" },
+    visual: { type: "digital", trapBadge: "PRO" },
     reward: {
       title: "프리미엄 대기 루틴",
       checklist: [
@@ -950,7 +958,7 @@ const daySets: DaySet[] = [
     theme: "배달 음료",
     enemy: "음료배달 괴물",
     hook: "음료 한 잔도 배달비와 만나면 커져요",
-    visual: { type: "delivery", trapBadge: "음료" },
+    visual: { type: "food", trapBadge: "음료" },
     reward: {
       title: "음료 배달 컷 루틴",
       checklist: ["음료만 배달 금지", "편의점/집 대안 보기", "물 먼저 마시기"],
@@ -989,7 +997,7 @@ const daySets: DaySet[] = [
     theme: "계절템 충동",
     enemy: "시즌 괴물",
     hook: "계절 한정이라는 말이 충동구매를 부릅니다",
-    visual: { type: "convenience", trapBadge: "한정" },
+    visual: { type: "shopping", trapBadge: "한정" },
     reward: {
       title: "시즌템 대기 루틴",
       checklist: [
@@ -1032,7 +1040,7 @@ const daySets: DaySet[] = [
     theme: "멤버십 중복",
     enemy: "멤버십 유령",
     hook: "혜택 받으려다 멤버십이 겹쳐요",
-    visual: { type: "subscription", trapBadge: "멤버십" },
+    visual: { type: "digital", trapBadge: "멤버십" },
     reward: {
       title: "멤버십 정리 루틴",
       checklist: [
@@ -1075,7 +1083,7 @@ const daySets: DaySet[] = [
     theme: "반품 귀찮음",
     enemy: "반품회피 괴물",
     hook: "반품이 귀찮아 불필요한 물건이 남아요",
-    visual: { type: "delivery", trapBadge: "반품" },
+    visual: { type: "shopping", trapBadge: "반품" },
     reward: {
       title: "반품 24시간 룰",
       checklist: [
@@ -1118,7 +1126,7 @@ const daySets: DaySet[] = [
     theme: "점심 배달팟",
     enemy: "배달팟 괴물",
     hook: "다 같이 시키면 내 예산도 같이 흔들려요",
-    visual: { type: "delivery", trapBadge: "배달팟" },
+    visual: { type: "social", trapBadge: "배달팟" },
     reward: {
       title: "배달팟 방어 루틴",
       checklist: [
@@ -1161,7 +1169,7 @@ const daySets: DaySet[] = [
     theme: "뷰티 소모품",
     enemy: "뷰티템 괴물",
     hook: "다 쓰기 전 새로 사는 루틴을 막아요",
-    visual: { type: "convenience", trapBadge: "뷰티" },
+    visual: { type: "shopping", trapBadge: "뷰티" },
     reward: {
       title: "공병 확인 루틴",
       checklist: [
@@ -1204,7 +1212,7 @@ const daySets: DaySet[] = [
     theme: "클라우드 용량",
     enemy: "클라우드 유령",
     hook: "용량 부족 팝업이 구독을 부릅니다",
-    visual: { type: "subscription", trapBadge: "용량" },
+    visual: { type: "digital", trapBadge: "용량" },
     reward: {
       title: "용량 정리 루틴",
       checklist: [
@@ -1290,7 +1298,7 @@ const daySets: DaySet[] = [
     theme: "월말 정산",
     enemy: "월말 보스",
     hook: "이번 달 마지막 방어는 새는 곳 하나를 찾는 거예요",
-    visual: { type: "subscription", trapBadge: "월말" },
+    visual: { type: "digital", trapBadge: "월말" },
     reward: {
       title: "월말 3분 정산 루틴",
       checklist: [
