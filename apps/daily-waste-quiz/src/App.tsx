@@ -5,109 +5,103 @@ import { useInAppAds } from "./hooks/useInAppAds";
 import { InAppAdsPage } from "./pages/InAppAdsPage";
 
 type Screen = "home" | "quiz" | "result" | "iaa";
-type Choice = { label: string; value: number; feedback: string };
-type Question = { title: string; description: string; choices: Choice[] };
-type DaySet = { theme: string; hook: string; questions: Question[] };
+type Choice = { label: string; value: number; reply: string };
+type Question = { leak: string; title: string; choices: Choice[] };
+type DaySet = { theme: string; enemy: string; hook: string; questions: Question[] };
 
 const AD_GROUP_ID = "ait-ad-test-rewarded-id";
-const STAMP_KEY = "daily-waste-quiz-stamps-v1";
+const STAMP_KEY = "daily-waste-quiz-stamps-v2";
 
 const daySets: DaySet[] = [
   {
-    theme: "배달비 방어의 날",
-    hook: "오늘은 배달앱을 켜기 전에 한 번만 멈춰보는 날이에요.",
+    theme: "배달비 습격",
+    enemy: "배달비 괴물",
+    hook: "오늘 카드값을 괴롭히는 배달비 괴물 잡기",
     questions: [
       {
-        title: "퇴근길에 배고플 때 제일 먼저 하는 행동은?",
-        description: "오늘 헛돈이 새는 첫 지점을 찾아볼게요.",
+        leak: "퇴근 직후",
+        title: "배고프면 바로?",
         choices: [
-          { label: "배달앱부터 켠다", value: 0, feedback: "가장 빠르게 새는 구멍이에요." },
-          { label: "냉장고를 먼저 확인한다", value: 2, feedback: "이미 방어력이 좋아요." },
-          { label: "편의점으로 간다", value: 1, feedback: "소액 누수가 쌓일 수 있어요." },
+          { label: "배달앱 켬", value: 0, reply: "위험. 제일 빨리 새요." },
+          { label: "냉장고 봄", value: 2, reply: "좋음. 1차 방어 성공." },
         ],
       },
       {
-        title: "배달비가 아까워도 주문하는 순간은?",
-        description: "반복되는 패턴일수록 막기 쉬워요.",
+        leak: "쿠폰 유혹",
+        title: "쿠폰 뜨면?",
         choices: [
-          { label: "피곤하면 바로 주문", value: 0, feedback: "피곤함 예산을 따로 잡아야 해요." },
-          { label: "쿠폰 있을 때만 주문", value: 1, feedback: "쿠폰이 핑계가 되지 않게 주의." },
-          { label: "주 1회 이하로 정한다", value: 2, feedback: "좋은 기준을 갖고 있어요." },
+          { label: "일단 주문", value: 0, reply: "쿠폰이 미끼였어요." },
+          { label: "원래 먹을 때만", value: 2, reply: "좋음. 안 끌려감." },
         ],
       },
       {
-        title: "오늘 하나만 정한다면?",
-        description: "작은 규칙이 제일 오래 가요.",
+        leak: "최소주문금액",
+        title: "금액 모자라면?",
         choices: [
-          { label: "배달앱 알림 끄기", value: 2, feedback: "충동 주문 방어에 좋아요." },
-          { label: "최소주문금액 채우기", value: 0, feedback: "오히려 지출이 커질 수 있어요." },
-          { label: "집밥 후보 1개 저장", value: 2, feedback: "오늘 바로 가능한 루틴이에요." },
+          { label: "사이드 추가", value: 0, reply: "여기서 돈이 샙니다." },
+          { label: "그냥 포기", value: 2, reply: "강함. 괴물 약해짐." },
         ],
       },
     ],
   },
   {
-    theme: "구독료 점검의 날",
-    hook: "안 보는 구독 하나만 찾아도 이번 달 방어 성공이에요.",
+    theme: "구독료 잠복",
+    enemy: "구독료 유령",
+    hook: "안 보는 구독 하나만 찾아도 오늘은 성공",
     questions: [
       {
-        title: "최근 결제된 구독을 바로 말할 수 있나요?",
-        description: "기억 안 나는 구독은 헛돈 후보예요.",
+        leak: "자동결제",
+        title: "구독 몇 개 쓰는지?",
         choices: [
-          { label: "3개 이상 바로 말함", value: 2, feedback: "관리 감각이 있어요." },
-          { label: "몇 개는 헷갈림", value: 1, feedback: "한 번만 정리하면 좋아져요." },
-          { label: "거의 모름", value: 0, feedback: "오늘의 핵심 점검 대상이에요." },
+          { label: "바로 앎", value: 2, reply: "좋음. 숨어도 잡네요." },
+          { label: "잘 모름", value: 0, reply: "유령이 숨어 있어요." },
         ],
       },
       {
-        title: "무료체험 종료 알림을 따로 적어두나요?",
-        description: "무료체험은 자동결제가 핵심 함정이에요.",
+        leak: "무료체험",
+        title: "무료체험 끝나면?",
         choices: [
-          { label: "항상 적어둔다", value: 2, feedback: "좋은 방어 습관이에요." },
-          { label: "가끔만 적는다", value: 1, feedback: "캘린더 알림 하나면 충분해요." },
-          { label: "그냥 잊는다", value: 0, feedback: "자동결제 구멍이 생기기 쉬워요." },
+          { label: "알림 해둠", value: 2, reply: "방어 성공." },
+          { label: "까먹음", value: 0, reply: "다음 달 청구 후보." },
         ],
       },
       {
-        title: "이번 주 할 수 있는 가장 쉬운 정리는?",
-        description: "취소보다 먼저 확인부터 해도 돼요.",
+        leak: "안 보는 앱",
+        title: "이번 주 정리?",
         choices: [
-          { label: "결제 문자 검색", value: 2, feedback: "가장 빠른 구독 찾기 방법이에요." },
-          { label: "언젠가 몰아서 보기", value: 0, feedback: "미루면 또 결제돼요." },
-          { label: "앱 하나만 열어보기", value: 1, feedback: "작게 시작하는 건 좋아요." },
+          { label: "하나 해지", value: 2, reply: "깔끔. 바로 절약." },
+          { label: "다음에", value: 0, reply: "유령 생존." },
         ],
       },
     ],
   },
   {
-    theme: "편의점 소액누수의 날",
-    hook: "천 원, 이천 원이 모이면 생각보다 큽니다.",
+    theme: "편의점 함정",
+    enemy: "1+1 함정",
+    hook: "작은 결제 3번이면 점심값 하나가 사라져요",
     questions: [
       {
-        title: "편의점에서 가장 자주 사는 건?",
-        description: "반복 구매 품목이 오늘의 단서예요.",
+        leak: "입구 컷",
+        title: "들어가기 전?",
         choices: [
-          { label: "커피/음료", value: 1, feedback: "월 단위로 보면 꽤 커져요." },
-          { label: "간식/야식", value: 0, feedback: "충동 소비 가능성이 높아요." },
-          { label: "필요한 생필품", value: 2, feedback: "목적 구매는 괜찮아요." },
+          { label: "살 것 정함", value: 2, reply: "좋음. 함정 회피." },
+          { label: "그냥 들어감", value: 0, reply: "위험. 손이 바빠짐." },
         ],
       },
       {
-        title: "1+1을 보면 어떻게 하나요?",
-        description: "할인은 필요할 때만 이득이에요.",
+        leak: "1+1",
+        title: "1+1 보이면?",
         choices: [
-          { label: "일단 산다", value: 0, feedback: "할인에 끌린 지출이에요." },
-          { label: "원래 살 것만 산다", value: 2, feedback: "좋은 기준이에요." },
-          { label: "가끔 흔들린다", value: 1, feedback: "구매 전 5초만 멈춰도 줄어요." },
+          { label: "필요하면 삼", value: 2, reply: "할인에 안 끌림." },
+          { label: "일단 집음", value: 0, reply: "함정 발동." },
         ],
       },
       {
-        title: "오늘의 방어 규칙은?",
-        description: "편의점은 규칙 하나가 잘 먹혀요.",
+        leak: "야식 루트",
+        title: "밤 11시 편의점?",
         choices: [
-          { label: "들어가기 전 살 것 정하기", value: 2, feedback: "가장 현실적인 방법이에요." },
-          { label: "카드 대신 현금만", value: 1, feedback: "가능하면 효과는 있어요." },
-          { label: "배고플 때 들어가기", value: 0, feedback: "지출이 커지는 조합이에요." },
+          { label: "안 감", value: 2, reply: "강함. 오늘 방어." },
+          { label: "라면 사러 감", value: 0, reply: "추가 지출 확정." },
         ],
       },
     ],
@@ -140,6 +134,7 @@ function App() {
   const [stamps, setStamps] = useState<string[]>(() => readStamps());
   const [bonusOpen, setBonusOpen] = useState(false);
   const [pendingBonus, setPendingBonus] = useState(false);
+  const [lastReply, setLastReply] = useState<string | null>(null);
   const toast = useToast();
   const ads = useInAppAds(AD_GROUP_ID);
   const today = useMemo(() => daySets[getTodayIndex()], []);
@@ -148,12 +143,13 @@ function App() {
   const score = answers.reduce((sum, answer) => sum + answer.value, 0);
   const maxScore = today.questions.length * 2;
   const percent = Math.round((score / maxScore) * 100);
+  const monsterHp = Math.max(0, 100 - Math.round((answers.length / today.questions.length) * 100));
 
   useEffect(() => {
     if (pendingBonus && ads.lastReward) {
       setBonusOpen(true);
       setPendingBonus(false);
-      toast.openToast("보너스 절약 힌트를 열었어요");
+      toast.openToast("보너스 한 줄 팁 열림");
     }
   }, [ads.lastReward, pendingBonus, toast]);
 
@@ -161,21 +157,26 @@ function App() {
     setStep(0);
     setAnswers([]);
     setBonusOpen(false);
+    setLastReply(null);
     setScreen("quiz");
   };
 
   const choose = (choice: Choice) => {
-    const next = [...answers, choice];
-    setAnswers(next);
-    if (step >= today.questions.length - 1) {
-      const nextStamps = Array.from(new Set([...stamps, todayKey])).slice(-7);
-      setStamps(nextStamps);
-      localStorage.setItem(STAMP_KEY, JSON.stringify(nextStamps));
-      setScreen("result");
-      toast.openToast("오늘의 스탬프를 받았어요");
-      return;
-    }
-    setStep((value) => value + 1);
+    setLastReply(choice.reply);
+    window.setTimeout(() => {
+      const next = [...answers, choice];
+      setAnswers(next);
+      setLastReply(null);
+      if (step >= today.questions.length - 1) {
+        const nextStamps = Array.from(new Set([...stamps, todayKey])).slice(-7);
+        setStamps(nextStamps);
+        localStorage.setItem(STAMP_KEY, JSON.stringify(nextStamps));
+        setScreen("result");
+        toast.openToast("오늘 괴물 퇴치 완료");
+        return;
+      }
+      setStep((value) => value + 1);
+    }, 420);
   };
 
   const openBonus = () => {
@@ -189,13 +190,13 @@ function App() {
   };
 
   const shareResult = async () => {
-    const text = `나 오늘 '${today.theme}' ${percent}점 나왔어. 하루 3문제로 헛돈 방지 중!`;
+    const text = `오늘 ${today.enemy} 잡고 ${percent}점 나옴. 너도 10초 컷 해봐.`;
     try {
       if (navigator.share) {
         await navigator.share({ title: "오늘의 헛돈 방지 퀴즈", text });
       } else {
         await navigator.clipboard?.writeText(text);
-        toast.openToast("공유 문구를 복사했어요");
+        toast.openToast("공유 문구 복사 완료");
       }
     } catch (error) {
       if ((error as Error).name === "AbortError") {
@@ -211,42 +212,45 @@ function App() {
   if (screen === "quiz") {
     const question = today.questions[step];
     return (
-      <main className="app-shell">
+      <main className="app-shell quiz-shell">
         <Top
-          title={<Top.TitleParagraph size={22}>오늘의 {step + 1}번 문제</Top.TitleParagraph>}
+          title={<Top.TitleParagraph size={22}>{step + 1}/3 헛돈 컷</Top.TitleParagraph>}
           subtitleBottom={<Top.SubtitleParagraph size={16}>{today.theme}</Top.SubtitleParagraph>}
         />
-        <section className="quiz-card">
-          <div className="progress-row">
-            <span>{step + 1}/3</span>
-            <div className="progress-track"><div style={{ width: `${((step + 1) / 3) * 100}%` }} /></div>
+        <section className="battle-card">
+          <div className="battle-top">
+            <span className="leak-pill">{question.leak}</span>
+            <span className="hp-label">괴물 HP {monsterHp}%</span>
           </div>
-          <p className="eyebrow">헛돈 방지 퀴즈</p>
+          <div className="monster-stage" aria-hidden="true">
+            <span className="monster">{today.enemy}</span>
+            <span className="slash slash-a" />
+            <span className="slash slash-b" />
+          </div>
           <h1>{question.title}</h1>
-          <p>{question.description}</p>
-          <div className="choice-list">
+          <div className="quick-choice-grid">
             {question.choices.map((choice) => (
-              <button className="choice-button" key={choice.label} onClick={() => choose(choice)}>
-                <span>{choice.label}</span>
-                <small>{choice.feedback}</small>
+              <button className="quick-choice" key={choice.label} onClick={() => choose(choice)}>
+                {choice.label}
               </button>
             ))}
           </div>
+          {lastReply ? <div className="hit-toast">{lastReply}</div> : null}
         </section>
       </main>
     );
   }
 
   if (screen === "result") {
-    const grade = percent >= 75 ? "헛돈 방어 우수" : percent >= 45 ? "막기 쉬운 구멍 발견" : "오늘 점검 효과 큼";
+    const grade = percent >= 75 ? "완전 방어" : percent >= 45 ? "반쯤 막음" : "내일 복수전";
     return (
       <main className="app-shell result-shell">
         <Top
-          title={<Top.TitleParagraph size={22}>오늘 퀴즈 완료</Top.TitleParagraph>}
-          subtitleBottom={<Top.SubtitleParagraph size={16}>스탬프 1개를 모았어요</Top.SubtitleParagraph>}
+          title={<Top.TitleParagraph size={22}>오늘 전투 끝</Top.TitleParagraph>}
+          subtitleBottom={<Top.SubtitleParagraph size={16}>스탬프 1개 획득</Top.SubtitleParagraph>}
         />
         <section className="result-card">
-          <p className="eyebrow">{today.theme}</p>
+          <p className="eyebrow">{today.enemy} 결과</p>
           <h1>{grade}</h1>
           <div
             className="score-ring"
@@ -254,28 +258,28 @@ function App() {
               background: `radial-gradient(circle at center, #fff 0 54%, transparent 55%), conic-gradient(#3182f6 0 ${percent}%, #dfefff ${percent}% 100%)`,
             }}
           ><strong>{percent}</strong><span>점</span></div>
-          <p className="result-copy">오늘은 작은 지출을 한 번 멈춰보는 것만으로도 충분해요.</p>
+          <p className="result-copy">헛돈 괴물 퇴치 성공. 내일은 다른 놈이 나와요.</p>
         </section>
         <section className="stamp-card">
-          <div className="section-title"><strong>7일 헛돈 방지판</strong><span>{stamps.length}/7</span></div>
+          <div className="section-title"><strong>7일 퇴치판</strong><span>{stamps.length}/7</span></div>
           <div className="stamp-grid">
             {Array.from({ length: 7 }).map((_, index) => (
-              <span className={index < stamps.length ? "stamp is-filled" : "stamp"} key={index}>{index < stamps.length ? "✓" : index + 1}</span>
+              <span className={index < stamps.length ? "stamp is-filled" : "stamp"} key={index}>{index < stamps.length ? "✓" : "잠김"}</span>
             ))}
           </div>
         </section>
         <section className="tip-card">
-          <strong>오늘의 절약 팁</strong>
-          <p>{answers[0]?.feedback ?? "오늘의 소비 루틴을 가볍게 점검해보세요."}</p>
+          <strong>오늘 한 줄 팁</strong>
+          <p>{answers.at(-1)?.reply ?? "오늘의 헛돈 루트를 하나만 피해봐요."}</p>
           {bonusOpen ? (
-            <div className="bonus-box">보너스 힌트: 오늘 결제 문자에서 `배달`, `구독`, `편의점` 중 하나만 검색해봐요.</div>
+            <div className="bonus-box">보너스: 오늘 결제 문자에서 `{today.theme.split(" ")[0]}` 한 번만 검색.</div>
           ) : (
-            <Button color="dark" variant="weak" onClick={openBonus}>광고 보고 보너스 힌트 열기</Button>
+            <Button color="dark" variant="weak" onClick={openBonus}>광고 보고 한 줄 팁 더 보기</Button>
           )}
         </section>
         <div className="cta-stack">
-          <Button onClick={shareResult}>내 결과 공유하기</Button>
-          <Button variant="weak" onClick={startQuiz}>다시 풀어보기</Button>
+          <Button onClick={shareResult}>친구한테 괴물 도전 보내기</Button>
+          <Button variant="weak" onClick={startQuiz}>10초 더 잡기</Button>
           {import.meta.env.DEV ? <Button color="dark" variant="weak" onClick={() => setScreen("iaa")}>개발용 광고 테스트</Button> : null}
         </div>
       </main>
@@ -286,29 +290,27 @@ function App() {
     <main className="app-shell home-shell">
       <Top
         title={<Top.TitleParagraph size={22}>오늘의 헛돈 방지 퀴즈</Top.TitleParagraph>}
-        subtitleBottom={<Top.SubtitleParagraph size={16}>하루 3문제로 생활비 새는 구멍 막기</Top.SubtitleParagraph>}
+        subtitleBottom={<Top.SubtitleParagraph size={16}>긴 설명 없이 10초 컷</Top.SubtitleParagraph>}
       />
-      <section className="hero-card">
-        <p className="eyebrow">{completedToday ? "오늘 스탬프 완료" : "오늘의 새 문제 도착"}</p>
-        <h1>오늘 새는 돈,<br />3문제로 막아봐</h1>
+      <section className="hero-card compact-hero">
+        <p className="eyebrow">{completedToday ? "오늘 이미 잡음" : "오늘의 괴물 등장"}</p>
+        <h1>{today.enemy}<br />10초 컷</h1>
         <p>{today.hook}</p>
-        <div className="money-scene" aria-hidden="true">
-          <span className="wallet">월급</span>
-          <span className="coin coin-a" />
-          <span className="coin coin-b" />
-          <span className="shield">방어</span>
+        <div className="monster-stage home-stage" aria-hidden="true">
+          <span className="monster big">{today.enemy}</span>
+          <span className="slash slash-a" />
+          <span className="slash slash-b" />
         </div>
-        <Button onClick={startQuiz}>{completedToday ? "오늘 퀴즈 다시 보기" : "오늘 퀴즈 시작하기"}</Button>
+        <Button onClick={startQuiz}>{completedToday ? "10초 더 잡기" : "함정 잡기"}</Button>
       </section>
-      <section className="daily-panel">
-        <div className="section-title"><strong>{today.theme}</strong><span>3문제</span></div>
-        <p>{completedToday ? "이미 오늘 스탬프를 받았어요. 공유하거나 다시 풀 수 있어요." : "완료하면 오늘의 스탬프와 절약 팁을 받을 수 있어요."}</p>
+      <section className="daily-panel compact-panel">
+        <div className="section-title"><strong>오늘 할 일</strong><span>3탭</span></div>
         <div className="mini-list">
-          <span>가입 없음</span><span>하루 1분</span><span>공유 카드</span>
+          <span>두 선택지</span><span>10초 컷</span><span>7일 스탬프</span>
         </div>
       </section>
       <section className="stamp-card compact">
-        <div className="section-title"><strong>최근 스탬프</strong><span>{stamps.length}/7</span></div>
+        <div className="section-title"><strong>퇴치 기록</strong><span>{stamps.length}/7</span></div>
         <div className="stamp-grid">
           {Array.from({ length: 7 }).map((_, index) => (
             <span className={index < stamps.length ? "stamp is-filled" : "stamp"} key={index}>{index < stamps.length ? "✓" : index + 1}</span>
