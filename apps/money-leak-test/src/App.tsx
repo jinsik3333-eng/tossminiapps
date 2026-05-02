@@ -1,71 +1,425 @@
-import { Asset, Button, Top } from "@toss/tds-mobile";
+import { Button, TextButton, useToast } from "@toss/tds-mobile";
+import { useEffect, useMemo, useState } from "react";
+
 import "./App.css";
+import { useInAppAds } from "./hooks/useInAppAds";
 import { InAppAdsPage } from "./pages/InAppAdsPage";
-import { useState } from "react";
+
+type LeakType =
+  | "delivery"
+  | "subscription"
+  | "convenience"
+  | "lateNight"
+  | "discount"
+  | "taxi";
+
+type Step = "intro" | "quiz" | "result" | "ads";
+
+interface AnswerOption {
+  label: string;
+  leakType: LeakType;
+}
+
+interface Question {
+  title: string;
+  description: string;
+  options: AnswerOption[];
+}
+
+interface ResultProfile {
+  title: string;
+  badge: string;
+  summary: string;
+  leakPattern: string;
+  prescription: string;
+  detail: string;
+}
+
+const DETAIL_AD_GROUP_ID = "ait-ad-test-rewarded-id";
+const SHOW_DEV_TOOLS = import.meta.env.DEV;
+
+const questions: Question[] = [
+  {
+    title: "퇴근길 저녁을 고르는 방식은?",
+    description: "가장 자주 하는 선택에 가까운 답을 골라주세요.",
+    options: [
+      { label: "배달앱을 열고 할인 쿠폰부터 찾아요", leakType: "delivery" },
+      { label: "집 앞 편의점에서 빠르게 해결해요", leakType: "convenience" },
+      { label: "늦었으니 오늘은 야식까지 가요", leakType: "lateNight" },
+      { label: "집밥 재료가 있어도 귀찮으면 택시 타고 사와요", leakType: "taxi" },
+    ],
+  },
+  {
+    title: "월말 카드 내역에서 가장 놀라는 항목은?",
+    description: "내역을 봤을 때 '이게 이렇게 많았어?' 싶은 항목이에요.",
+    options: [
+      { label: "배달비와 최소 주문 금액", leakType: "delivery" },
+      { label: "안 쓰는 앱과 멤버십 정기결제", leakType: "subscription" },
+      { label: "커피, 간식, 생필품 자잘한 결제", leakType: "convenience" },
+      { label: "심야 택시비", leakType: "taxi" },
+    ],
+  },
+  {
+    title: "할인 문구를 봤을 때 반응은?",
+    description: "솔직히 손이 먼저 움직이는 순간을 떠올려보세요.",
+    options: [
+      { label: "무료배송 기준까지 장바구니를 채워요", leakType: "delivery" },
+      { label: "지금 안 사면 손해 같아서 일단 사요", leakType: "discount" },
+      { label: "구독 첫 달 무료면 바로 눌러요", leakType: "subscription" },
+      { label: "2+1이면 먹을 만큼보다 더 사요", leakType: "convenience" },
+    ],
+  },
+  {
+    title: "밤 11시에 출출하면?",
+    description: "가장 많이 반복되는 행동을 골라주세요.",
+    options: [
+      { label: "내일의 나에게 맡기고 야식을 시켜요", leakType: "lateNight" },
+      { label: "편의점에 가서 간식과 음료를 골라요", leakType: "convenience" },
+      { label: "배달비가 아까워도 결국 주문해요", leakType: "delivery" },
+      { label: "참다가 잠이 안 와서 더 크게 먹어요", leakType: "lateNight" },
+    ],
+  },
+  {
+    title: "구독 서비스 관리는 어떤 편인가요?",
+    description: "영상, 음악, 생산성 앱, 멤버십을 모두 포함해요.",
+    options: [
+      { label: "쓰는지 안 쓰는지 기억이 흐릿해요", leakType: "subscription" },
+      { label: "무료 체험 종료일을 자주 놓쳐요", leakType: "subscription" },
+      { label: "할인 중이면 언젠가 쓰겠지 하고 결제해요", leakType: "discount" },
+      { label: "필요한 날마다 새 서비스를 추가해요", leakType: "subscription" },
+    ],
+  },
+  {
+    title: "약속이 끝난 뒤 집에 갈 때는?",
+    description: "피곤한 날의 기본값을 기준으로 답해주세요.",
+    options: [
+      { label: "대중교통 막차를 계산하기 귀찮아 택시를 불러요", leakType: "taxi" },
+      { label: "택시비는 오늘의 체력 회복비라고 생각해요", leakType: "taxi" },
+      { label: "집에 와서 또 배달앱을 열어요", leakType: "delivery" },
+      { label: "편의점에서 내일 먹을 것까지 사요", leakType: "convenience" },
+    ],
+  },
+  {
+    title: "스트레스를 받으면 돈은 어디로 새나요?",
+    description: "위로가 필요할 때 생기는 소비 패턴이에요.",
+    options: [
+      { label: "맛있는 배달 메뉴로 기분을 바꿔요", leakType: "delivery" },
+      { label: "작은 간식 쇼핑을 여러 번 해요", leakType: "convenience" },
+      { label: "세일 상품을 보며 보상받는 느낌을 받아요", leakType: "discount" },
+      { label: "밤에 먹는 걸로 하루를 마감해요", leakType: "lateNight" },
+    ],
+  },
+  {
+    title: "가장 해볼 만한 절약 방식은?",
+    description: "이번 주에 실제로 할 수 있는 선택을 골라주세요.",
+    options: [
+      { label: "배달 횟수를 딱 1번만 줄이기", leakType: "delivery" },
+      { label: "구독 결제일 캘린더에 적기", leakType: "subscription" },
+      { label: "편의점 갈 때 살 것 2개만 정하기", leakType: "convenience" },
+      { label: "택시 타기 전 5분만 경로 보기", leakType: "taxi" },
+    ],
+  },
+];
+
+const resultProfiles: Record<LeakType, ResultProfile> = {
+  delivery: {
+    title: "배달 누수형",
+    badge: "월급이 배달 봉투에 조금씩 담겨 나가요",
+    summary: "쿠폰을 잘 쓰는 것 같지만, 주문 빈도와 배달비가 같이 커지는 타입이에요.",
+    leakPattern: "무료배송 기준, 최소 주문 금액, 사이드 메뉴 추가가 대표 누수 패턴이에요.",
+    prescription: "오늘은 배달앱을 열기 전 냉장고 사진을 먼저 찍어보세요.",
+    detail: "이번 주 배달 가능 횟수를 2회처럼 숫자로 정해두면 매번 참는 결심보다 훨씬 덜 피곤해요. 남은 횟수를 메모장 첫 줄에 적어두는 것만으로도 주문 전 멈춤이 생깁니다.",
+  },
+  subscription: {
+    title: "구독 방치형",
+    badge: "작은 자동결제가 조용히 월급을 갉아먹어요",
+    summary: "한 달에 몇 번 쓰는지 모르는 서비스가 카드 내역에서 계속 살아있는 타입이에요.",
+    leakPattern: "무료 체험 종료, 중복 콘텐츠 서비스, 가끔 쓰는 생산성 앱이 대표 누수 패턴이에요.",
+    prescription: "오늘 결제 문자에서 '정기'와 '구독'을 검색해 1개만 해지해보세요.",
+    detail: "구독은 의지보다 날짜 관리가 중요해요. 다음 결제일 하루 전 알림을 걸고, 그날 10분 안에 계속 쓸지 결정하는 방식이 가장 현실적입니다.",
+  },
+  convenience: {
+    title: "편의점 새는형",
+    badge: "작은 결제가 자주 모이면 꽤 큰 구멍이 돼요",
+    summary: "한 번 결제는 가볍지만 하루에도 여러 번 새는 생활 밀착형 소비가 많은 타입이에요.",
+    leakPattern: "커피, 간식, 2+1 상품, 급한 생필품이 대표 누수 패턴이에요.",
+    prescription: "오늘 편의점에 가기 전 살 것 2개만 메모하고 들어가세요.",
+    detail: "편의점 소비는 금지보다 입장 규칙이 효과적이에요. 들어가기 전 품목 수를 정하고, 계산대 앞 추가 상품은 다음 방문으로 미루는 식으로 마찰을 만들면 됩니다.",
+  },
+  lateNight: {
+    title: "야식 합리화형",
+    badge: "하루의 피로가 밤마다 결제 버튼을 눌러요",
+    summary: "밤이 깊을수록 내일의 예산보다 오늘의 보상이 더 크게 느껴지는 타입이에요.",
+    leakPattern: "심야 배달, 편의점 간식, 늦은 시간 과식이 대표 누수 패턴이에요.",
+    prescription: "오늘 밤 먹고 싶어지면 물 한 컵 후 10분만 늦춰보세요.",
+    detail: "야식은 배고픔보다 루틴인 경우가 많아요. 밤 10시 이후 선택지를 '차, 과일, 바로 양치'처럼 미리 정해두면 배달앱을 열 확률이 줄어듭니다.",
+  },
+  discount: {
+    title: "할인 착각형",
+    badge: "아낀 줄 알았는데 안 사도 될 걸 산 적이 많아요",
+    summary: "할인율을 잘 보는 편이지만, 필요 여부보다 기회비용에 마음이 흔들리는 타입이에요.",
+    leakPattern: "마감 세일, 무료배송 기준, 쿠폰 소멸 알림이 대표 누수 패턴이에요.",
+    prescription: "오늘 장바구니에서 '정가여도 살 것'만 남겨보세요.",
+    detail: "할인은 필요한 물건에 붙을 때만 절약이에요. 결제 전 '이걸 어제도 원했나?'라고 한 번만 물어보면 충동성 구매를 꽤 많이 걸러낼 수 있습니다.",
+  },
+  taxi: {
+    title: "택시 자기합리화형",
+    badge: "시간을 산 줄 알았는데 피곤함이 결제 명분이 됐어요",
+    summary: "택시가 꼭 필요한 날도 있지만, 반복되면 월말에 존재감이 커지는 타입이에요.",
+    leakPattern: "막차 포기, 가까운 거리 이동, 피곤함 보상 택시가 대표 누수 패턴이에요.",
+    prescription: "오늘 택시 호출 전 대중교통 경로를 5분만 확인해보세요.",
+    detail: "택시는 기준을 정하면 죄책감 없이 줄일 수 있어요. 늦은 밤, 짐이 많은 날, 비 오는 날처럼 허용 조건을 3개만 정하고 나머지는 한 번 더 비교해보세요.",
+  },
+};
+
+const leakTypeOrder: LeakType[] = [
+  "delivery",
+  "subscription",
+  "convenience",
+  "lateNight",
+  "discount",
+  "taxi",
+];
+
+function getResultType(answers: LeakType[]): LeakType {
+  const scores = leakTypeOrder.reduce(
+    (acc, leakType) => ({ ...acc, [leakType]: 0 }),
+    {} as Record<LeakType, number>,
+  );
+
+  answers.forEach((answer) => {
+    scores[answer] += 1;
+  });
+
+  return leakTypeOrder.reduce((winner, leakType) =>
+    scores[leakType] > scores[winner] ? leakType : winner,
+  );
+}
 
 function App() {
-  const [page, setPage] = useState<string | null>(null);
+  const [step, setStep] = useState<Step>("intro");
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<LeakType[]>([]);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isDetailWaitingReward, setIsDetailWaitingReward] = useState(false);
+  const detailAd = useInAppAds(DETAIL_AD_GROUP_ID);
+  const toast = useToast();
 
-  if (page === "iaa") return <InAppAdsPage onBack={() => setPage(null)} />;
+  const resultType = useMemo(() => getResultType(answers), [answers]);
+  const result = resultProfiles[resultType];
+  const progressPercent = Math.round(
+    ((currentQuestionIndex + 1) / questions.length) * 100,
+  );
+  const currentQuestion = questions[currentQuestionIndex];
+
+  const startQuiz = () => {
+    setAnswers([]);
+    setCurrentQuestionIndex(0);
+    setIsDetailOpen(false);
+    setIsDetailWaitingReward(false);
+    setStep("quiz");
+  };
+
+  const answerQuestion = (leakType: LeakType) => {
+    const nextAnswers = [...answers, leakType];
+
+    setAnswers(nextAnswers);
+
+    if (nextAnswers.length === questions.length) {
+      setStep("result");
+      setIsDetailOpen(false);
+      setIsDetailWaitingReward(false);
+      return;
+    }
+
+    setCurrentQuestionIndex((index) => index + 1);
+  };
+
+  const goBackQuestion = () => {
+    if (currentQuestionIndex === 0) {
+      setStep("intro");
+      return;
+    }
+
+    setAnswers((previous) => previous.slice(0, -1));
+    setCurrentQuestionIndex((index) => index - 1);
+  };
+
+  useEffect(() => {
+    if (isDetailWaitingReward && detailAd.lastReward != null) {
+      setIsDetailOpen(true);
+      setIsDetailWaitingReward(false);
+    }
+  }, [detailAd.lastReward, isDetailWaitingReward]);
+
+  const openDetail = () => {
+    if (detailAd.isSupported && detailAd.isAdLoaded) {
+      setIsDetailWaitingReward(true);
+      detailAd.showAd();
+      return;
+    }
+
+    setIsDetailOpen(true);
+  };
+
+  const shareResult = async () => {
+    const text = `나는 ${result.title}! ${result.summary} 돈 새는 구멍 테스트에서 60초 진단해봤어요.`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "돈 새는 구멍 테스트",
+          text,
+        });
+        return;
+      }
+
+      await navigator.clipboard?.writeText(text);
+      toast.openToast("공유 문구를 복사했어요.");
+    } catch (error) {
+      console.info("공유가 취소되었거나 복사에 실패했습니다.", error);
+      toast.openToast("공유를 완료하지 못했어요.");
+    }
+  };
+
+  if (step === "ads" && SHOW_DEV_TOOLS) {
+    return <InAppAdsPage onBack={() => setStep("intro")} />;
+  }
+
+  if (step === "quiz") {
+    return (
+      <main className="app-shell">
+        <section className="quiz-header">
+          <TextButton size="medium" onClick={goBackQuestion}>
+            ← 이전
+          </TextButton>
+          <span className="question-count">
+            {currentQuestionIndex + 1}/{questions.length}
+          </span>
+        </section>
+
+        <div
+          className="progress-track"
+          role="progressbar"
+          aria-label="문항 진행률"
+          aria-valuenow={progressPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          <div
+            className="progress-bar"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+
+        <section className="page-title">
+          <h1>{currentQuestion.title}</h1>
+          <p>{currentQuestion.description}</p>
+        </section>
+
+        <section className="option-list">
+          {currentQuestion.options.map((option) => (
+            <button
+              className="option-button"
+              key={option.label}
+              type="button"
+              onClick={() => answerQuestion(option.leakType)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </section>
+      </main>
+    );
+  }
+
+  if (step === "result") {
+    return (
+      <main className="app-shell result-shell">
+        <section className="page-title result-title">
+          <h1>{result.title}</h1>
+          <p>{result.badge}</p>
+        </section>
+
+        <section className="result-panel">
+          <p className="result-label">60초 진단 결과</p>
+          <h2>{result.summary}</h2>
+          <div className="result-block">
+            <strong>대표 누수 패턴</strong>
+            <p>{result.leakPattern}</p>
+          </div>
+          <div className="result-block prescription">
+            <strong>오늘의 처방</strong>
+            <p>{result.prescription}</p>
+          </div>
+        </section>
+
+        <section className="action-stack">
+          {!isDetailOpen ? (
+            <Button
+              color="dark"
+              loading={isDetailWaitingReward}
+              onClick={openDetail}
+            >
+              {detailAd.isSupported && detailAd.isAdLoaded
+                ? "광고 보고 맞춤 절약 처방 보기"
+                : "맞춤 절약 처방 보기"}
+            </Button>
+          ) : (
+            <div className="detail-panel">
+              <strong>상세 처방</strong>
+              <p>{result.detail}</p>
+            </div>
+          )}
+          <Button variant="weak" onClick={shareResult}>
+            내 유형 공유하기
+          </Button>
+          <TextButton size="medium" onClick={startQuiz}>
+            다시 테스트하기
+          </TextButton>
+        </section>
+
+        {SHOW_DEV_TOOLS && (
+          <TextButton
+            className="dev-link"
+            size="small"
+            onClick={() => setStep("ads")}
+          >
+            개발용 인앱광고 테스트
+          </TextButton>
+        )}
+      </main>
+    );
+  }
 
   return (
-    <>
-      <Top
-        title={<Top.TitleParagraph size={22}>반가워요</Top.TitleParagraph>}
-        subtitleBottom={
-          <Top.SubtitleParagraph size={17}>
-            앱인토스 개발을 시작해 보세요.
-          </Top.SubtitleParagraph>
-        }
-      />
+    <main className="app-shell intro-shell">
+      <section className="page-title intro-title">
+        <h1>내 월급은 어디서 새고 있을까?</h1>
+        <p>60초 만에 돈 새는 유형을 진단하고 오늘 바로 막을 구멍을 찾아보세요.</p>
+      </section>
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          padding: "24px",
-        }}
-      >
-        <Button
-          as="a"
-          variant="weak"
-          href="https://developers-apps-in-toss.toss.im"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          개발자센터
-        </Button>
-        <Button
-          as="a"
-          variant="weak"
-          href="https://techchat-apps-in-toss.toss.im"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          개발자 커뮤니티
-        </Button>
-        <Button color="dark" variant="weak" onClick={() => setPage("iaa")}>
-          인앱광고 테스트하기
-        </Button>
-      </div>
+      <section className="intro-card">
+        <p className="routine-name">오늘의 머니루틴</p>
+        <h1>돈 새는 구멍 테스트</h1>
+        <ul>
+          <li>8문항으로 가볍게 진단해요</li>
+          <li>결과 유형 6개 중 하나가 나와요</li>
+          <li>결과 공유와 상세 처방 지점을 확인해요</li>
+        </ul>
+      </section>
 
-      <div
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
-      >
-        <Asset.Image
-          alt="apps in toss logo"
-          frameShape={{ width: 160 }}
-          backgroundColor="transparent"
-          src={`${import.meta.env.BASE_URL}appsintoss-logo.png`}
-        />
-      </div>
-    </>
+      <section className="action-stack">
+        <Button color="dark" onClick={startQuiz}>
+          테스트 시작하기
+        </Button>
+        {SHOW_DEV_TOOLS && (
+          <TextButton size="small" onClick={() => setStep("ads")}>
+            개발용 인앱광고 테스트
+          </TextButton>
+        )}
+      </section>
+    </main>
   );
 }
 

@@ -40,3 +40,15 @@ ax search docs --query "인앱 광고" --limit 5
 
 - 상황: Codex 안정 사용을 위해 Git 필요.
 - 해결: 프로젝트 루트에서 `git init` 수행.
+
+### `money-leak-test` 광고 훅 lint 경고
+
+- 상황: `npm run lint`에서 `src/hooks/useInAppAds.tsx`의 hook dependency 경고 2건 발생.
+- 처리: 미사용 `useDialog` 의존을 제거하고, `useEffect`/`useCallback` 의존성에 `load`, `toast`를 명시.
+- 추가 결정: 광고 지원 여부 확인 실패는 사용자 다이얼로그 대신 `console.info`로 남겨 브라우저/미지원 환경에서 테스트 흐름을 막지 않는다.
+
+### 로컬 dev 서버 포트 바인딩 실패
+
+- 상황: `granite dev --host 127.0.0.1`, `vite --host 127.0.0.1 --port 5173` 모두 `listen EPERM` 발생.
+- 원인 추정: 현재 실행 샌드박스에서 로컬 포트 바인딩이 제한됨.
+- 처리: `npm run lint`, `npm run build`로 정적 검증 완료. 이후 `dist/web`를 정적 서버로 열어 브라우저/비전 QA로 첫 화면·질문 화면·결과 화면을 확인했다. 실기기/토스 샌드박스앱 확인은 별도 진행.

@@ -2,7 +2,7 @@ import {
   loadFullScreenAd,
   showFullScreenAd,
 } from "@apps-in-toss/web-framework";
-import { useDialog, useToast } from "@toss/tds-mobile";
+import { useToast } from "@toss/tds-mobile";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Reward {
@@ -19,7 +19,6 @@ interface UseInAppAdsReturn {
 
 // 참고문서: https://developers-apps-in-toss.toss.im/ads/intro.html
 export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
-  const dialog = useDialog();
   const toast = useToast();
 
   const [isAdLoaded, setIsAdLoaded] = useState(false);
@@ -59,12 +58,7 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
         load();
       }
     } catch (error) {
-      dialog.openAlert({
-        title: "광고 지원 여부 확인 실패",
-        description:
-          "광고 지원 여부 확인 실패: \n\n- 인앱광고 기능은 브라우저가 아닌 샌드박스앱/토스앱에서 실행해주세요.\n\n" +
-          error,
-      });
+      console.info("현재 환경에서는 인앱 광고 지원 여부를 확인할 수 없습니다.", error);
       setIsSupported(false);
     }
 
@@ -75,7 +69,7 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
         console.error("광고 정리(cleanup) 중 에러:", error);
       }
     };
-  }, []);
+  }, [load]);
 
   /**
    * 광고를 실제로 화면에 표시합니다.
@@ -126,7 +120,7 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
       setIsAdLoaded(false);
       load();
     }
-  }, [adGroupId, isAdLoaded, isSupported, load]);
+  }, [adGroupId, isAdLoaded, isSupported, load, toast]);
 
   return { isAdLoaded, isSupported, showAd, lastReward };
 }
