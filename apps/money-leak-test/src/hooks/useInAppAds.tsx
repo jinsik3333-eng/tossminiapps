@@ -15,6 +15,7 @@ interface UseInAppAdsReturn {
   isSupported: boolean;
   showAd: () => void;
   lastReward: Reward | null;
+  rewardCount: number;
 }
 
 // 참고문서: https://developers-apps-in-toss.toss.im/ads/intro.html
@@ -23,6 +24,7 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
 
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [lastReward, setLastReward] = useState<Reward | null>(null);
+  const [rewardCount, setRewardCount] = useState(0);
   const [isSupported, setIsSupported] = useState(false);
   const unregisterRef = useRef<(() => void) | null>(null);
 
@@ -96,6 +98,7 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
                 `보상 획득: ${event.data.unitType} ${event.data.unitAmount}개`,
               );
               setLastReward(event.data);
+              setRewardCount((count) => count + 1);
               break;
             case "dismissed":
               setIsAdLoaded(false);
@@ -122,5 +125,5 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
     }
   }, [adGroupId, isAdLoaded, isSupported, load, toast]);
 
-  return { isAdLoaded, isSupported, showAd, lastReward };
+  return { isAdLoaded, isSupported, showAd, lastReward, rewardCount };
 }

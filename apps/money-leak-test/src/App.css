@@ -231,75 +231,173 @@
 
 .result-visual {
   position: relative;
-  width: 166px;
-  height: 150px;
-  margin: 12px auto 6px;
+  width: 178px;
+  height: 154px;
+  margin: 12px auto 8px;
 }
 
-.visual-orb,
-.visual-card,
-.visual-coin,
+.visual-hole,
+.visual-hole__label,
+.visual-leak-path,
+.visual-wallet,
+.visual-wallet__label,
+.visual-leak,
+.visual-plug,
 .visual-shadow {
   position: absolute;
   display: block;
 }
 
-.visual-orb--back {
-  inset: 18px 22px 20px;
-  border-radius: 38px;
-  border: 6px solid rgba(124, 155, 143, 0.22);
-  background: rgba(255, 255, 255, 0.32);
+.visual-hole {
+  left: 14px;
+  right: 14px;
+  bottom: 18px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 46%, #2f5d48 0 28px, #163b2e 29px 58px, transparent 59px);
+  box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.22), 0 12px 24px rgba(25, 31, 40, 0.12);
 }
 
-.visual-card {
-  left: 52px;
-  top: 38px;
-  width: 62px;
-  height: 78px;
-  border-radius: 30px 30px 26px 26px;
-  background: linear-gradient(145deg, #8f5d4a 0%, #6e3f32 100%);
-  transform: rotate(-10deg);
-  box-shadow: inset -14px -8px 0 rgba(76, 34, 26, 0.3), 0 18px 26px rgba(93, 54, 43, 0.23);
+.visual-hole__label {
+  left: 50%;
+  top: 16px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: -0.1px;
+  transform: translateX(-50%);
 }
 
-.visual-card::after {
+.visual-leak-path {
+  left: 83px;
+  top: 84px;
+  width: 10px;
+  height: 44px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 159, 26, 0.95) 0 8px,
+    rgba(255, 159, 26, 0) 8px 15px
+  );
+  filter: drop-shadow(0 5px 8px rgba(255, 159, 26, 0.25));
+}
+
+.visual-wallet {
+  left: 43px;
+  top: 24px;
+  width: 92px;
+  height: 72px;
+  border-radius: 22px 22px 26px 26px;
+  background: linear-gradient(145deg, #4f9f6f 0%, #26734e 100%);
+  transform: rotate(-7deg);
+  box-shadow: inset -14px -10px 0 rgba(0, 62, 37, 0.2), 0 18px 28px rgba(38, 115, 78, 0.24);
+}
+
+.visual-wallet::before {
   content: "";
   position: absolute;
-  left: 20px;
-  top: 18px;
-  width: 20px;
-  height: 36px;
-  border-radius: 0 0 18px 18px;
-  background: rgba(255, 183, 129, 0.18);
+  left: 14px;
+  top: -13px;
+  width: 56px;
+  height: 28px;
+  border-radius: 18px 18px 6px 6px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 -6px 0 rgba(255, 255, 255, 0.2);
 }
 
-.visual-coin {
-  width: 20px;
-  height: 20px;
+.visual-wallet::after {
+  content: "";
+  position: absolute;
+  right: 9px;
+  top: 27px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.visual-wallet__label {
+  left: 50%;
+  bottom: 12px;
+  min-width: 66px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f7a3f;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.visual-leak {
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   background: linear-gradient(145deg, #ffd35a, #ff9f1a);
   box-shadow: 0 8px 14px rgba(255, 159, 26, 0.28);
 }
 
-.visual-coin--one { left: 28px; top: 52px; }
-.visual-coin--two { right: 24px; top: 70px; transform: scale(0.82); }
-.visual-coin--three { left: 74px; bottom: 16px; transform: scale(0.68); }
+.visual-leak::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 255, 255, 0.58);
+}
+
+.visual-leak--one { left: 28px; top: 74px; }
+.visual-leak--two { right: 32px; top: 92px; transform: scale(0.86); }
+.visual-leak--three { left: 78px; bottom: 25px; transform: scale(0.72); }
+
+.visual-plug {
+  right: 14px;
+  top: 26px;
+  width: 40px;
+  height: 40px;
+  border-radius: 16px 16px 18px 18px;
+  background: linear-gradient(145deg, #3182f6, #1b64da);
+  transform: rotate(13deg);
+  box-shadow: 0 12px 20px rgba(49, 130, 246, 0.22);
+}
+
+.visual-plug::before,
+.visual-plug::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 6px;
+  height: 13px;
+  border-radius: 999px;
+  background: #1456c8;
+}
+
+.visual-plug::before { left: 11px; }
+.visual-plug::after { right: 11px; }
+
+.result-visual--delivery .visual-wallet { background: linear-gradient(145deg, #35c98b, #1f7a3f); }
+.result-visual--subscription .visual-wallet { background: linear-gradient(145deg, #5d8cff, #6d5ce7); }
+.result-visual--convenience .visual-wallet { background: linear-gradient(145deg, #ffbf5f, #ff7b54); }
+.result-visual--lateNight .visual-wallet { background: linear-gradient(145deg, #5b668a, #2f3758); }
+.result-visual--discount .visual-wallet { background: linear-gradient(145deg, #ff6b8a, #ff3d71); }
+.result-visual--taxi .visual-wallet { background: linear-gradient(145deg, #ffd75a, #ffb020); }
+.result-visual--taxi .visual-wallet__label,
+.result-visual--discount .visual-wallet__label,
+.result-visual--convenience .visual-wallet__label { color: #191f28; }
 
 .visual-shadow {
   left: 44px;
   right: 44px;
-  bottom: 8px;
+  bottom: 6px;
   height: 14px;
   border-radius: 50%;
   background: rgba(25, 31, 40, 0.11);
   filter: blur(2px);
 }
-
-.result-visual--subscription .visual-card { background: linear-gradient(145deg, #5d8cff, #6d5ce7); }
-.result-visual--convenience .visual-card { background: linear-gradient(145deg, #ffbf5f, #ff7b54); }
-.result-visual--lateNight .visual-card { background: linear-gradient(145deg, #5b668a, #2f3758); }
-.result-visual--discount .visual-card { background: linear-gradient(145deg, #ff6b8a, #ff3d71); }
-.result-visual--taxi .visual-card { background: linear-gradient(145deg, #ffd75a, #ffb020); }
 
 .result-panel,
 .patch-card {
@@ -432,8 +530,42 @@
   gap: 10px;
 }
 
-.detail-panel {
+.detail-panel,
+.benefit-panel {
   padding: 17px 18px;
+}
+
+.benefit-panel {
+  border: 1px solid rgba(49, 130, 246, 0.16);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #eef6ff 0%, #ffffff 100%);
+  box-shadow: 0 12px 28px rgba(49, 130, 246, 0.08);
+}
+
+.benefit-panel strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #1b64da;
+  font-size: 15px;
+}
+
+.benefit-panel p {
+  margin: 0 0 12px;
+  color: #4e5968;
+  font-size: 16px;
+  line-height: 1.52;
+}
+
+.benefit-button {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 16px;
+  background: #3182f6;
+  color: #ffffff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .dev-link {

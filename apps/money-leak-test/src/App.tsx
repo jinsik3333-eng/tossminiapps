@@ -1,5 +1,5 @@
 import { Button, TextButton, useToast } from "@toss/tds-mobile";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./App.css";
 import { useInAppAds } from "./hooks/useInAppAds";
@@ -14,6 +14,7 @@ type LeakType =
   | "taxi";
 
 type Step = "intro" | "quiz" | "result" | "ads";
+type RewardAction = "detail" | "badge" | "shareBenefit";
 
 interface AnswerOption {
   label: string;
@@ -210,13 +211,28 @@ function getResultType(answers: LeakType[]): LeakType {
 }
 
 function ResultVisual({ type, label }: { type: LeakType; label: string }) {
+  const leakLabels: Record<LeakType, string> = {
+    delivery: "배달비",
+    subscription: "구독료",
+    convenience: "자잘결제",
+    lateNight: "야식비",
+    discount: "세일충동",
+    taxi: "택시비",
+  };
+
   return (
     <div className={`result-visual result-visual--${type}`} aria-label={label}>
-      <span className="visual-orb visual-orb--back" />
-      <span className="visual-card" />
-      <span className="visual-coin visual-coin--one" />
-      <span className="visual-coin visual-coin--two" />
-      <span className="visual-coin visual-coin--three" />
+      <span className="visual-hole">
+        <span className="visual-hole__label">돈구멍</span>
+      </span>
+      <span className="visual-leak-path" />
+      <span className="visual-wallet">
+        <span className="visual-wallet__label">{leakLabels[type]}</span>
+      </span>
+      <span className="visual-leak visual-leak--one" />
+      <span className="visual-leak visual-leak--two" />
+      <span className="visual-leak visual-leak--three" />
+      <span className="visual-plug" />
       <span className="visual-shadow" />
     </div>
   );
@@ -227,9 +243,11 @@ function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<LeakType[]>([]);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [isDetailWaitingReward, setIsDetailWaitingReward] = useState(false);
+  const [isShareBenefitOpen, setIsShareBenefitOpen] = useState(false);
+  const [pendingRewardAction, setPendingRewardAction] = useState<RewardAction | null>(null);
   const [patchCount, setPatchCount] = useState(0);
   const detailAd = useInAppAds(DETAIL_AD_GROUP_ID);
+  const handledRewardCountRef = useRef(0);
   const toast = useToast();
 
   const resultType = useMemo(() => getResultType(answers), [answers]);
@@ -246,7 +264,8 @@ function App() {
     setAnswers([]);
     setCurrentQuestionIndex(0);
     setIsDetailOpen(false);
-    setIsDetailWaitingReward(false);
+    setIsShareBenefitOpen(false);
+    setPendingRewardAction(null);
     setPatchCount(0);
     setStep("quiz");
   };
@@ -259,7 +278,8 @@ function App() {
     if (nextAnswers.length === questions.length) {
       setStep("result");
       setIsDetailOpen(false);
-      setIsDetailWaitingReward(false);
+      setIsShareBenefitOpen(false);
+      setPendingRewardAction(null);
       setPatchCount(0);
       return;
     }
@@ -278,33 +298,57 @@ function App() {
   };
 
   useEffect(() => {
-    if (isDetailWaitingReward && detailAd.lastReward != null) {
-      setIsDetailOpen(true);
-      setIsDetailWaitingReward(false);
+    if (pendingRewardAction == null || detailAd.rewardCount <= handledRewardCountRef.current) {
+      return;
     }
-  }, [detailAd.lastReward, isDetailWaitingReward]);
 
-  const openDetail = () => {
+    handledRewardCountRef.current = detailAd.rewardCount;
+
+    if (pendingRewardAction === "detail") {
+      setIsDetailOpen(true);
+    }
+
+    if (pendingRewardAction === "badge") {
+      setPatchCount(patchGoal);
+      toast.openToast("짧은 확인을 마치고 절약 배지를 받았어요.");
+    }
+
+    if (pendingRewardAction === "shareBenefit") {
+      setIsShareBenefitOpen(true);
+      toast.openToast("공유 보너스 루틴을 열었어요.");
+    }
+
+    setPendingRewardAction(null);
+  }, [detailAd.rewardCount, patchGoal, pendingRewardAction, toast]);
+
+  const runRewardGate = (action: RewardAction, fallback: () => void) => {
     if (detailAd.isSupported && detailAd.isAdLoaded) {
-      setIsDetailWaitingReward(true);
+      setPendingRewardAction(action);
       detailAd.showAd();
       return;
     }
 
-    setIsDetailOpen(true);
+    fallback();
   };
 
+  const openDetail = () => {
+    runRewardGate("detail", () => setIsDetailOpen(true));
+  };
+
+  const completeBadge = () => {
+    runRewardGate("badge", () => {
+      setPatchCount(patchGoal);
+      toast.openToast("오늘 막을 소비 구멍을 정했어요.");
+    });
+  };
 
   const patchLeak = () => {
-    setPatchCount((count) => {
-      const nextCount = Math.min(count + 1, patchGoal);
+    if (patchCount >= patchGoal - 1) {
+      completeBadge();
+      return;
+    }
 
-      if (nextCount === patchGoal && count < patchGoal) {
-        toast.openToast("오늘 막을 소비 구멍을 정했어요.");
-      }
-
-      return nextCount;
-    });
+    setPatchCount((count) => Math.min(count + 1, patchGoal));
   };
 
   const shareResult = async () => {
@@ -318,14 +362,23 @@ function App() {
           title: "돈 새는 구멍 테스트",
           text,
         });
+        runRewardGate("shareBenefit", () => setIsShareBenefitOpen(true));
         return;
       }
 
       await navigator.clipboard?.writeText(text);
       toast.openToast("공유 문구를 복사했어요.");
+      runRewardGate("shareBenefit", () => setIsShareBenefitOpen(true));
     } catch (error) {
       console.info("공유가 취소되었거나 복사에 실패했습니다.", error);
-      toast.openToast("공유를 완료하지 못했어요.");
+
+      if (error instanceof DOMException && error.name === "AbortError") {
+        toast.openToast("공유를 취소했어요.");
+        return;
+      }
+
+      toast.openToast("공유 문구를 준비했어요.");
+      runRewardGate("shareBenefit", () => setIsShareBenefitOpen(true));
     }
   };
 
@@ -435,16 +488,20 @@ function App() {
             onClick={patchLeak}
             disabled={isPatchComplete}
           >
-            {isPatchComplete ? "오늘의 절약 배지 획득" : "눌러서 소비 구멍 막기"}
+            {isPatchComplete
+              ? "오늘의 절약 배지 획득"
+              : patchCount === patchGoal - 1
+                ? "짧은 광고 보고 절약 배지 받기"
+                : "눌러서 소비 구멍 막기"}
           </button>
-          <p>5번 누르면 오늘 막을 구멍이 채워지고, 상세 처방을 확인할 준비가 끝나요.</p>
+          <p>마지막 한 칸은 짧은 확인 뒤 배지로 바뀌어요. 현금 보상은 아니고 오늘의 루틴을 여는 장치예요.</p>
         </section>
 
         <section className="action-stack">
           {!isDetailOpen ? (
             <Button
               color="dark"
-              loading={isDetailWaitingReward}
+              loading={pendingRewardAction === "detail"}
               onClick={openDetail}
             >
               {detailAd.isSupported && detailAd.isAdLoaded
@@ -457,9 +514,22 @@ function App() {
               <p>{result.detail}</p>
             </div>
           )}
-          <Button variant="weak" onClick={shareResult}>
-            내 유형 공유하기
+          <Button
+            loading={pendingRewardAction === "shareBenefit"}
+            variant="weak"
+            onClick={shareResult}
+          >
+            공유하고 혜택 루틴 받기
           </Button>
+          {isShareBenefitOpen && (
+            <div className="benefit-panel">
+              <strong>공유 보너스 루틴</strong>
+              <p>친구에게 보내기 좋은 결과 문구와 함께, 오늘 바로 해볼 절약 체크리스트를 열었어요.</p>
+              <button className="benefit-button" type="button" onClick={openDetail}>
+                혜택 루틴 받아가기
+              </button>
+            </div>
+          )}
           <TextButton size="medium" onClick={startQuiz}>
             다시 테스트하기
           </TextButton>
