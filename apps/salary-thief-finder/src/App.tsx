@@ -425,6 +425,12 @@ export default function App() {
 
   return (
     <main className="app-shell">
+      <UtilityNudge
+        appLabel="월급 도둑 찾기"
+        notifyCopy="알림을 켜면 내일 수사 미션을 놓치지 않아요."
+        loginCopy="로그인하면 7일 수사 기록을 더 안전하게 이어볼 수 있어요."
+      />
+
       <section className="home-card">
         <p className="eyebrow">오늘의 사건 · {todayCase}</p>
         <h1>이번 달 내 월급을 훔쳐간 범인은?</h1>
@@ -461,8 +467,67 @@ export default function App() {
           <span>7일 수사 기록</span>
         </div>
       </section>
+      <CherryPickMenu
+        items={[
+          "수사 룰렛",
+          "도둑 추적 게임",
+          "친구에게 보내기",
+          "기록 보기",
+          "보너스 루틴",
+        ]}
+        adCopy="AD · 광고 보고 추가 단서 받기"
+      />
       <BannerAd label="월급 도둑 찾기 홈 광고" />
     </main>
+  );
+}
+
+function UtilityNudge({
+  appLabel,
+  notifyCopy,
+  loginCopy,
+}: {
+  appLabel: string;
+  notifyCopy: string;
+  loginCopy: string;
+}) {
+  return (
+    <section
+      className="utility-nudge"
+      aria-label={`${appLabel} 알림과 로그인 안내`}
+    >
+      <div>
+        <span className="utility-bell" aria-hidden="true" />
+        <strong>내일도 이어보기</strong>
+      </div>
+      <p>{notifyCopy}</p>
+      <p>{loginCopy}</p>
+    </section>
+  );
+}
+
+function CherryPickMenu({
+  items,
+  adCopy,
+}: {
+  items: string[];
+  adCopy: string;
+}) {
+  return (
+    <section className="cherry-menu" aria-label="보조 메뉴">
+      <div className="cherry-menu__head">
+        <strong>오늘의 보조 메뉴</strong>
+        <span>매일 들어올 이유</span>
+      </div>
+      <div className="cherry-menu__grid">
+        {items.map((item) => (
+          <button key={item} type="button">
+            {item}
+          </button>
+        ))}
+      </div>
+      <div className="ad-loop-pill">{adCopy}</div>
+    </section>
   );
 }
 

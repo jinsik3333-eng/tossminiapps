@@ -1692,6 +1692,11 @@ function App() {
           </Top.SubtitleParagraph>
         }
       />
+      <UtilityNudge
+        appLabel="오늘의 헛돈 방어전"
+        notifyCopy="알림을 켜면 내일 방어 미션을 놓치지 않아요."
+        loginCopy="로그인하면 30일 방어 기록을 더 안전하게 이어볼 수 있어요."
+      />
       <section className="hero-card compact-hero">
         <p className="eyebrow">
           {completedToday
@@ -1736,6 +1741,17 @@ function App() {
           <span>30일 기록</span>
         </div>
       </section>
+      <CherryPickMenu
+        items={[
+          "방어 룰렛",
+          "5초 미니 게임",
+          "친구에게 보내기",
+          "기록 보기",
+          "보너스 루틴",
+        ]}
+        adCopy="AD · 광고 보고 방어 카드 열기"
+      />
+
       <section className="stamp-card compact">
         <div className="section-title">
           <strong>30일 방어 기록</strong>
@@ -1756,6 +1772,55 @@ function App() {
         <p className="next-monster">내일 다시 오면 {tomorrow.enemy} 등장</p>
       </section>
     </main>
+  );
+}
+
+function UtilityNudge({
+  appLabel,
+  notifyCopy,
+  loginCopy,
+}: {
+  appLabel: string;
+  notifyCopy: string;
+  loginCopy: string;
+}) {
+  return (
+    <section
+      className="utility-nudge"
+      aria-label={`${appLabel} 알림과 로그인 안내`}
+    >
+      <div>
+        <span className="utility-bell" aria-hidden="true" />
+        <strong>내일도 이어보기</strong>
+      </div>
+      <p>{notifyCopy}</p>
+      <p>{loginCopy}</p>
+    </section>
+  );
+}
+
+function CherryPickMenu({
+  items,
+  adCopy,
+}: {
+  items: string[];
+  adCopy: string;
+}) {
+  return (
+    <section className="cherry-menu" aria-label="보조 메뉴">
+      <div className="cherry-menu__head">
+        <strong>오늘의 보조 메뉴</strong>
+        <span>매일 들어올 이유</span>
+      </div>
+      <div className="cherry-menu__grid">
+        {items.map((item) => (
+          <button key={item} type="button">
+            {item}
+          </button>
+        ))}
+      </div>
+      <div className="ad-loop-pill">{adCopy}</div>
+    </section>
   );
 }
 

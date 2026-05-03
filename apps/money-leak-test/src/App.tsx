@@ -635,6 +635,12 @@ function App() {
 
   return (
     <main className="app-shell intro-shell">
+      <UtilityNudge
+        appLabel="돈 새는 구멍 테스트"
+        notifyCopy="알림을 켜면 내일 패치 미션을 놓치지 않아요."
+        loginCopy="로그인하면 7일 패치 기록을 더 안전하게 이어볼 수 있어요."
+      />
+
       <section className="intro-hero" aria-label="돈 새는 구멍 테스트 소개">
         <div className="intro-hero__copy">
           <p className="intro-kicker">요즘 카드값 보고 뜨끔했다면</p>
@@ -678,6 +684,17 @@ function App() {
         </p>
       </section>
 
+      <CherryPickMenu
+        items={[
+          "패치 룰렛",
+          "미니 게임",
+          "친구에게 보내기",
+          "기록 보기",
+          "보너스 루틴",
+        ]}
+        adCopy="AD · 광고 보고 보너스 패치 열기"
+      />
+
       <section className="intro-card">
         <p className="routine-name">오늘의 머니루틴</p>
         <h2>테스트 완료 후 확인할 수 있는 것</h2>
@@ -705,6 +722,55 @@ function App() {
         )}
       </section>
     </main>
+  );
+}
+
+function UtilityNudge({
+  appLabel,
+  notifyCopy,
+  loginCopy,
+}: {
+  appLabel: string;
+  notifyCopy: string;
+  loginCopy: string;
+}) {
+  return (
+    <section
+      className="utility-nudge"
+      aria-label={`${appLabel} 알림과 로그인 안내`}
+    >
+      <div>
+        <span className="utility-bell" aria-hidden="true" />
+        <strong>내일도 이어보기</strong>
+      </div>
+      <p>{notifyCopy}</p>
+      <p>{loginCopy}</p>
+    </section>
+  );
+}
+
+function CherryPickMenu({
+  items,
+  adCopy,
+}: {
+  items: string[];
+  adCopy: string;
+}) {
+  return (
+    <section className="cherry-menu" aria-label="보조 메뉴">
+      <div className="cherry-menu__head">
+        <strong>오늘의 보조 메뉴</strong>
+        <span>매일 들어올 이유</span>
+      </div>
+      <div className="cherry-menu__grid">
+        {items.map((item) => (
+          <button key={item} type="button">
+            {item}
+          </button>
+        ))}
+      </div>
+      <div className="ad-loop-pill">{adCopy}</div>
+    </section>
   );
 }
 
