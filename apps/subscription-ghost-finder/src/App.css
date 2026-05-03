@@ -311,6 +311,15 @@ body {
   margin-top: 16px;
 }
 
+.result-note {
+  margin-top: 14px !important;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #6b7684 !important;
+  font-size: 12px !important;
+}
+
 .ghost-list span,
 .benefit-tags span {
   display: inline-flex;

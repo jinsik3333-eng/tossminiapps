@@ -124,8 +124,8 @@ function getResult(ghostCount: number) {
   if (ghostCount === 0) {
     return {
       label: "깨끗한 구독함",
-      title: "구독료 유령 0마리",
-      copy: "이번 달 자동결제 감각이 꽤 좋아요. 결제일만 한 번 더 확인하면 충분해요.",
+      title: "점검할 구독 후보 0개",
+      copy: "이번 달 구독 관리 감각이 꽤 좋아요. 결제일만 한 번 더 확인하면 충분해요.",
       level: "safe",
     };
   }
@@ -133,25 +133,25 @@ function getResult(ghostCount: number) {
   if (ghostCount <= 2) {
     return {
       label: "잠복 유령 주의",
-      title: `구독료 유령 ${ghostCount}마리 발견`,
-      copy: "크게 새는 건 아니지만, 안 쓰는 구독이 조용히 남아있을 수 있어요.",
+      title: `구독료 점검 후보 ${ghostCount}개`,
+      copy: "크게 부담되는 수준은 아니지만, 직접 확인해볼 구독 후보가 있어요.",
       level: "watch",
     };
   }
 
   if (ghostCount <= 4) {
     return {
-      label: "자동결제 경보",
-      title: `구독료 유령 ${ghostCount}마리 출몰`,
-      copy: "이번 달 고정비에서 유령 후보가 꽤 보여요. 해지 전 체크 순서가 필요해요.",
+      label: "구독 점검 필요",
+      title: `구독료 점검 후보 ${ghostCount}개`,
+      copy: "이번 달 구독 목록에서 직접 확인할 후보가 꽤 있어요. 해지 전 체크 순서가 필요해요.",
       level: "danger",
     };
   }
 
   return {
     label: "월급 새는 단계",
-    title: `구독료 유령 ${ghostCount}마리 잠복`,
-    copy: "자동결제가 월급을 조금씩 갉아먹는 상태예요. 오늘 10분 정리 루틴을 추천해요.",
+    title: `구독료 점검 후보 ${ghostCount}개`,
+    copy: "안 쓰는 구독 후보가 여러 개 보여요. 오늘 10분만 잡고 결제일과 사용 여부를 정리해보세요.",
     level: "boss",
   };
 }
@@ -199,7 +199,7 @@ function GhostScene({ ghostCount }: { ghostCount: number }) {
         <span className="ghost-mouth" />
         <strong>{ghostCount > 0 ? `${ghostCount}마리` : "탐색"}</strong>
       </div>
-      <div className="shield-card">해지 전 확인</div>
+      <div className="shield-card">해지 전 체크</div>
     </div>
   );
 }
@@ -253,7 +253,7 @@ function App() {
   }
 
   async function share() {
-    const text = `나는 ${result.title}. 너도 60초 안에 구독료 유령 찾아봐.`;
+    const text = `나는 ${result.title}. 너도 60초 안에 안 쓰는 구독 후보를 직접 점검해봐.`;
 
     try {
       if (navigator.share) {
@@ -267,7 +267,8 @@ function App() {
         toast.openToast("공유를 취소했어요");
         return;
       }
-      toast.openToast("공유 문구를 복사하지 못했어요");
+      await navigator.clipboard?.writeText(text);
+      toast.openToast("공유 문구를 복사했어요");
     }
   }
 
@@ -326,7 +327,7 @@ function App() {
         <TossBannerAd
           adGroupId={BANNER_AD_GROUP_ID}
           className="quiz-bottom-ad"
-          label="자동결제 점검 중 광고"
+          label="구독 점검 중 광고"
         />
       </main>
     );
@@ -339,7 +340,7 @@ function App() {
           title={<Top.TitleParagraph size={22}>진단 결과</Top.TitleParagraph>}
           subtitleBottom={
             <Top.SubtitleParagraph size={15}>
-              구독료 유령 후보를 찾았어요
+              입력한 답변 기준의 참고용 결과예요
             </Top.SubtitleParagraph>
           }
         />
@@ -359,12 +360,17 @@ function App() {
               ))
             )}
           </div>
+
+          <p className="result-note">
+            실제 결제 내역이나 구독 상태를 자동으로 조회하지 않으며, 입력한
+            답변을 바탕으로 한 참고용 결과예요.
+          </p>
         </section>
 
         <section className="history-card">
           <div>
             <strong>최근 7회 점검 기록</strong>
-            <p>숫자가 낮을수록 자동결제가 잘 정리된 상태예요.</p>
+            <p>숫자가 낮을수록 직접 확인할 구독 후보가 적은 상태예요.</p>
           </div>
           <div className="history-grid">
             {Array.from({ length: 7 }).map((_, itemIndex) => {
@@ -385,12 +391,12 @@ function App() {
           <div className="ticket-head">
             <span>👻</span>
             <div>
-              <p className="eyebrow">오늘의 정리권</p>
+              <p className="eyebrow">오늘의 정리 루틴</p>
               <h2>광고 보고 구독 정리 루틴 받기</h2>
             </div>
           </div>
           <p>
-            현금/포인트 보상이 아니라, 지금 바로 저장해둘 수 있는 자동결제 점검
+            현금/포인트 보상 없이, 직접 확인할 때 참고할 수 있는 구독 점검
             순서예요.
           </p>
 
@@ -438,14 +444,14 @@ function App() {
       />
 
       <section className="hero-card">
-        <p className="eyebrow">자동결제 유령 진단</p>
-        <h1>이번 달에도 몰래 빠져나간 구독료가 있을지도?</h1>
+        <p className="eyebrow">직접 답하는 구독 점검</p>
+        <h1>이번 달에도 잊고 있던 구독료가 있을지도?</h1>
         <p>
-          토스가 내 구독 목록을 자동으로 읽는 앱은 아니에요. 대신 내가 쓰는
-          구독만 빠르게 떠올리며 유령 후보를 표시하는 60초 자가 점검이에요.
+          실제 결제 내역이나 구독 목록을 자동으로 조회하지 않아요. 내가 직접
+          답한 내용을 바탕으로 놓치기 쉬운 구독 후보만 확인해요.
         </p>
         <GhostScene ghostCount={3} />
-        <Button onClick={start}>60초 유령 찾기 시작</Button>
+        <Button onClick={start}>60초 자가 점검 시작</Button>
       </section>
 
       <TossBannerAd
@@ -456,17 +462,17 @@ function App() {
 
       <section className="benefit-card">
         <div>
-          <p className="eyebrow">광고 보상 루프</p>
+          <p className="eyebrow">오늘의 보너스</p>
           <h2>구독 정리 루틴 3단계</h2>
           <p>
-            진단을 끝내고 광고를 보면, 오늘 바로 쓸 수 있는 해지 전 체크 순서가
-            열려요.
+            점검 후 짧은 광고를 확인하면, 오늘 바로 쓸 수 있는 해지 전
+            체크리스트가 열려요.
           </p>
         </div>
         <div className="benefit-tags">
-          <span>광고 보고 열기</span>
-          <span>자동결제 점검</span>
-          <span>7회 기록</span>
+          <span>정리 루틴 열기</span>
+          <span>결제 내역 확인법</span>
+          <span>7일 기록</span>
         </div>
       </section>
     </main>

@@ -26,7 +26,7 @@ export function TossBannerAd({
           <div className="ad-banner-fallback">
             {isSupported
               ? "광고를 불러오는 중이에요"
-              : "토스앱에서 배너 광고가 노출돼요"}
+              : "광고가 표시될 수 있어요"}
           </div>
         )}
       </div>
