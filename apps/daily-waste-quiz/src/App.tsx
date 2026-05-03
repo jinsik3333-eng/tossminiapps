@@ -1376,7 +1376,7 @@ function BattleScene({
     >
       <img className="battle-hero-art" src={wasteDefenseHero} />
       <span className="battle-hero-scrim" />
-      <span className="stage-timer">05</span>
+      <span className="stage-timer">5초</span>
       <span className="trap-badge-pill">{visual.trapBadge}</span>
       <span className="shield-copy">헛돈 방어</span>
       {typeof hp === "number" ? (

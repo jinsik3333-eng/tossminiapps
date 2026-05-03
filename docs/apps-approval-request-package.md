@@ -63,7 +63,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/daily-waste-quiz`
 - AIT 번들: `apps/daily-waste-quiz/daily-waste-quiz.ait`
-- 최신 build deploymentId: `019ded96-dc13-7844-99c7-737a9bb64ed2`
+- 최신 build deploymentId: `019ded9d-d327-754d-8829-a7de6414727b`
 - 상세 카피 문서: `docs/daily-waste-quiz-listing-copy.md`
 
 ### 콘솔 입력값
