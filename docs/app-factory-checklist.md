@@ -1,5 +1,7 @@
 # Apps in Toss 앱 공장 체크리스트
 
+상세 운영 기준은 `docs/factory-operation.md`를 따른다.
+
 ## 새 앱 생성 전
 
 - [ ] 앱명/후킹 카피 확정

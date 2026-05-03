@@ -67,7 +67,7 @@
 - `npm run lint` 성공
 - `npm run build` 성공
 - 생성 번들: `subscription-ghost-finder.ait`
-- 최신 build deploymentId: `019ded7d-9268-727e-9a0d-f10b1eb51501`
+- 최신 build deploymentId: `019dee13-70ef-7cfb-84aa-3659ef85de25`
 - 모바일 QA:
   - 홈: 컨셉/CTA/광고/보상 카드 잘림 없음
   - 질문: 3선택지와 하단 광고가 서로 가리지 않음

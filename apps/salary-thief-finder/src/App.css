@@ -86,7 +86,8 @@ h2 {
   letter-spacing: -0.02em;
 }
 
-.hero-art {
+.hero-art,
+.result-scene {
   position: relative;
   height: 204px;
   margin: 18px 0;
@@ -96,7 +97,13 @@ h2 {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.42);
 }
 
-.hero-art img {
+.result-scene {
+  margin-top: 0;
+  background: color-mix(in srgb, var(--result-color) 13%, white);
+}
+
+.hero-art img,
+.result-scene img {
   width: 100%;
   height: 100%;
   display: block;
@@ -324,6 +331,97 @@ h2 {
   background: #eef6ff;
 }
 
+.daily-ticket,
+.evidence-box {
+  display: grid;
+  gap: 12px;
+  margin: 14px 0 18px;
+  padding: 15px;
+  border: 1px solid color-mix(in srgb, #3182f6 14%, white);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+}
+
+.daily-ticket strong,
+.evidence-box strong {
+  color: #191f28;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.daily-ticket span,
+.evidence-box span {
+  color: #4e5968;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.daily-ticket small {
+  color: #6b7684;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stamp-row,
+.evidence-slots {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.stamp-row i {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #dfe8f5;
+  box-shadow: inset 0 0 0 1px rgba(107, 118, 132, 0.12);
+}
+
+.stamp-row i.filled {
+  background: linear-gradient(135deg, #3182f6, #7048e8);
+  box-shadow: 0 8px 18px rgba(49, 130, 246, 0.22);
+}
+
+.evidence-box {
+  border-color: color-mix(in srgb, var(--result-color) 18%, white);
+  background: color-mix(in srgb, var(--result-color) 8%, white);
+}
+
+.evidence-box > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.evidence-slots span {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #6b7684;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.evidence-slots span.found {
+  background: color-mix(in srgb, var(--result-color) 14%, white);
+  color: var(--result-color);
+}
+
+.mini-action {
+  min-height: 44px;
+  border: 0;
+  border-radius: 15px;
+  background: #191f28;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
 .reward-box {
   margin: 14px 0;
   background: #f3f0ff;
@@ -360,7 +458,8 @@ h2 {
     font-size: 27px;
   }
 
-  .hero-art {
+  .hero-art,
+  .result-scene {
     height: 188px;
   }
 }

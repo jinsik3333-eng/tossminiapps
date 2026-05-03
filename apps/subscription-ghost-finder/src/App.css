@@ -48,6 +48,60 @@ body {
   padding: 22px;
 }
 
+.clue-hub {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 16px;
+  border: 1px solid rgba(123, 97, 255, 0.14);
+  border-radius: 24px;
+  background: rgba(248, 245, 255, 0.86);
+}
+
+.clue-hub strong {
+  display: block;
+  color: #191f28;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.clue-hub span {
+  display: block;
+  margin-top: 6px;
+  color: #4e5968;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.clue-hub button {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 17px;
+  background: #191f28;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.clue-slot-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.clue-slot-row i {
+  height: 8px;
+  border-radius: 999px;
+  background: #d8d2ff;
+}
+
+.clue-slot-row i.filled {
+  background: #7b61ff;
+}
+
 .hero-card h1,
 .question-card h1,
 .result-card h1 {

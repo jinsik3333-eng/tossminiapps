@@ -50,4 +50,4 @@
 - `npm run lint` 성공
 - `npm run build` 성공
 - AIT 번들: `apps/salary-thief-finder/salary-thief-finder.ait`
-- 최신 build deploymentId: `019dedbe-c7ee-7734-901b-9bae6db0edfd`
+- 최신 build deploymentId: `019dee13-b000-7527-8e34-db24088fb440`

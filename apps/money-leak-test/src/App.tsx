@@ -41,6 +41,29 @@ interface ResultProfile {
 
 const DETAIL_AD_GROUP_ID = "ait-ad-test-rewarded-id";
 const SHOW_DEV_TOOLS = import.meta.env.DEV;
+const DAILY_PATCH_KEY = "money-leak-test:daily-patches";
+
+function readDailyPatches() {
+  try {
+    const raw = window.localStorage.getItem(DAILY_PATCH_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(Boolean).slice(-7) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveDailyPatch(label: string) {
+  try {
+    const todayKey = `money-leak:${Math.floor(Date.now() / 86400000)}`;
+    const previous = readDailyPatches().filter((item) => item.key !== todayKey);
+    const next = [...previous, { key: todayKey, label }].slice(-7);
+    window.localStorage.setItem(DAILY_PATCH_KEY, JSON.stringify(next));
+    return next;
+  } catch {
+    return [];
+  }
+}
 
 const questions: Question[] = [
   {
@@ -265,6 +288,8 @@ function App() {
   const [pendingRewardAction, setPendingRewardAction] =
     useState<RewardAction | null>(null);
   const [patchCount, setPatchCount] = useState(0);
+  const [dailyPatches, setDailyPatches] = useState(readDailyPatches);
+  const [todayPatchCount, setTodayPatchCount] = useState(0);
   const detailAd = useInAppAds(DETAIL_AD_GROUP_ID);
   const handledRewardCountRef = useRef(0);
   const answerLockedRef = useRef(false);
@@ -289,6 +314,19 @@ function App() {
     setPendingRewardAction(null);
     setPatchCount(0);
     setStep("quiz");
+  };
+
+  const collectTodayPatch = () => {
+    const nextCount = Math.min(todayPatchCount + 1, 3);
+    setTodayPatchCount(nextCount);
+
+    if (nextCount >= 3) {
+      setDailyPatches(saveDailyPatch("돈구멍 패치 완료"));
+      toast.openToast("오늘 돈구멍 패치 3개를 채웠어요.");
+      return;
+    }
+
+    toast.openToast("패치 단서가 하나 쌓였어요.");
   };
 
   const answerQuestion = (leakType: LeakType) => {
@@ -611,6 +649,27 @@ function App() {
           <span className="money-hero-badge">생활비</span>
           <span className="money-hero-status">60초 소비 점검</span>
         </div>
+        <section className="daily-patch-card" aria-label="오늘의 돈구멍 패치">
+          <div>
+            <p className="routine-name">오늘의 패치권</p>
+            <strong>구멍 3개를 탭해서 막으면 오늘 기록이 채워져요</strong>
+            <span>
+              최근 기록 {dailyPatches.length}/7 · 내일은 다른 소비 구멍으로
+              열려요
+            </span>
+          </div>
+          <button type="button" onClick={collectTodayPatch}>
+            패치 붙이기 {todayPatchCount}/3
+          </button>
+          <div className="patch-dot-row" aria-hidden="true">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <i
+                className={index < todayPatchCount ? "filled" : ""}
+                key={index}
+              />
+            ))}
+          </div>
+        </section>
         <button className="hero-start-button" type="button" onClick={startQuiz}>
           내 돈구멍 60초 진단하기
         </button>
@@ -621,11 +680,11 @@ function App() {
 
       <section className="intro-card">
         <p className="routine-name">오늘의 머니루틴</p>
-        <h2>테스트 끝나면 바로 받는 것</h2>
+        <h2>테스트 완료 후 확인할 수 있는 것</h2>
         <ul>
           <li>내 돈을 새게 하는 대표 소비 유형</li>
-          <li>친구에게 보내기 좋은 “나는 ○○형” 결과 카드</li>
-          <li>마지막에 눌러서 받는 오늘의 절약 배지</li>
+          <li>오늘의 패치 기록과 7일 재방문 루프</li>
+          <li>선택형 광고 시청 후 열리는 절약 배지와 상세 루틴</li>
         </ul>
       </section>
 

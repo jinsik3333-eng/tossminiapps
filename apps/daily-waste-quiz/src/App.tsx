@@ -1717,20 +1717,21 @@ function App() {
       <section className="daily-panel compact-panel reward-preview benefit-preview">
         <div className="benefit-row">
           <span className="benefit-icon" aria-hidden="true">
-            🎟️
+            5초
           </span>
           <div>
             <div className="section-title">
-              <strong>행운의 절약 혜택권</strong>
-              <span>광고 보상</span>
+              <strong>오늘의 방어 카드</strong>
+              <span>콘텐츠 보너스</span>
             </div>
             <p>
-              {today.reward.title} · {today.reward.benefitCopy}
+              {today.reward.title} · 광고 확인 후 바로 써볼 수 있는 3단계
+              루틴이에요.
             </p>
           </div>
         </div>
         <div className="mini-list benefit-tags">
-          <span>광고 보고 열기</span>
+          <span>광고 보고 루틴 열기</span>
           <span>3단계 루틴 저장</span>
           <span>30일 기록</span>
         </div>

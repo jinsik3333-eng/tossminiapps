@@ -2,6 +2,11 @@ import { useMemo, useState } from "react";
 
 import "./App.css";
 import salaryThiefHero from "./assets/salary-thief-hero.jpg";
+import convenienceResult from "./assets/convenience-result.jpg";
+import deliveryResult from "./assets/delivery-result.jpg";
+import shoppingResult from "./assets/shopping-result.jpg";
+import subscriptionResult from "./assets/subscription-result.jpg";
+import taxiResult from "./assets/taxi-result.jpg";
 
 type ThiefType =
   | "delivery"
@@ -28,6 +33,8 @@ type ResultMeta = {
   quote: string;
   pattern: string;
   routine: string;
+  evidence: string[];
+  image: string;
   color: string;
 };
 
@@ -147,6 +154,8 @@ const RESULTS: Record<ThiefType, ResultMeta> = {
     pattern:
       "무료배송 기준 맞추기, 사이드 추가, 늦은 저녁 주문이 반복되는 편이에요.",
     routine: "오늘은 배달앱을 열기 전에 냉장고 사진 한 장을 먼저 확인해요.",
+    evidence: ["무료배송 기준", "야식 주문", "사이드 추가"],
+    image: deliveryResult,
     color: "#3182f6",
   },
   convenience: {
@@ -155,6 +164,8 @@ const RESULTS: Record<ThiefType, ResultMeta> = {
     quote: "한 번은 작지만, 여러 번이면 월급 봉투가 가벼워져요.",
     pattern: "커피, 간식, 행사 상품처럼 소액 결제가 자주 쌓이는 타입이에요.",
     routine: "오늘은 편의점에 들어가기 전 살 것 1개만 메모해요.",
+    evidence: ["커피 한 잔", "행사 상품", "퇴근길 간식"],
+    image: convenienceResult,
     color: "#12b886",
   },
   subscription: {
@@ -164,6 +175,8 @@ const RESULTS: Record<ThiefType, ResultMeta> = {
     pattern:
       "무료체험, 멤버십, 클라우드, 콘텐츠 구독을 나중에 확인하는 편이에요.",
     routine: "오늘은 결제 알림함에서 모르는 이름 1개만 찾아봐요.",
+    evidence: ["무료체험 종료", "안 쓰는 멤버십", "모르는 결제명"],
+    image: subscriptionResult,
     color: "#7048e8",
   },
   taxi: {
@@ -172,6 +185,8 @@ const RESULTS: Record<ThiefType, ResultMeta> = {
     quote: "급한 이동이 반복되면 월급 도둑은 조용히 커져요.",
     pattern: "비 오는 날, 늦은 약속, 피곤한 퇴근길에 이동비가 자주 늘어요.",
     routine: "오늘은 호출 전에 대중교통 도착 시간만 한 번 확인해요.",
+    evidence: ["늦은 약속", "비 오는 날", "피곤한 퇴근길"],
+    image: taxiResult,
     color: "#f76707",
   },
   shopping: {
@@ -181,6 +196,8 @@ const RESULTS: Record<ThiefType, ResultMeta> = {
     pattern:
       "할인, 무료배송, 타임딜을 보면 필요보다 기회가 먼저 보이는 타입이에요.",
     routine: "오늘은 장바구니 하나를 24시간만 묵혀두고 다시 봐요.",
+    evidence: ["타임딜", "무료배송 맞춤", "장바구니 방치"],
+    image: shoppingResult,
     color: "#e64980",
   },
 };
@@ -195,9 +212,53 @@ const DAILY_CASES = [
   "야식 합리화",
 ];
 
+const DAILY_MISSIONS = [
+  "오늘의 단서 3개 모으면 방어 루틴이 열려요.",
+  "오늘만 다른 월급 도둑 후보가 숨어 있어요.",
+  "내일 들어오면 새로운 사건명으로 다시 시작돼요.",
+  "7일 기록을 채우면 내 소비 패턴이 더 선명해져요.",
+];
+
+function getDayIndex() {
+  return Math.floor(Date.now() / 86400000);
+}
+
+function getTodayKey() {
+  return `salary-thief:${getDayIndex()}`;
+}
+
 function getTodayCase() {
-  const day = Math.floor(Date.now() / 86400000);
+  const day = getDayIndex();
   return DAILY_CASES[day % DAILY_CASES.length];
+}
+
+function getTodayMission() {
+  const day = getDayIndex();
+  return DAILY_MISSIONS[day % DAILY_MISSIONS.length];
+}
+
+function getStoredStamps() {
+  try {
+    const raw = window.localStorage.getItem("salary-thief:stamps");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(Boolean).slice(-7) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveTodayStamp(resultTitle: string) {
+  try {
+    const todayKey = getTodayKey();
+    const previous = getStoredStamps().filter(
+      (stamp) => stamp.key !== todayKey,
+    );
+    const next = [...previous, { key: todayKey, title: resultTitle }].slice(-7);
+    window.localStorage.setItem("salary-thief:stamps", JSON.stringify(next));
+    return next;
+  } catch {
+    return [];
+  }
 }
 
 function pickResult(answers: ThiefType[]) {
@@ -217,7 +278,10 @@ export default function App() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<ThiefType[]>([]);
   const [routineOpen, setRoutineOpen] = useState(false);
+  const [evidenceCount, setEvidenceCount] = useState(0);
+  const [stamps, setStamps] = useState(getStoredStamps);
   const todayCase = useMemo(getTodayCase, []);
+  const todayMission = useMemo(getTodayMission, []);
   const resultType = pickResult(answers);
   const result = RESULTS[resultType];
 
@@ -225,6 +289,7 @@ export default function App() {
     setQuestionIndex(0);
     setAnswers([]);
     setRoutineOpen(false);
+    setEvidenceCount(0);
     setScreen("quiz");
   };
 
@@ -233,11 +298,22 @@ export default function App() {
     setAnswers(next);
 
     if (questionIndex >= QUESTIONS.length - 1) {
+      const picked = RESULTS[pickResult(next)];
+      setStamps(saveTodayStamp(picked.title));
       setScreen("result");
       return;
     }
 
     setQuestionIndex((index) => index + 1);
+  };
+
+  const collectEvidence = () => {
+    if (evidenceCount >= result.evidence.length) {
+      setRoutineOpen(true);
+      return;
+    }
+
+    setEvidenceCount((count) => Math.min(count + 1, result.evidence.length));
   };
 
   if (screen === "quiz") {
@@ -280,13 +356,15 @@ export default function App() {
   }
 
   if (screen === "result") {
+    const evidenceComplete = evidenceCount >= result.evidence.length;
+
     return (
       <main className="app-shell">
         <section
           className="result-card"
           style={{ "--result-color": result.color } as React.CSSProperties}
         >
-          <HeroArt badge={result.title} chip="결과 카드" />
+          <ResultScene result={result} todayCase={todayCase} />
           <p className="eyebrow">이번 달 월급 도둑 후보</p>
           <h1>{result.title}</h1>
           <p className="result-name">{result.thiefName}</p>
@@ -294,6 +372,28 @@ export default function App() {
           <div className="insight-box">
             <strong>대표 패턴</strong>
             <span>{result.pattern}</span>
+          </div>
+          <div className="evidence-box">
+            <div>
+              <strong>오늘의 단서 수집</strong>
+              <span>
+                {evidenceCount}/{result.evidence.length}개 찾음 · 매일 다른
+                사건으로 갱신
+              </span>
+            </div>
+            <div className="evidence-slots">
+              {result.evidence.map((item, index) => (
+                <span
+                  className={index < evidenceCount ? "found" : ""}
+                  key={item}
+                >
+                  {index < evidenceCount ? item : "숨은 단서"}
+                </span>
+              ))}
+            </div>
+            <button className="mini-action" onClick={collectEvidence}>
+              {evidenceComplete ? "단서 완료 · 루틴 열기" : "단서 하나 찾기"}
+            </button>
           </div>
           <div className="insight-box soft">
             <strong>오늘의 방어 루틴</strong>
@@ -303,9 +403,9 @@ export default function App() {
             <div className="reward-box">
               <strong>광고 확인 후 열리는 3단계 루틴</strong>
               <ol>
-                <li>오늘 결제 알림에서 낯선 항목 1개 찾기</li>
-                <li>반복되는 결제는 메모장에 이름만 적기</li>
-                <li>내일 같은 시간에 한 번 더 확인하기</li>
+                <li>오늘 의심 항목 1개만 기록하기</li>
+                <li>반복되는 소비는 내일 같은 시간에 다시 보기</li>
+                <li>7일 기록에 오늘의 도둑 유형 남기기</li>
               </ol>
             </div>
           ) : null}
@@ -333,6 +433,21 @@ export default function App() {
           후보를 60초만에 찾아요.
         </p>
         <HeroArt badge="월급 추적" chip="60초 사건" />
+        <section className="daily-ticket">
+          <strong>오늘의 수사권</strong>
+          <span>{todayMission}</span>
+          <div className="stamp-row" aria-label="최근 7일 기록">
+            {Array.from({ length: 7 }).map((_, index) => (
+              <i
+                key={index}
+                className={index < stamps.length ? "filled" : ""}
+              />
+            ))}
+          </div>
+          <small>
+            최근 기록 {stamps.length}/7 · 내일은 다른 사건명으로 열려요
+          </small>
+        </section>
         <button className="primary-button" onClick={start}>
           월급 도둑 찾기 시작
         </button>
@@ -340,10 +455,10 @@ export default function App() {
       <section className="benefit-card">
         <h2>테스트 끝나면 바로 받는 것</h2>
         <div className="benefit-grid">
-          <span>도둑 유형 카드</span>
-          <span>대표 소비 패턴</span>
+          <span>유형별 결과 이미지</span>
+          <span>오늘의 단서 수집</span>
           <span>광고 보고 루틴</span>
-          <span>내일 사건 예고</span>
+          <span>7일 수사 기록</span>
         </div>
       </section>
       <BannerAd label="월급 도둑 찾기 홈 광고" />
@@ -359,6 +474,24 @@ function HeroArt({ badge, chip }: { badge: string; chip: string }) {
       <span className="hero-badge">{badge}</span>
       <span className="hero-chip">{chip}</span>
       <span className="hero-label">탐정 모드</span>
+    </div>
+  );
+}
+
+function ResultScene({
+  result,
+  todayCase,
+}: {
+  result: ResultMeta;
+  todayCase: string;
+}) {
+  return (
+    <div className="result-scene" aria-hidden="true">
+      <img src={result.image} />
+      <span className="hero-scrim" />
+      <span className="hero-badge">{result.title}</span>
+      <span className="hero-chip">{todayCase}</span>
+      <span className="hero-label">검거 완료</span>
     </div>
   );
 }

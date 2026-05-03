@@ -378,6 +378,7 @@ function App() {
   const [answers, setAnswers] = useState<Answers>({});
   const [history, setHistory] = useState<string[]>(() => loadHistory());
   const [routineOpen, setRoutineOpen] = useState(false);
+  const [homeClueCount, setHomeClueCount] = useState(0);
   const answerLockedRef = useRef(false);
   const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(
     null,
@@ -416,6 +417,18 @@ function App() {
     setRoutineOpen(false);
     setPendingRewardCount(null);
     setStep("question");
+  }
+
+  function collectHomeClue() {
+    const nextCount = Math.min(homeClueCount + 1, 3);
+    setHomeClueCount(nextCount);
+
+    if (nextCount >= 3) {
+      toast.openToast("오늘의 유령 단서 3개를 채웠어요.");
+      return;
+    }
+
+    toast.openToast("유령 단서가 하나 쌓였어요.");
   }
 
   function answer(value: AnswerValue) {
@@ -638,6 +651,27 @@ function App() {
           확인해요.
         </p>
         <GhostScene ghostCount={3} theme={todayTheme} />
+        <section className="clue-hub" aria-label="오늘의 유령 단서">
+          <div>
+            <p className="eyebrow">오늘의 단서 수집</p>
+            <strong>유령 단서 3개를 탭하면 점검 루틴이 더 선명해져요</strong>
+            <span>
+              최근 기록 {history.length}/7 · 내일은{" "}
+              {tomorrowTheme.label.replace("오늘의 유령: ", "")} 테마
+            </span>
+          </div>
+          <button type="button" onClick={collectHomeClue}>
+            단서 찾기 {homeClueCount}/3
+          </button>
+          <div className="clue-slot-row" aria-hidden="true">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <i
+                className={index < homeClueCount ? "filled" : ""}
+                key={index}
+              />
+            ))}
+          </div>
+        </section>
         <Button onClick={start}>60초 자가 점검 시작</Button>
       </section>
 
@@ -659,8 +693,8 @@ function App() {
           </p>
         </div>
         <div className="benefit-tags">
-          <span>정리 루틴 열기</span>
-          <span>결제 내역 확인법</span>
+          <span>단서 3개 수집</span>
+          <span>광고 보고 루틴 열기</span>
           <span>7일 기록</span>
         </div>
       </section>

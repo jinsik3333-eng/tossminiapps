@@ -28,7 +28,7 @@
 - AIT 번들: `apps/money-leak-test/money-leak-test.ait`
 - 등록 이미지 패키지: `assets/app-store/money-leak-test/money-leak-test-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/money-leak-test/contact-sheet.png`
-- 최신 build deploymentId: `019ded96-fe4c-7485-ad98-f724a9902b4a`
+- 최신 build deploymentId: `019dee19-a866-75ba-bfd6-e3a46f44c45e`
 
 ### 콘솔 입력값
 
@@ -63,7 +63,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/daily-waste-quiz`
 - AIT 번들: `apps/daily-waste-quiz/daily-waste-quiz.ait`
-- 최신 build deploymentId: `019deda0-28fe-74e5-b91d-1072f3f9c763`
+- 최신 build deploymentId: `019dee16-75bb-7814-85bb-4d578b3f71b7`
 - 상세 카피 문서: `docs/daily-waste-quiz-listing-copy.md`
 
 ### 콘솔 입력값
@@ -117,7 +117,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/subscription-ghost-finder`
 - AIT 번들: `apps/subscription-ghost-finder/subscription-ghost-finder.ait`
-- 최신 build deploymentId: `019ded7d-9268-727e-9a0d-f10b1eb51501`
+- 최신 build deploymentId: `019dee13-70ef-7cfb-84aa-3659ef85de25`
 - MVP/심사 브리프: `docs/subscription-ghost-finder-mvp-brief.md`
 
 ### 콘솔 입력값
@@ -173,7 +173,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/salary-thief-finder`
 - AIT 번들: `apps/salary-thief-finder/salary-thief-finder.ait`
-- 최신 build deploymentId: `019dedbe-c7ee-7734-901b-9bae6db0edfd`
+- 최신 build deploymentId: `019dee13-b000-7527-8e34-db24088fb440`
 - MVP/심사 브리프: `docs/salary-thief-finder-mvp-brief.md`
 - 등록 이미지 패키지: `assets/app-store/salary-thief-finder/salary-thief-finder-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/salary-thief-finder/contact-sheet.png`

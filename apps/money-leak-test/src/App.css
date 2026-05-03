@@ -74,6 +74,62 @@
   padding: 20px 18px;
 }
 
+.daily-patch-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(31, 122, 63, 0.14);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 24px rgba(31, 122, 63, 0.1);
+}
+
+.daily-patch-card strong {
+  display: block;
+  color: #191f28;
+  font-size: 16px;
+  font-weight: 950;
+  line-height: 1.35;
+}
+
+.daily-patch-card span {
+  display: block;
+  margin-top: 6px;
+  color: #4e5968;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.daily-patch-card button {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 17px;
+  background: #191f28;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.patch-dot-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.patch-dot-row i {
+  height: 8px;
+  border-radius: 999px;
+  background: #d1d6db;
+}
+
+.patch-dot-row i.filled {
+  background: #1f7a3f;
+}
+
 .intro-hero {
   position: relative;
   overflow: hidden;
