@@ -245,6 +245,82 @@ def make_contact(app, folder):
     return canvas
 
 
+def cover_image(src, size, focus=(0.5, 0.5)):
+    src = src.convert('RGB')
+    tw, th = size
+    scale = max(tw / src.width, th / src.height)
+    nw, nh = int(src.width * scale), int(src.height * scale)
+    src = src.resize((nw, nh), Image.LANCZOS)
+    left = int((nw - tw) * focus[0])
+    top = int((nh - th) * focus[1])
+    return src.crop((left, top, left + tw, top + th)).convert('RGBA')
+
+
+def overlay_scrim(im, alpha=72):
+    layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    w, h = im.size
+    d.rectangle((0, 0, w, h), fill=(44, 24, 97, alpha))
+    d.ellipse((-int(w * 0.24), -int(h * 0.32), int(w * 0.58), int(h * 0.72)), fill=(124, 58, 237, int(alpha * 0.45)))
+    return Image.alpha_composite(im.convert('RGBA'), layer)
+
+
+def make_source_logo(app, dark=False):
+    im = cover_image(Image.open(app['source_icon']), (600, 600), focus=(0.5, 0.44))
+    if dark:
+        tint = Image.new('RGBA', (600, 600), '#121826')
+        im = Image.blend(im, tint, 0.34)
+        im = overlay_scrim(im, 42)
+    d = ImageDraw.Draw(im)
+    rounded(d, (68, 460, 532, 542), 42, (255, 255, 255, 228))
+    center_text(d, 480, '구독유령', F_BOLD(44), app['accent'], 600)
+    return im.convert('RGB')
+
+
+def make_source_marketing(app, size, horizontal=False):
+    im = cover_image(Image.open(app['source_landscape']), size, focus=(0.56, 0.5))
+    im = overlay_scrim(im, 70 if horizontal else 78)
+    d = ImageDraw.Draw(im)
+    left = 96 if horizontal else 112
+    d.text((left, 104 if horizontal else 120), app['title'], font=F_BOLD(66 if horizontal else 78), fill='#ffffff')
+    if horizontal:
+        for i, line in enumerate(app['hero_lines']):
+            d.text((left, 214 + i * 58), line, font=F_BOLD(40), fill='#F2F7FF')
+        d.text((left, 344), '내 답변을 바탕으로 참고 후보를 정리해요', font=F_REG(27), fill='#DCE9FF')
+        rounded(d, (left, 430, left + 456, 502), 36, '#ffffff')
+        center_text(d, 448, app['cta'], F_BOLD(29), app['accent'], left * 2 + 456)
+    else:
+        d.text((left, 228), app['thumb_sub'], font=F_BOLD(42), fill='#F2F7FF')
+        d.text((left, 294), app['thumb_note'], font=F_REG(30), fill='#DCE9FF')
+        rounded(d, (left, 394, left + 530, 476), 40, '#ffffff')
+        d.text((left + 40, 417), app['cta'], font=F_BOLD(32), fill=app['accent'])
+    return im.convert('RGB')
+
+
+def make_source_screenshot(app, idx):
+    w, h = 636, 1048
+    im = cover_image(Image.open(app['source_portrait']), (w, h), focus=(0.52, 0.48))
+    im = overlay_scrim(im, 78)
+    d = ImageDraw.Draw(im)
+    headline, sub, _kind = app['screens'][idx - 1]
+    center_text(d, 58, headline, F_BOLD(47), '#ffffff', w)
+    for j, line in enumerate(wrap_text(d, sub, F_BOLD(27), w - 92)[:2]):
+        center_text(d, 126 + j * 36, line, F_BOLD(27), '#ECF6FF', w)
+    panel_y = 738
+    rounded(d, (52, panel_y, w - 52, panel_y + 146), 34, (255, 255, 255, 232))
+    callouts = [
+        ('구독 습관을 직접 점검', 'OTT·멤버십·클라우드 후보 확인'),
+        ('민감정보 입력 없이 선택', '내 답변으로만 결과 구성'),
+        ('내 답변 기준 후보', '정리 루틴까지 이어서 확인'),
+    ]
+    big, small = callouts[idx - 1]
+    center_text(d, panel_y + 30, big, F_BOLD(31), app['ink'], w)
+    center_text(d, panel_y + 82, small, F_REG(25), app['muted'], w)
+    rounded(d, (104, 918, w - 104, 990), 36, app['accent'])
+    center_text(d, 938, ['자가 점검 시작', '질문에 답하기', '정리 루틴 보기'][idx - 1], F_BOLD(28), '#ffffff', w)
+    return im.convert('RGB')
+
+
 def make_zip(folder, app_id):
     zpath = folder / f'{app_id}-appstore-assets.zip'
     if zpath.exists():
@@ -278,7 +354,10 @@ APPS = {
         'quiz_title':'직접 답하는 점검','quiz_sub':'내 선택으로만 결과 구성','progress':'5 / 8  진행 중','question':'요즘 거의 쓰지 않는\n구독이 있나요?','options':['없어요','애매해요','확인해볼래요'],
         'result_title':'답변 기반 후보 3개','result_sub':'직접 고른 답변의 참고 결과','metric_big':'후보 3개','metric_small':'직접 확인할 항목을 보기 쉽게 정리','checks':3,'result_cta':'정리 루틴 보기',
         'screens':[('구독료 유령 찾기','60초 자가 점검 시작','home'),('직접 답하는 구독 점검','입력한 선택으로만 결과를 만들어요','quiz'),('내 답변 기반 점검 후보','직접 입력한 답변 기준으로 정리','result')],
-        'captions':['OTT·멤버십·클라우드 등 구독 습관을 직접 점검해요.','민감한 정보 입력 없이 선택한 답변으로만 진행해요.','답변 기준 참고 후보와 정리 루틴을 보여줘요.']
+        'captions':['OTT·멤버십·클라우드 등 구독 습관을 직접 점검해요.','민감한 정보 입력 없이 선택한 답변으로만 진행해요.','답변 기준 참고 후보와 정리 루틴을 보여줘요.'],
+        'source_icon':str(OUT_ROOT / 'subscription-ghost-finder' / 'sources' / 'ghost-icon-source.png'),
+        'source_landscape':str(OUT_ROOT / 'subscription-ghost-finder' / 'sources' / 'ghost-landscape-source.png'),
+        'source_portrait':str(OUT_ROOT / 'subscription-ghost-finder' / 'sources' / 'ghost-portrait-source.png')
     }
 }
 
@@ -297,12 +376,20 @@ EXPECTED = {
 def generate(app_id, app):
     folder = OUT_ROOT / app_id
     folder.mkdir(parents=True, exist_ok=True)
-    make_logo(app, False).save(folder/'app-logo-600.png', optimize=True)
-    make_logo(app, True).save(folder/'app-logo-dark-600.png', optimize=True)
-    make_marketing(app, (1932, 828), horizontal=False).save(folder/'thumbnail-1932x828.png', optimize=True)
-    for idx in (1,2,3):
-        make_screenshot(app, idx).save(folder/f'screenshot-0{idx}-636x1048.png', optimize=True)
-    make_marketing(app, (1504, 741), horizontal=True).save(folder/'screenshot-horizontal-1504x741.png', optimize=True)
+    if 'source_icon' in app:
+        make_source_logo(app, False).save(folder/'app-logo-600.png', optimize=True)
+        make_source_logo(app, True).save(folder/'app-logo-dark-600.png', optimize=True)
+        make_source_marketing(app, (1932, 828), horizontal=False).save(folder/'thumbnail-1932x828.png', optimize=True)
+        for idx in (1,2,3):
+            make_source_screenshot(app, idx).save(folder/f'screenshot-0{idx}-636x1048.png', optimize=True)
+        make_source_marketing(app, (1504, 741), horizontal=True).save(folder/'screenshot-horizontal-1504x741.png', optimize=True)
+    else:
+        make_logo(app, False).save(folder/'app-logo-600.png', optimize=True)
+        make_logo(app, True).save(folder/'app-logo-dark-600.png', optimize=True)
+        make_marketing(app, (1932, 828), horizontal=False).save(folder/'thumbnail-1932x828.png', optimize=True)
+        for idx in (1,2,3):
+            make_screenshot(app, idx).save(folder/f'screenshot-0{idx}-636x1048.png', optimize=True)
+        make_marketing(app, (1504, 741), horizontal=True).save(folder/'screenshot-horizontal-1504x741.png', optimize=True)
     make_contact(app, folder).save(folder/'contact-sheet.png', optimize=True)
     zpath = make_zip(folder, app_id)
     print(f'[{app_id}]')
