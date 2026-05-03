@@ -28,6 +28,7 @@
 - AIT 번들: `apps/money-leak-test/money-leak-test.ait`
 - 등록 이미지 패키지: `assets/app-store/money-leak-test/money-leak-test-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/money-leak-test/contact-sheet.png`
+- 최신 build deploymentId: `019ded96-fe4c-7485-ad98-f724a9902b4a`
 
 ### 콘솔 입력값
 
@@ -62,7 +63,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/daily-waste-quiz`
 - AIT 번들: `apps/daily-waste-quiz/daily-waste-quiz.ait`
-- 최신 build deploymentId: `019ded5a-3b93-7508-aa39-e500fb8ef3c3`
+- 최신 build deploymentId: `019ded96-dc13-7844-99c7-737a9bb64ed2`
 - 상세 카피 문서: `docs/daily-waste-quiz-listing-copy.md`
 
 ### 콘솔 입력값

@@ -60,7 +60,10 @@ export function useInAppAds(adGroupId: string): UseInAppAdsReturn {
         load();
       }
     } catch (error) {
-      console.info("현재 환경에서는 인앱 광고 지원 여부를 확인할 수 없습니다.", error);
+      console.info(
+        "현재 환경에서는 인앱 광고 지원 여부를 확인할 수 없습니다.",
+        error,
+      );
       setIsSupported(false);
     }
 

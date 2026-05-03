@@ -19,14 +19,29 @@ export function getDefenseGrade(score: number, maxScore: number): DefenseGrade {
   const blockedCount = Math.round(score / 2);
 
   if (percent >= 90) {
-    return { title: "완전 방어", label: `${blockedCount}번 모두 막음`, percent, blockedCount };
+    return {
+      title: "완전 방어",
+      label: `${blockedCount}번 모두 막음`,
+      percent,
+      blockedCount,
+    };
   }
 
   if (percent >= 45) {
-    return { title: "아슬 방어", label: `${blockedCount}번 막음`, percent, blockedCount };
+    return {
+      title: "아슬 방어",
+      label: `${blockedCount}번 막음`,
+      percent,
+      blockedCount,
+    };
   }
 
-  return { title: "내일 복수전", label: `${blockedCount}번 막음`, percent, blockedCount };
+  return {
+    title: "내일 복수전",
+    label: `${blockedCount}번 막음`,
+    percent,
+    blockedCount,
+  };
 }
 
 export function getCountdownCopy(secondsLeft: number) {

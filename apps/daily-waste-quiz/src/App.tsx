@@ -1,6 +1,7 @@
 import { Button, Top, useToast } from "@toss/tds-mobile";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
+import wasteDefenseHero from "./assets/waste-defense-hero.jpg";
 import { TossBannerAd } from "./components/TossBannerAd";
 import {
   DAILY_BOARD_DAYS,
@@ -1373,17 +1374,11 @@ function BattleScene({
       className={`defense-stage ${compact ? "home-stage" : ""} visual-${visual.type}`}
       aria-hidden="true"
     >
+      <img className="battle-hero-art" src={wasteDefenseHero} />
+      <span className="battle-hero-scrim" />
       <span className="stage-timer">05</span>
-      <span className="source-visual" />
-      <span className="coin-flow" />
-      <span className="coin coin-a">₩</span>
-      <span className="coin coin-b">₩</span>
-      <span className="impact-burst" />
-      <span className={`trap-monster ${compact ? "is-big" : ""}`}>
-        <span className="trap-coupon">{visual.trapBadge}</span>
-        <span className="monster-mouth" />
-      </span>
-      <span className="defense-shield" />
+      <span className="trap-badge-pill">{visual.trapBadge}</span>
+      <span className="shield-copy">헛돈 방어</span>
       {typeof hp === "number" ? (
         <span className="hp-label floating-hp">괴물 HP {hp}%</span>
       ) : null}
