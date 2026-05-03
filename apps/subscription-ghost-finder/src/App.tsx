@@ -1,6 +1,7 @@
 import { Button, Top, useToast } from "@toss/tds-mobile";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
+import ghostSceneSource from "./assets/ghost-scene-source.jpg";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { useInAppAds } from "./hooks/useInAppAds";
 
@@ -344,31 +345,25 @@ function GhostScene({
   ghostCount: number;
   theme: DailyTheme;
 }) {
-  const dots = Array.from({ length: 5 });
-
   return (
     <div
       className={`ghost-scene ghost-count-${Math.min(ghostCount, 5)} theme-${theme.scene}`}
     >
-      <div className="phone-card">
-        <div className="phone-speaker" />
-        <div className="subscription-list">
-          {theme.focusIds.slice(0, 3).map((id) => {
-            const question = QUESTIONS.find((item) => item.id === id);
-            return <span key={id}>{question?.ghost.replace(" 유령", "")}</span>;
-          })}
-        </div>
+      <img
+        aria-hidden="true"
+        className="ghost-scene-art"
+        src={ghostSceneSource}
+      />
+      <div className="ghost-scene-scrim" />
+      <div className="scene-topic-list">
+        {theme.focusIds.slice(0, 3).map((id) => {
+          const question = QUESTIONS.find((item) => item.id === id);
+          return <span key={id}>{question?.ghost.replace(" 유령", "")}</span>;
+        })}
       </div>
-      <div className="coin-stream">
-        {dots.map((_, index) => (
-          <span key={index} className={`coin coin-${index + 1}`} />
-        ))}
-      </div>
-      <div className="ghost-body">
-        <span className="ghost-eye left" />
-        <span className="ghost-eye right" />
-        <span className="ghost-mouth" />
-        <strong>{ghostCount > 0 ? `${ghostCount}개` : "탐색"}</strong>
+      <div className="scene-count-badge">
+        <span>{ghostCount > 0 ? `${ghostCount}개` : "탐색"}</span>
+        <strong>점검 후보</strong>
       </div>
       <div className="shield-card">해지 전 체크</div>
     </div>

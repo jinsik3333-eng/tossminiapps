@@ -116,7 +116,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/subscription-ghost-finder`
 - AIT 번들: `apps/subscription-ghost-finder/subscription-ghost-finder.ait`
-- 최신 build deploymentId: `019ded5d-d06b-7a19-8dfd-9359f4fafb58`
+- 최신 build deploymentId: `019ded7d-9268-727e-9a0d-f10b1eb51501`
 - MVP/심사 브리프: `docs/subscription-ghost-finder-mvp-brief.md`
 
 ### 콘솔 입력값
