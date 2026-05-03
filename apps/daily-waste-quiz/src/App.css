@@ -166,21 +166,20 @@ button {
 .stage-timer {
   position: absolute;
   left: 14px;
-  top: 14px;
+  top: 18px;
   z-index: 6;
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 1px;
-  min-width: 48px;
-  height: 34px;
-  padding: 0 10px;
-  border-radius: 14px;
+  min-width: 58px;
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: 999px;
   background: #fff;
   color: #f76707;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 950;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.03em;
   white-space: nowrap;
   box-shadow: 0 12px 24px rgba(247, 103, 7, 0.16);
 }
