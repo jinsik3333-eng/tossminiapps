@@ -14,85 +14,110 @@ const STORAGE_KEY = "subscription-ghost-finder-history";
 const QUESTIONS = [
   {
     id: "ott-watch",
-    title: "최근 30일 안에 본 OTT인가요?",
-    subtitle: "기억이 안 나면 유령 후보예요.",
-    yes: "봤어요",
-    no: "기억 안 남",
-    ghostIf: "no",
+    title: "영상/OTT 구독을 결제 중인가요?",
+    subtitle: "넷플릭스·티빙·디즈니+처럼 매달 나가는 영상 구독만 생각해요.",
     ghost: "OTT 유령",
+    options: [
+      { value: "safe", label: "안 써요", helper: "결제 중인 OTT 없음" },
+      {
+        value: "safe",
+        label: "결제 중·자주 봄",
+        helper: "최근에도 잘 쓰는 중",
+      },
+      { value: "ghost", label: "결제 중인데 안 봄", helper: "유령 후보" },
+    ],
   },
   {
     id: "free-trial",
-    title: "무료체험 끝난 뒤 계속 결제 중인가요?",
-    subtitle: "체험판은 끝났는데 결제만 남는 경우가 많아요.",
-    yes: "그럴 수도",
-    no: "아니에요",
-    ghostIf: "yes",
+    title: "무료체험으로 시작한 앱이 아직 결제 중인가요?",
+    subtitle:
+      "처음엔 무료였는데 지금은 매달 빠지는 서비스가 있는지만 확인해요.",
     ghost: "무료체험 유령",
+    options: [
+      { value: "safe", label: "없어요", helper: "체험판 결제 없음" },
+      { value: "safe", label: "있지만 잘 씀", helper: "계속 쓸 이유 있음" },
+      { value: "ghost", label: "있는지 헷갈림", helper: "결제내역 확인 필요" },
+    ],
   },
   {
     id: "duplicate",
-    title: "가족/친구 계정과 중복 구독 중인가요?",
-    subtitle: "같은 서비스를 둘이 따로 내고 있으면 잠복 유령이에요.",
-    yes: "중복 같음",
-    no: "중복 아님",
-    ghostIf: "yes",
+    title: "같은 서비스를 가족/친구와 따로 결제 중인가요?",
+    subtitle:
+      "공유 요금제나 가족 계정으로 합칠 수 있는 중복 구독을 찾는 질문이에요.",
     ghost: "중복구독 유령",
+    options: [
+      { value: "safe", label: "중복 없음", helper: "혼자 쓰거나 이미 공유" },
+      {
+        value: "safe",
+        label: "따로 결제해도 필요",
+        helper: "분리 사용 이유 있음",
+      },
+      { value: "ghost", label: "중복 같음", helper: "합칠 수 있는지 확인" },
+    ],
   },
   {
     id: "app-delete",
-    title: "앱은 지웠는데 결제는 남아있을 수 있나요?",
-    subtitle: "앱 삭제와 구독 해지는 달라요.",
-    yes: "확인 필요",
-    no: "해지 완료",
-    ghostIf: "yes",
+    title: "앱을 지웠는데 구독 해지는 따로 안 한 적 있나요?",
+    subtitle: "앱 삭제만으로 자동결제가 멈추지는 않는 경우가 있어요.",
     ghost: "앱삭제 착각 유령",
+    options: [
+      { value: "safe", label: "해지까지 했어요", helper: "정리 완료" },
+      { value: "safe", label: "그런 앱 없음", helper: "삭제한 유료앱 없음" },
+      { value: "ghost", label: "확인 필요", helper: "구독 관리 화면 확인" },
+    ],
   },
   {
     id: "membership",
-    title: "쇼핑 멤버십 혜택을 이번 달에 썼나요?",
-    subtitle: "혜택을 안 쓰면 멤버십도 고정비가 돼요.",
-    yes: "썼어요",
-    no: "안 쓴 듯",
-    ghostIf: "no",
+    title: "쇼핑 멤버십을 결제 중인가요?",
+    subtitle: "쿠팡·네이버·마켓 멤버십처럼 혜택을 써야 이득인 구독이에요.",
     ghost: "멤버십 유령",
+    options: [
+      { value: "safe", label: "안 써요", helper: "쇼핑 멤버십 없음" },
+      { value: "safe", label: "혜택 잘 씀", helper: "배송/적립 활용 중" },
+      { value: "ghost", label: "혜택 안 쓴 듯", helper: "이번 달 사용 확인" },
+    ],
   },
   {
     id: "cloud",
-    title: "클라우드 용량을 실제로 꽉 쓰고 있나요?",
-    subtitle: "남는 용량에 매달 돈을 낼 수 있어요.",
-    yes: "쓰고 있음",
-    no: "남는 듯",
-    ghostIf: "no",
+    title: "클라우드/저장공간 요금제를 쓰고 있나요?",
+    subtitle: "iCloud·Google One·드라이브처럼 용량 때문에 내는 구독이에요.",
     ghost: "클라우드 유령",
+    options: [
+      { value: "safe", label: "안 써요", helper: "유료 용량 없음" },
+      { value: "safe", label: "용량이 필요함", helper: "사진/파일 백업 중" },
+      { value: "ghost", label: "남는 듯", helper: "다운그레이드 후보" },
+    ],
   },
   {
     id: "music",
-    title: "음악/오디오 앱을 주 3회 이상 쓰나요?",
-    subtitle: "습관이 끊긴 구독은 조용히 빠져나가요.",
-    yes: "자주 써요",
-    no: "거의 안 써요",
-    ghostIf: "no",
+    title: "음악/오디오 구독을 결제 중인가요?",
+    subtitle: "멜론·스포티파이·오디오북처럼 습관이 끊기면 바로 유령이 돼요.",
     ghost: "음악앱 유령",
+    options: [
+      { value: "safe", label: "안 써요", helper: "음악 구독 없음" },
+      { value: "safe", label: "자주 들어요", helper: "주 3회 이상 사용" },
+      { value: "ghost", label: "거의 안 들어요", helper: "해지 후보" },
+    ],
   },
   {
     id: "next-billing",
-    title: "다음 결제일을 알고 있나요?",
-    subtitle: "결제일을 모르면 해지 타이밍을 놓치기 쉬워요.",
-    yes: "알아요",
-    no: "모름",
-    ghostIf: "no",
+    title: "결제 중인 구독들의 다음 결제일을 알고 있나요?",
+    subtitle:
+      "정확한 앱 이름을 몰라도, 결제일을 모르면 해지 타이밍을 놓치기 쉬워요.",
     ghost: "결제일 유령",
+    options: [
+      { value: "safe", label: "거의 알아요", helper: "결제일 관리 중" },
+      { value: "safe", label: "구독이 적어요", helper: "관리할 항목 적음" },
+      { value: "ghost", label: "대부분 몰라요", helper: "캘린더 표시 추천" },
+    ],
   },
 ] as const;
 
-type AnswerValue = "yes" | "no";
+type AnswerValue = "safe" | "ghost";
 type Answers = Record<string, AnswerValue>;
 
 function getGhostIds(answers: Answers) {
-  return QUESTIONS.filter(
-    (question) => answers[question.id] === question.ghostIf,
-  );
+  return QUESTIONS.filter((question) => answers[question.id] === "ghost");
 }
 
 function getResult(ghostCount: number) {
@@ -266,7 +291,7 @@ function App() {
           }
           subtitleBottom={
             <Top.SubtitleParagraph size={15}>
-              {index + 1}/{QUESTIONS.length} · 60초 자동결제 점검
+              {index + 1}/{QUESTIONS.length} · 직접 답하는 구독 점검
             </Top.SubtitleParagraph>
           }
         />
@@ -282,15 +307,19 @@ function App() {
 
           <GhostScene ghostCount={ghostQuestions.length} />
 
-          <p className="eyebrow">{currentQuestion.ghost}</p>
+          <p className="eyebrow">
+            구독 정보를 자동으로 가져오지 않아요 · 내 답변으로만 진단
+          </p>
           <h1>{currentQuestion.title}</h1>
           <p className="question-subtitle">{currentQuestion.subtitle}</p>
 
           <div className="choice-grid">
-            <Button onClick={() => answer("yes")}>{currentQuestion.yes}</Button>
-            <Button variant="weak" onClick={() => answer("no")}>
-              {currentQuestion.no}
-            </Button>
+            {currentQuestion.options.map((option) => (
+              <Button key={option.label} onClick={() => answer(option.value)}>
+                <span className="choice-label">{option.label}</span>
+                <span className="choice-helper">{option.helper}</span>
+              </Button>
+            ))}
           </div>
         </section>
 
@@ -412,8 +441,8 @@ function App() {
         <p className="eyebrow">자동결제 유령 진단</p>
         <h1>이번 달에도 몰래 빠져나간 구독료가 있을지도?</h1>
         <p>
-          OTT, 앱 구독, 쇼핑 멤버십, 클라우드까지. 8개 질문으로 자동결제 유령
-          후보를 찾아봐요.
+          토스가 내 구독 목록을 자동으로 읽는 앱은 아니에요. 대신 내가 쓰는
+          구독만 빠르게 떠올리며 유령 후보를 표시하는 60초 자가 점검이에요.
         </p>
         <GhostScene ghostCount={3} />
         <Button onClick={start}>60초 유령 찾기 시작</Button>

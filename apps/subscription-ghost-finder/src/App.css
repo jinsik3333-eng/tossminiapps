@@ -284,6 +284,26 @@ body {
   gap: 10px;
 }
 
+.choice-grid button {
+  min-height: 62px;
+}
+
+.choice-grid button > span {
+  display: grid;
+  gap: 3px;
+}
+
+.choice-label {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.choice-helper {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.76;
+}
+
 .ghost-list {
   display: flex;
   flex-wrap: wrap;
