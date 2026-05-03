@@ -62,7 +62,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/daily-waste-quiz`
 - AIT 번들: `apps/daily-waste-quiz/daily-waste-quiz.ait`
-- 최신 build deploymentId: `019ded49-bf89-7b84-9130-0902c95555f6`
+- 최신 build deploymentId: `019ded5a-3b93-7508-aa39-e500fb8ef3c3`
 - 상세 카피 문서: `docs/daily-waste-quiz-listing-copy.md`
 
 ### 콘솔 입력값
@@ -116,7 +116,7 @@
 - 상태: 승인 요청 준비 완료.
 - 앱 경로: `apps/subscription-ghost-finder`
 - AIT 번들: `apps/subscription-ghost-finder/subscription-ghost-finder.ait`
-- 최신 build deploymentId: `019ded49-d655-7c08-b7c5-72224fd439be`
+- 최신 build deploymentId: `019ded5d-d06b-7a19-8dfd-9359f4fafb58`
 - MVP/심사 브리프: `docs/subscription-ghost-finder-mvp-brief.md`
 
 ### 콘솔 입력값

@@ -1,5 +1,5 @@
 import { Button, Top, useToast } from "@toss/tds-mobile";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { useInAppAds } from "./hooks/useInAppAds";
@@ -113,8 +113,170 @@ const QUESTIONS = [
   },
 ] as const;
 
+type Question = (typeof QUESTIONS)[number];
+
+type DailyTheme = {
+  key: string;
+  label: string;
+  title: string;
+  hook: string;
+  questionPrefix: string;
+  scene:
+    | "ott"
+    | "trial"
+    | "family"
+    | "mobile"
+    | "shopping"
+    | "cloud"
+    | "audio"
+    | "calendar";
+  focusIds: Question["id"][];
+  routineTitle: string;
+  routineSteps: string[];
+};
+
+const DAILY_THEMES: DailyTheme[] = [
+  {
+    key: "ott-night",
+    label: "오늘의 유령: OTT 잠복",
+    title: "오늘은 안 보는 OTT부터 직접 점검해요",
+    hook: "시청 기록이 멈춘 영상 구독은 월말에 가장 조용히 새요.",
+    questionPrefix: "OTT부터",
+    scene: "ott",
+    focusIds: ["ott-watch", "duplicate", "next-billing"],
+    routineTitle: "OTT 3분 정리 루틴",
+    routineSteps: [
+      "OTT 앱을 열어 최근 본 콘텐츠가 있는지 직접 확인하기",
+      "이번 달 볼 앱 1개만 남길 후보로 표시하기",
+      "해지 전 가족 공유·남은 기간만 확인하고 결정하기",
+    ],
+  },
+  {
+    key: "free-trial-alarm",
+    label: "오늘의 유령: 무료체험 알림",
+    title: "오늘은 무료체험이 유료로 바뀐 앱을 찾아봐요",
+    hook: "무료로 시작한 앱은 결제일을 모르면 유령 후보가 되기 쉬워요.",
+    questionPrefix: "무료체험부터",
+    scene: "trial",
+    focusIds: ["free-trial", "app-delete", "next-billing"],
+    routineTitle: "무료체험 종료일 확인 루틴",
+    routineSteps: [
+      "결제 문자·앱스토어 구독 화면에서 무료체험 항목을 직접 보기",
+      "다음 결제일을 캘린더에 표시하기",
+      "계속 쓸 이유가 없으면 해지 전 저장 데이터만 확인하기",
+    ],
+  },
+  {
+    key: "family-duplicate",
+    label: "오늘의 유령: 중복 결제",
+    title: "오늘은 가족·친구와 겹치는 구독을 점검해요",
+    hook: "각자 따로 내는 구독은 합칠 수 있는지 확인만 해도 후보가 보여요.",
+    questionPrefix: "중복 결제부터",
+    scene: "family",
+    focusIds: ["duplicate", "ott-watch", "music"],
+    routineTitle: "중복 구독 합치기 루틴",
+    routineSteps: [
+      "같은 서비스에 가족·친구가 따로 결제 중인지 물어보기",
+      "가족/공유 요금제 조건과 동시 시청 제한을 직접 확인하기",
+      "개인 계정 데이터가 필요한 앱은 무리하게 합치지 않기",
+    ],
+  },
+  {
+    key: "deleted-app",
+    label: "오늘의 유령: 앱 삭제 착각",
+    title: "오늘은 지운 앱의 구독 해지 여부를 확인해요",
+    hook: "앱 삭제와 구독 해지는 다를 수 있어요. 자동조회 없이 직접 점검해요.",
+    questionPrefix: "삭제한 앱부터",
+    scene: "mobile",
+    focusIds: ["app-delete", "free-trial", "next-billing"],
+    routineTitle: "삭제 앱 구독 확인 루틴",
+    routineSteps: [
+      "앱스토어/플레이스토어 구독 관리 화면을 직접 열기",
+      "삭제한 앱 이름이 남아 있는지 검색하기",
+      "해지 전 저장 데이터·백업 필요 여부만 확인하기",
+    ],
+  },
+  {
+    key: "membership-day",
+    label: "오늘의 유령: 쇼핑 멤버십",
+    title: "오늘은 혜택을 못 쓴 멤버십을 찾아봐요",
+    hook: "배송·적립 혜택을 안 쓰면 멤버십도 조용한 고정비가 돼요.",
+    questionPrefix: "멤버십부터",
+    scene: "shopping",
+    focusIds: ["membership", "duplicate", "next-billing"],
+    routineTitle: "멤버십 사용량 확인 루틴",
+    routineSteps: [
+      "이번 달 배송비/적립 혜택을 직접 확인하기",
+      "구독료보다 혜택이 적으면 해지 후보로 표시하기",
+      "무료배송 때문에 더 산 물건은 없는지 같이 돌아보기",
+    ],
+  },
+  {
+    key: "cloud-cleanup",
+    label: "오늘의 유령: 클라우드 용량",
+    title: "오늘은 남는 저장공간 요금제를 점검해요",
+    hook: "용량 업그레이드 전에 큰 파일 몇 개만 지워도 후보가 줄 수 있어요.",
+    questionPrefix: "클라우드부터",
+    scene: "cloud",
+    focusIds: ["cloud", "app-delete", "next-billing"],
+    routineTitle: "클라우드 다운그레이드 전 루틴",
+    routineSteps: [
+      "사진·동영상 큰 파일 3개를 직접 정리하기",
+      "현재 사용 용량과 요금제 용량을 비교하기",
+      "백업이 필요한 파일은 내려받고 다운그레이드 후보 표시하기",
+    ],
+  },
+  {
+    key: "music-quiet",
+    label: "오늘의 유령: 음악앱 침묵",
+    title: "오늘은 거의 안 듣는 음악 구독을 확인해요",
+    hook: "습관이 끊긴 오디오 구독은 직접 사용 횟수만 봐도 보여요.",
+    questionPrefix: "음악앱부터",
+    scene: "audio",
+    focusIds: ["music", "duplicate", "next-billing"],
+    routineTitle: "음악 구독 사용 횟수 루틴",
+    routineSteps: [
+      "최근 7일 재생 기록이 있는지 직접 확인하기",
+      "무료 버전·가족 요금제로 대체 가능한지 보기",
+      "다운로드 곡/플레이리스트를 확인한 뒤 해지 후보로 표시하기",
+    ],
+  },
+  {
+    key: "billing-calendar",
+    label: "오늘의 유령: 결제일 미로",
+    title: "오늘은 다음 결제일을 모르는 구독을 표시해요",
+    hook: "구독을 계속 쓰더라도 결제일을 알면 유령이 되기 전에 막을 수 있어요.",
+    questionPrefix: "결제일부터",
+    scene: "calendar",
+    focusIds: ["next-billing", "free-trial", "membership"],
+    routineTitle: "결제일 캘린더 루틴",
+    routineSteps: [
+      "확실히 쓰는 구독 3개의 다음 결제일을 직접 확인하기",
+      "결제 하루 전 알림을 캘린더에 넣기",
+      "결제일을 모르는 항목은 이번 주 점검 후보로 남기기",
+    ],
+  },
+];
+
 type AnswerValue = "safe" | "ghost";
 type Answers = Record<string, AnswerValue>;
+
+function getTodayIndex() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const day = Math.floor((now.getTime() - start.getTime()) / 86400000);
+  return day % DAILY_THEMES.length;
+}
+
+function getOrderedQuestions(theme: DailyTheme) {
+  const focused = theme.focusIds
+    .map((id) => QUESTIONS.find((question) => question.id === id))
+    .filter((question): question is Question => Boolean(question));
+  const rest = QUESTIONS.filter(
+    (question) => !theme.focusIds.includes(question.id),
+  );
+  return [...focused, ...rest];
+}
 
 function getGhostIds(answers: Answers) {
   return QUESTIONS.filter((question) => answers[question.id] === "ghost");
@@ -132,7 +294,7 @@ function getResult(ghostCount: number) {
 
   if (ghostCount <= 2) {
     return {
-      label: "잠복 유령 주의",
+      label: "점검 후보 주의",
       title: `구독료 점검 후보 ${ghostCount}개`,
       copy: "크게 부담되는 수준은 아니지만, 직접 확인해볼 구독 후보가 있어요.",
       level: "watch",
@@ -149,7 +311,7 @@ function getResult(ghostCount: number) {
   }
 
   return {
-    label: "월급 새는 단계",
+    label: "집중 점검 필요",
     title: `구독료 점검 후보 ${ghostCount}개`,
     copy: "안 쓰는 구독 후보가 여러 개 보여요. 오늘 10분만 잡고 결제일과 사용 여부를 정리해보세요.",
     level: "boss",
@@ -175,17 +337,26 @@ function saveHistory(score: number) {
   return next;
 }
 
-function GhostScene({ ghostCount }: { ghostCount: number }) {
+function GhostScene({
+  ghostCount,
+  theme,
+}: {
+  ghostCount: number;
+  theme: DailyTheme;
+}) {
   const dots = Array.from({ length: 5 });
 
   return (
-    <div className={`ghost-scene ghost-count-${Math.min(ghostCount, 5)}`}>
+    <div
+      className={`ghost-scene ghost-count-${Math.min(ghostCount, 5)} theme-${theme.scene}`}
+    >
       <div className="phone-card">
         <div className="phone-speaker" />
         <div className="subscription-list">
-          <span>OTT</span>
-          <span>Music</span>
-          <span>Cloud</span>
+          {theme.focusIds.slice(0, 3).map((id) => {
+            const question = QUESTIONS.find((item) => item.id === id);
+            return <span key={id}>{question?.ghost.replace(" 유령", "")}</span>;
+          })}
         </div>
       </div>
       <div className="coin-stream">
@@ -197,7 +368,7 @@ function GhostScene({ ghostCount }: { ghostCount: number }) {
         <span className="ghost-eye left" />
         <span className="ghost-eye right" />
         <span className="ghost-mouth" />
-        <strong>{ghostCount > 0 ? `${ghostCount}마리` : "탐색"}</strong>
+        <strong>{ghostCount > 0 ? `${ghostCount}개` : "탐색"}</strong>
       </div>
       <div className="shield-card">해지 전 체크</div>
     </div>
@@ -212,15 +383,25 @@ function App() {
   const [answers, setAnswers] = useState<Answers>({});
   const [history, setHistory] = useState<string[]>(() => loadHistory());
   const [routineOpen, setRoutineOpen] = useState(false);
+  const answerLockedRef = useRef(false);
   const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(
     null,
   );
 
+  const todayTheme = useMemo(() => DAILY_THEMES[getTodayIndex()], []);
+  const tomorrowTheme = useMemo(
+    () => DAILY_THEMES[(getTodayIndex() + 1) % DAILY_THEMES.length],
+    [],
+  );
+  const dailyQuestions = useMemo(
+    () => getOrderedQuestions(todayTheme),
+    [todayTheme],
+  );
   const ghostQuestions = useMemo(() => getGhostIds(answers), [answers]);
   const result = getResult(ghostQuestions.length);
-  const currentQuestion = QUESTIONS[index];
+  const currentQuestion = dailyQuestions[index];
   const progress = Math.round(
-    (Object.keys(answers).length / QUESTIONS.length) * 100,
+    (Object.keys(answers).length / dailyQuestions.length) * 100,
   );
 
   useEffect(() => {
@@ -229,6 +410,10 @@ function App() {
       setPendingRewardCount(null);
     }
   }, [ads.rewardCount, pendingRewardCount]);
+
+  useEffect(() => {
+    answerLockedRef.current = false;
+  }, [index, step]);
 
   function start() {
     setIndex(0);
@@ -239,10 +424,19 @@ function App() {
   }
 
   function answer(value: AnswerValue) {
+    if (
+      answerLockedRef.current ||
+      step !== "question" ||
+      currentQuestion == null
+    ) {
+      return;
+    }
+
+    answerLockedRef.current = true;
     const nextAnswers = { ...answers, [currentQuestion.id]: value };
     setAnswers(nextAnswers);
 
-    if (index + 1 >= QUESTIONS.length) {
+    if (index + 1 >= dailyQuestions.length) {
       const score = getGhostIds(nextAnswers).length;
       setHistory(saveHistory(score));
       setStep("result");
@@ -292,7 +486,8 @@ function App() {
           }
           subtitleBottom={
             <Top.SubtitleParagraph size={15}>
-              {index + 1}/{QUESTIONS.length} · 직접 답하는 구독 점검
+              {index + 1}/{dailyQuestions.length} · {todayTheme.questionPrefix}{" "}
+              직접 점검
             </Top.SubtitleParagraph>
           }
         />
@@ -306,10 +501,10 @@ function App() {
             <div style={{ width: `${progress}%` }} />
           </div>
 
-          <GhostScene ghostCount={ghostQuestions.length} />
+          <GhostScene ghostCount={ghostQuestions.length} theme={todayTheme} />
 
           <p className="eyebrow">
-            구독 정보를 자동으로 가져오지 않아요 · 내 답변으로만 진단
+            {todayTheme.label} · 자동조회 아님 · 내 답변으로만 진단
           </p>
           <h1>{currentQuestion.title}</h1>
           <p className="question-subtitle">{currentQuestion.subtitle}</p>
@@ -347,7 +542,7 @@ function App() {
 
         <section className={`result-card result-${result.level}`}>
           <p className="eyebrow">{result.label}</p>
-          <GhostScene ghostCount={ghostQuestions.length} />
+          <GhostScene ghostCount={ghostQuestions.length} theme={todayTheme} />
           <h1>{result.title}</h1>
           <p>{result.copy}</p>
 
@@ -392,7 +587,7 @@ function App() {
             <span>👻</span>
             <div>
               <p className="eyebrow">오늘의 정리 루틴</p>
-              <h2>광고 보고 구독 정리 루틴 받기</h2>
+              <h2>광고 보고 {todayTheme.routineTitle} 받기</h2>
             </div>
           </div>
           <p>
@@ -402,15 +597,11 @@ function App() {
 
           {routineOpen ? (
             <div className="routine-open">
-              <strong>구독 정리 3단계</strong>
+              <strong>{todayTheme.routineTitle}</strong>
               <ol>
-                <li>오늘 발견한 유령 후보 앱의 다음 결제일을 먼저 확인하기</li>
-                <li>
-                  최근 30일 사용 기록이 없으면 해지/다운그레이드 후보로 표시하기
-                </li>
-                <li>
-                  해지 전 가족 공유·연간 결제·백업 데이터만 확인하고 정리하기
-                </li>
+                {todayTheme.routineSteps.map((stepText) => (
+                  <li key={stepText}>{stepText}</li>
+                ))}
               </ol>
             </div>
           ) : (
@@ -444,13 +635,14 @@ function App() {
       />
 
       <section className="hero-card">
-        <p className="eyebrow">직접 답하는 구독 점검</p>
-        <h1>이번 달에도 잊고 있던 구독료가 있을지도?</h1>
+        <p className="eyebrow">{todayTheme.label} · 매일 바뀌는 자가 점검</p>
+        <h1>{todayTheme.title}</h1>
         <p>
-          실제 결제 내역이나 구독 목록을 자동으로 조회하지 않아요. 내가 직접
-          답한 내용을 바탕으로 놓치기 쉬운 구독 후보만 확인해요.
+          {todayTheme.hook} 실제 결제 내역이나 구독 목록을 자동으로 조회하지
+          않아요. 내가 직접 답한 내용을 바탕으로 놓치기 쉬운 구독 후보만
+          확인해요.
         </p>
-        <GhostScene ghostCount={3} />
+        <GhostScene ghostCount={3} theme={todayTheme} />
         <Button onClick={start}>60초 자가 점검 시작</Button>
       </section>
 
@@ -466,7 +658,9 @@ function App() {
           <h2>구독 정리 루틴 3단계</h2>
           <p>
             점검 후 짧은 광고를 확인하면, 오늘 바로 쓸 수 있는 해지 전
-            체크리스트가 열려요.
+            체크리스트가 열려요. 내일은{" "}
+            {tomorrowTheme.label.replace("오늘의 유령: ", "")}
+            테마로 바뀌어요.
           </p>
         </div>
         <div className="benefit-tags">

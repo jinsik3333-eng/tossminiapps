@@ -93,6 +93,139 @@ body {
     #f7f4ff;
 }
 
+.theme-ott {
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(91, 141, 239, 0.24),
+      transparent 25%
+    ),
+    linear-gradient(135deg, #edf2ff 0%, #f6f0ff 100%);
+}
+
+.theme-trial {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 184, 92, 0.3),
+      transparent 26%
+    ),
+    linear-gradient(135deg, #fff7e6 0%, #f8f0ff 100%);
+}
+
+.theme-family {
+  background:
+    radial-gradient(
+      circle at 76% 22%,
+      rgba(12, 166, 120, 0.22),
+      transparent 28%
+    ),
+    linear-gradient(135deg, #e6fcf5 0%, #eef2ff 100%);
+}
+
+.theme-mobile {
+  background:
+    radial-gradient(
+      circle at 16% 20%,
+      rgba(255, 107, 107, 0.24),
+      transparent 26%
+    ),
+    linear-gradient(135deg, #fff5f5 0%, #f7f4ff 100%);
+}
+
+.theme-shopping {
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(230, 73, 128, 0.22),
+      transparent 27%
+    ),
+    linear-gradient(135deg, #fff0f6 0%, #f8f5ff 100%);
+}
+
+.theme-cloud {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(51, 154, 240, 0.24),
+      transparent 26%
+    ),
+    linear-gradient(135deg, #e7f5ff 0%, #f7fbff 100%);
+}
+
+.theme-audio {
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(134, 142, 150, 0.22),
+      transparent 27%
+    ),
+    linear-gradient(135deg, #f1f3f5 0%, #eef2ff 100%);
+}
+
+.theme-calendar {
+  background:
+    radial-gradient(
+      circle at 18% 22%,
+      rgba(49, 130, 246, 0.24),
+      transparent 26%
+    ),
+    linear-gradient(135deg, #edf7ff 0%, #f8f5ff 100%);
+}
+
+.theme-trial .phone-card,
+.theme-mobile .phone-card {
+  background: linear-gradient(145deg, #343a40, #fa5252);
+}
+
+.theme-family .phone-card {
+  background: linear-gradient(145deg, #087f5b, #20c997);
+}
+
+.theme-shopping .phone-card {
+  background: linear-gradient(145deg, #862e9c, #e64980);
+}
+
+.theme-cloud .phone-card {
+  background: linear-gradient(145deg, #1864ab, #74c0fc);
+}
+
+.theme-audio .phone-card {
+  background: linear-gradient(145deg, #343a40, #868e96);
+}
+
+.theme-calendar .phone-card {
+  background: linear-gradient(145deg, #1d4ed8, #7b61ff);
+}
+
+.theme-trial .ghost-body {
+  background: linear-gradient(180deg, #fff, #ffe8cc);
+}
+
+.theme-family .ghost-body {
+  background: linear-gradient(180deg, #fff, #c3fae8);
+}
+
+.theme-mobile .ghost-body {
+  background: linear-gradient(180deg, #fff, #ffc9c9);
+}
+
+.theme-shopping .ghost-body {
+  background: linear-gradient(180deg, #fff, #fcc2d7);
+}
+
+.theme-cloud .ghost-body {
+  background: linear-gradient(180deg, #fff, #d0ebff);
+}
+
+.theme-audio .ghost-body {
+  background: linear-gradient(180deg, #fff, #dee2e6);
+}
+
+.theme-calendar .ghost-body {
+  background: linear-gradient(180deg, #fff, #dbe4ff);
+}
+
 .phone-card {
   position: absolute;
   left: 22px;
