@@ -49,4 +49,4 @@
 - AIT 번들: `apps/spending-defense-roulette/spending-defense-roulette.ait`
 - 등록 이미지 패키지: `assets/app-store/spending-defense-roulette/spending-defense-roulette-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/spending-defense-roulette/contact-sheet.png`
-- 최신 build deploymentId: `019df045-41bf-71d6-a4ce-fc274029a9a8`
+- 최신 build deploymentId: `019df05f-189e-718d-9c42-591e0b52919a`

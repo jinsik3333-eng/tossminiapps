@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./App.css";
 import rouletteHero from "./assets/roulette-hero.jpg";
 
 type TrapType = "delivery" | "taxi" | "shopping" | "subscription" | "snack";
-type Screen = "home" | "spin" | "result";
+type Screen = "home" | "rolling" | "spin" | "result";
+
+const SPIN_DURATION_MS = 3200;
 
 type RouletteMission = {
   type: TrapType;
@@ -121,6 +123,15 @@ export default function App() {
   const [shieldCount, setShieldCount] = useState(0);
   const [routineOpen, setRoutineOpen] = useState(false);
   const [stamps, setStamps] = useState<string[]>(() => readStamps());
+  const spinTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (spinTimerRef.current) {
+        window.clearTimeout(spinTimerRef.current);
+      }
+    };
+  }, []);
 
   const todayMission = useMemo(() => MISSIONS[todayIndex()], []);
   const tomorrowMission = useMemo(
@@ -128,7 +139,7 @@ export default function App() {
     [],
   );
   const mission = MISSIONS[missionIndex];
-  const spinRotation = 36 + missionIndex * 72 + spinCount * 360;
+  const spinRotation = 36 + missionIndex * 72 + spinCount * 1080;
 
   const collectShield = () => {
     const next = Math.min(shieldCount + 1, 3);
@@ -138,12 +149,27 @@ export default function App() {
     }
   };
 
+  const goHome = () => {
+    if (spinTimerRef.current) {
+      window.clearTimeout(spinTimerRef.current);
+      spinTimerRef.current = null;
+    }
+    setScreen("home");
+  };
+
   const startSpin = () => {
+    if (spinTimerRef.current) {
+      window.clearTimeout(spinTimerRef.current);
+    }
     const nextIndex = (todayIndex() + spinCount) % MISSIONS.length;
     setMissionIndex(nextIndex);
     setSpinCount((count) => count + 1);
     setRoutineOpen(false);
-    setScreen("spin");
+    setScreen("rolling");
+    spinTimerRef.current = window.setTimeout(() => {
+      spinTimerRef.current = null;
+      setScreen("spin");
+    }, SPIN_DURATION_MS);
   };
 
   const chooseSafe = () => {
@@ -225,10 +251,32 @@ export default function App() {
         </>
       ) : null}
 
+      {screen === "rolling" ? (
+        <section className="play-card roulette-stage">
+          <div className="progress-row">
+            <button className="back-button" onClick={goHome}>
+              ← 홈
+            </button>
+            <span>룰렛 회전 중</span>
+          </div>
+          <HeroArt isRolling rotation={spinRotation} />
+          <p className="eyebrow">오늘의 소비 함정 선택 중</p>
+          <h1>룰렛이 돌고 있어요</h1>
+          <p className="description">
+            잠깐만 기다리면 오늘 점검할 소비 상황이 멈춰요. 멈춘 뒤 바로 5초
+            선택으로 넘어가요.
+          </p>
+          <div className="rolling-status" aria-live="polite">
+            <span />
+            <strong>{mission.label} 함정 쪽으로 이동 중</strong>
+          </div>
+        </section>
+      ) : null}
+
       {screen === "spin" ? (
         <section className="play-card">
           <div className="progress-row">
-            <button className="back-button" onClick={() => setScreen("home")}>
+            <button className="back-button" onClick={goHome}>
               ← 홈
             </button>
             <span>5초 선택</span>
@@ -287,10 +335,7 @@ export default function App() {
           <button className="secondary-button" onClick={startSpin}>
             한 번 더 돌리기
           </button>
-          <button
-            className="secondary-button ghost"
-            onClick={() => setScreen("home")}
-          >
+          <button className="secondary-button ghost" onClick={goHome}>
             홈으로
           </button>
         </section>
@@ -350,22 +395,36 @@ function CherryPickMenu({
 
 function HeroArt({
   compact = false,
+  isRolling = false,
   rotation,
 }: {
   compact?: boolean;
+  isRolling?: boolean;
   rotation: number;
 }) {
+  const className = [
+    "hero-art",
+    compact ? "compact" : "",
+    isRolling ? "rolling" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      className={compact ? "hero-art compact" : "hero-art"}
-      aria-hidden="true"
-    >
+    <div className={className} aria-hidden="true">
       <img src={rouletteHero} />
       <span className="hero-scrim" />
+      <span className="roulette-pointer" />
       <span
         className="roulette-wheel"
-        style={{ transform: `rotate(${rotation}deg)` }}
-      />
+        style={{ transform: `translate(-50%, -50%) rotate(${rotation}deg)` }}
+      >
+        <i>배달</i>
+        <i>택시</i>
+        <i>쇼핑</i>
+        <i>구독</i>
+        <i>간식</i>
+      </span>
       <span className="hero-badge">방어 룰렛</span>
       <span className="hero-chip">5초 선택</span>
       <span className="hero-label">루틴 카드</span>

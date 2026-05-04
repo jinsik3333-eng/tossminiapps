@@ -132,13 +132,15 @@ h2 {
 
 .roulette-wheel {
   position: absolute;
-  right: 16px;
-  bottom: 18px;
-  width: 52px;
-  height: 52px;
+  left: 50%;
+  top: 54%;
+  z-index: 2;
+  width: 176px;
+  height: 176px;
   border-radius: 50%;
   background:
     conic-gradient(
+      from -18deg,
       #3182f6 0 20%,
       #00c773 0 40%,
       #7c5cff 0 60%,
@@ -147,17 +149,133 @@ h2 {
     ),
     #ffffff;
   box-shadow:
-    inset 0 0 0 8px rgba(255, 255, 255, 0.82),
-    0 12px 20px rgba(25, 31, 40, 0.18);
-  transition: transform 520ms cubic-bezier(0.2, 0.85, 0.25, 1.2);
+    inset 0 0 0 10px rgba(255, 255, 255, 0.88),
+    inset 0 0 0 13px rgba(25, 31, 40, 0.08),
+    0 20px 34px rgba(25, 31, 40, 0.28);
+  transform-origin: center;
+  transition: transform 1450ms cubic-bezier(0.12, 0.78, 0.08, 1.02);
+}
+
+.hero-art.compact .roulette-wheel {
+  top: 55%;
+  width: 132px;
+  height: 132px;
+}
+
+.hero-art.rolling .roulette-wheel {
+  filter: saturate(1.16);
+  animation: realRouletteSpin 560ms linear infinite;
+  box-shadow:
+    inset 0 0 0 10px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 13px rgba(25, 31, 40, 0.08),
+    0 24px 42px rgba(49, 130, 246, 0.42);
+}
+
+@keyframes realRouletteSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .roulette-wheel::after {
   content: "";
   position: absolute;
-  inset: 20px;
+  inset: 58px;
+  z-index: 2;
   border-radius: 50%;
   background: #ffffff;
+  box-shadow: inset 0 0 0 6px #edf4ff;
+}
+
+.hero-art.compact .roulette-wheel::after {
+  inset: 44px;
+}
+
+.roulette-wheel i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  width: 42px;
+  margin-left: -21px;
+  color: #ffffff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 1px 5px rgba(25, 31, 40, 0.36);
+  transform-origin: center -58px;
+}
+
+.hero-art.compact .roulette-wheel i {
+  font-size: 10px;
+  transform-origin: center -43px;
+}
+
+.roulette-wheel i:nth-child(1) {
+  transform: rotate(36deg) translateY(58px) rotate(-36deg);
+}
+
+.roulette-wheel i:nth-child(2) {
+  transform: rotate(108deg) translateY(58px) rotate(-108deg);
+}
+
+.roulette-wheel i:nth-child(3) {
+  transform: rotate(180deg) translateY(58px) rotate(-180deg);
+}
+
+.roulette-wheel i:nth-child(4) {
+  transform: rotate(252deg) translateY(58px) rotate(-252deg);
+}
+
+.roulette-wheel i:nth-child(5) {
+  transform: rotate(324deg) translateY(58px) rotate(-324deg);
+}
+
+.hero-art.compact .roulette-wheel i:nth-child(1) {
+  transform: rotate(36deg) translateY(43px) rotate(-36deg);
+}
+
+.hero-art.compact .roulette-wheel i:nth-child(2) {
+  transform: rotate(108deg) translateY(43px) rotate(-108deg);
+}
+
+.hero-art.compact .roulette-wheel i:nth-child(3) {
+  transform: rotate(180deg) translateY(43px) rotate(-180deg);
+}
+
+.hero-art.compact .roulette-wheel i:nth-child(4) {
+  transform: rotate(252deg) translateY(43px) rotate(-252deg);
+}
+
+.hero-art.compact .roulette-wheel i:nth-child(5) {
+  transform: rotate(324deg) translateY(43px) rotate(-324deg);
+}
+
+.roulette-pointer {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  z-index: 4;
+  width: 0;
+  height: 0;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-top: 26px solid #191f28;
+  filter: drop-shadow(0 8px 10px rgba(25, 31, 40, 0.22));
+  transform: translateX(-50%);
+}
+
+.hero-art.compact .roulette-pointer {
+  top: 22px;
+  border-right-width: 12px;
+  border-left-width: 12px;
+  border-top-width: 22px;
 }
 
 .hero-badge,
@@ -457,6 +575,35 @@ h2 {
   font-size: 13px;
   font-weight: 800;
   line-height: 1.42;
+}
+
+.rolling-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: #eef6ff;
+  color: #1b64da;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+}
+
+.rolling-status span {
+  width: 16px;
+  height: 16px;
+  border: 3px solid rgba(49, 130, 246, 0.2);
+  border-top-color: #3182f6;
+  border-radius: 50%;
+  animation: rollingDot 520ms linear infinite;
+}
+
+@keyframes rollingDot {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .result-name {
