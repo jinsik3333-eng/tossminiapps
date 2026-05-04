@@ -1,50 +1,14 @@
-# Apps in Toss 앱 공장 체크리스트
+# App Factory Checklist
 
-상세 운영 기준은 `docs/factory-operation.md`를 따른다.
+## 새 Apps in Toss 미니앱 생성 체크리스트
 
-## 새 앱 생성 전
-
-- [ ] 앱명/후킹 카피 확정
-- [ ] 정책 리스크 확인
-- [ ] 카테고리/수익화 지점 확정
-- [ ] `appName`, `displayName`, `primaryColor`, `icon` 초안 준비
-
-## 구현
-
-- [ ] 템플릿 유형 선택: 테스트형 / 퀴즈형 / 체크리스트형 / 클리커형
-- [ ] 콘텐츠 데이터 작성
-- [ ] 첫 화면 구현
-- [ ] 질문/진행 화면 구현
-- [ ] 결과 화면 구현
-- [ ] 공유 문구 구현
-- [ ] 광고 지점 연결 또는 stub 처리
-- [ ] 저장소/재방문 루프 필요 여부 확인
-- [ ] 2호 앱부터 데일리 미션/오늘의 콘텐츠/연속 방문 보상 중 최소 1개 설계
-
-## 검증
-
-- [ ] `npm run build` 성공
-- [ ] 모바일 폭 375~390px 화면 확인
-- [ ] 결과 유형이 정상 매핑되는지 확인
-- [ ] 광고 미지원 환경 fallback 확인
-- [ ] 앱 설명/OG/아이콘 필요 항목 정리
-
-## 완료 후
-
-- [ ] `docs/lessons-learned.md` 업데이트
-- [ ] `docs/debug-log.md` 업데이트
-- [ ] 다음 앱 복제 시 바꿔야 할 파일 목록 업데이트
-- [ ] Git commit
-
-## money-leak-test 완료 기록
-
-- [x] 테스트형 첫 화면/질문/결과 화면 구현
-- [x] 8문항 진행률과 이전 이동 구현
-- [x] 6개 결과 유형 점수 매핑 구현
-- [x] 상세 처방 광고 지점 및 미지원 fallback 구현
-- [x] 보상형 광고 로드 시 보상 이벤트 이후 상세 처방 열기
-- [x] 공유 stub 구현
-- [x] 프로덕션 빌드에서 개발용 광고 테스트 링크 숨김
-- [x] `npm run lint` 성공
-- [x] `npm run build` 성공
-- [ ] 샌드박스 포트 바인딩 제한으로 실기기/브라우저 375~390px 확인은 별도 환경에서 진행
+1. 기존 최신 앱을 seed로 복사한다.
+2. `package.json`, `package-lock.json`, `granite.config.ts`, `.granite/app.json`의 앱명/appName/포트를 새 앱 기준으로 바꾼다.
+3. 앱 내부 hero 이미지는 image2/image_generate로 만들고, 읽을 수 있는 텍스트·로고·화폐기호가 없는지 vision QA한다.
+4. 홈/액션/결과/루틴 카드/광고 placeholder/알림·로그인 nudge/보조 메뉴를 포함한다.
+5. 금전성 보상, 포인트, 캐시백, 절약 보장, 금융상품 추천 문구를 피한다.
+6. `npm run format && npm run lint && npm run build`를 통과시킨다.
+7. 최종 build deploymentId를 승인 패키지 문서와 앱별 브리프에 반영한다.
+8. 앱스토어 이미지 zip/contact sheet를 생성하고 vision QA한다.
+9. 모바일 브라우저 QA로 홈/액션/결과 상태를 확인한다.
+10. stale seed 문구/이미지/광고 데모 소스가 남지 않았는지 검색한다.
