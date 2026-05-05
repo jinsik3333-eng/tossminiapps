@@ -1,0 +1,1006 @@
+{
+  "version": "2026-05-05-redesign-v1",
+  "count": 100,
+  "items": [
+    {
+      "id": "sleepy-pillow-ghost",
+      "index": 1,
+      "name": "낮잠 유령",
+      "emoji": "😴",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/001-sleepy-pillow-ghost.webp",
+      "description": "베개를 끌어안고 낮잠 시간을 지켜주는 조용한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: sleepy little ghost helper hugging a tiny pillow, rounded ghost tail silhouette, tiny dot eyes and tiny smile, soft blush cheeks. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "raincoat-puddle",
+      "index": 2,
+      "name": "우비 첨벙이",
+      "emoji": "☔️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/002-raincoat-puddle.webp",
+      "description": "작은 우비를 입고 물웅덩이를 건너는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: cute mongle in tiny yellow raincoat beside a small puddle, rounded clay body, dot eyes, tiny smile. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "sprout-gardener",
+      "index": 3,
+      "name": "새싹 정원사",
+      "emoji": "🌱",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/003-sprout-gardener.webp",
+      "description": "새싹 화분을 돌보며 매일 조금씩 자라는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: small gardener mongle holding one sprout pot, soft plush clay body, simple dot eyes, tiny smile. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cloud-postman",
+      "index": 4,
+      "name": "구름 우체부",
+      "emoji": "☁️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/004-cloud-postman.webp",
+      "description": "폭신한 구름 가방에 오늘의 기분을 담아오는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: cloud postman mongle with fluffy cloud satchel, round soft body, simple face, one bag prop. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "berry-cook",
+      "index": 5,
+      "name": "베리 요리사",
+      "emoji": "🫐",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/005-berry-cook.webp",
+      "description": "작은 베리 그릇을 들고 간식을 나눠주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: berry cook mongle holding one small berry bowl, chef kerchief, chubby clay toy style. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "book-detective",
+      "index": 6,
+      "name": "책장 탐정",
+      "emoji": "📚",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/006-book-detective.webp",
+      "description": "책 사이의 단서를 조용히 찾아내는 탐정 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: book detective mongle with tiny detective cap and one book, magnifier optional but not dominant, cute simple face. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "acorn-ranger",
+      "index": 7,
+      "name": "도토리 파수꾼",
+      "emoji": "🌰",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/007-acorn-ranger.webp",
+      "description": "도토리 모자를 쓰고 숲길을 지키는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: acorn ranger mongle wearing an acorn cap and holding a tiny leaf badge, rounded toy silhouette. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "blanket-burrito",
+      "index": 8,
+      "name": "담요 말이",
+      "emoji": "🛏️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/008-blanket-burrito.webp",
+      "description": "담요에 돌돌 말려 쉬어가는 포근한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle wrapped like a blanket burrito, soft cozy folds, dot eyes, tiny smile. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "milk-bubble",
+      "index": 9,
+      "name": "우유 방울",
+      "emoji": "🥛",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/009-milk-bubble.webp",
+      "description": "우유빛 방울처럼 말랑하게 통통 튀는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: milky bubble mongle holding one tiny cup with no text, pearly white soft clay material. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tiny-lantern",
+      "index": 10,
+      "name": "꼬마 등불",
+      "emoji": "🏮",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/010-tiny-lantern.webp",
+      "description": "작은 등불로 어두운 칸을 밝혀주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle holding a tiny warm lantern with no symbols or text, cozy soft 3D toy. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "sock-wanderer",
+      "index": 11,
+      "name": "양말 여행자",
+      "emoji": "🧦",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/011-sock-wanderer.webp",
+      "description": "짝 잃은 양말을 망토처럼 걸친 길잡이 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: cute wanderer mongle wearing a single oversized sock as cape, one simple prop, rounded silhouette. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "button-tailor",
+      "index": 12,
+      "name": "단추 재봉사",
+      "emoji": "🧵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/012-button-tailor.webp",
+      "description": "느슨해진 마음을 단추처럼 다시 꿰매주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: tailor mongle holding one large button, tiny scarf, no needles, soft plush clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "marshmallow-camper",
+      "index": 13,
+      "name": "마시멜로 캠퍼",
+      "emoji": "🏕️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/013-marshmallow-camper.webp",
+      "description": "작은 캠핑 의자에 앉아 쉬는 달콤한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: marshmallow camper mongle beside one tiny camping chair, soft off-white clay, cute simple face. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "leaf-umbrella",
+      "index": 14,
+      "name": "잎우산 몽글",
+      "emoji": "🌿",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/014-leaf-umbrella.webp",
+      "description": "커다란 잎사귀를 우산처럼 쓰는 숲속 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: forest mongle holding a single oversized leaf umbrella, rounded ghost-helper silhouette. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "paperboat-sailor",
+      "index": 15,
+      "name": "종이배 선원",
+      "emoji": "⛵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/015-paperboat-sailor.webp",
+      "description": "종이배 옆에서 작은 항해를 준비하는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: sailor mongle beside one paper boat with no letters, tiny sailor scarf, soft toy style. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "warm-muffler",
+      "index": 16,
+      "name": "목도리 산책가",
+      "emoji": "🧣",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/016-warm-muffler.webp",
+      "description": "긴 목도리를 두르고 천천히 걷는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: walking mongle with oversized knitted muffler scarf, tiny feet, soft 3D clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "honey-spoon",
+      "index": 17,
+      "name": "꿀숟갈 몽글",
+      "emoji": "🍯",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/017-honey-spoon.webp",
+      "description": "꿀숟갈 하나로 달콤한 기운을 챙겨주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: honey spoon mongle holding one wooden spoon with honey drop, no jar label, soft pastel. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cookie-thief",
+      "index": 18,
+      "name": "쿠키 도둑",
+      "emoji": "🍪",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/018-cookie-thief.webp",
+      "description": "쿠키를 몰래 챙겼지만 표정은 너무 순한 장난꾸러기예요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: adorable cookie thief mongle with tiny hood and one cookie, playful harmless expression, dot eyes tiny smile. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "pebble-collector",
+      "index": 19,
+      "name": "조약돌 수집가",
+      "emoji": "🪨",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/019-pebble-collector.webp",
+      "description": "반짝이는 조약돌 하나를 소중히 들고 다니는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: pebble collector mongle holding one smooth pebble, tiny backpack, rounded clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "toast-baker",
+      "index": 20,
+      "name": "토스트 제빵사",
+      "emoji": "🍞",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/020-toast-baker.webp",
+      "description": "따뜻한 토스트 냄새를 몰고 오는 아침 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: baker mongle with one toast slice prop, tiny chef kerchief, no text. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "memo-helper",
+      "index": 21,
+      "name": "메모 도우미",
+      "emoji": "📝",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/021-memo-helper.webp",
+      "description": "작은 빈 메모지를 들고 오늘 할 일을 기억해주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: memo helper mongle holding a blank note paper with absolutely no text, simple cute face. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "shell-napper",
+      "index": 22,
+      "name": "조개 낮잠이",
+      "emoji": "🐚",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/022-shell-napper.webp",
+      "description": "조개껍데기 그늘에서 잠깐 쉬는 바닷가 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: beach mongle napping beside one seashell, soft pastel studio, rounded body. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "snowball-friend",
+      "index": 23,
+      "name": "눈송이 친구",
+      "emoji": "❄️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/023-snowball-friend.webp",
+      "description": "녹지 않는 작은 눈덩이를 안고 있는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: snowball friend mongle hugging one small snowball, cozy cheeks, no sharp ice. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "ribbon-gifter",
+      "index": 24,
+      "name": "리본 선물꾼",
+      "emoji": "🎀",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/024-ribbon-gifter.webp",
+      "description": "리본만 살짝 묶어 오늘을 선물처럼 만드는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: gift helper mongle with one ribbon bow prop, no box text, soft toy clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "teacup-rest",
+      "index": 25,
+      "name": "찻잔 휴식이",
+      "emoji": "🍵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/025-teacup-rest.webp",
+      "description": "작은 찻잔 곁에서 숨을 고르는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: tea break mongle next to one plain teacup with no pattern text, warm calm mood. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "star-sticker",
+      "index": 26,
+      "name": "별스티커 몽글",
+      "emoji": "⭐",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/026-star-sticker.webp",
+      "description": "볼에 별 스티커 하나를 붙인 칭찬 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle with one star sticker on cheek, no letters, simple toy face. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "maple-sweeper",
+      "index": 27,
+      "name": "단풍 청소부",
+      "emoji": "🍁",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/027-maple-sweeper.webp",
+      "description": "작은 빗자루로 단풍잎을 모으는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: maple sweeper mongle holding tiny broom and one maple leaf, rounded plush. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "jelly-bounce",
+      "index": 28,
+      "name": "젤리 통통이",
+      "emoji": "🍮",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/028-jelly-bounce.webp",
+      "description": "젤리처럼 통통 튀는 말랑한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: jelly bounce mongle with translucent soft clay look, one small jelly cube prop, cute not slimy. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "pencil-planner",
+      "index": 29,
+      "name": "연필 계획가",
+      "emoji": "✏️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/029-pencil-planner.webp",
+      "description": "연필 하나로 다음 판의 계획을 세우는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: planner mongle holding one stubby pencil with no writing, cute soft 3D. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "music-hummer",
+      "index": 30,
+      "name": "콧노래 몽글",
+      "emoji": "🎵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/030-music-hummer.webp",
+      "description": "작은 음표 쿠션을 안고 콧노래를 부르는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: music hummer mongle hugging one music-note shaped pillow, no written notes, soft toy. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "bubble-washer",
+      "index": 31,
+      "name": "방울 세탁꾼",
+      "emoji": "🫧",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/031-bubble-washer.webp",
+      "description": "비누방울 하나를 굴리며 반짝반짝 닦는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: bubble washer mongle with one soap bubble, clean pastel, no checkerboard. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "candle-keeper",
+      "index": 32,
+      "name": "촛불 지킴이",
+      "emoji": "🕯️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/032-candle-keeper.webp",
+      "description": "작은 불빛을 조심히 지켜주는 차분한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: candle keeper mongle beside one safe tiny candle flame, cozy warm glow. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "pumpkin-hat",
+      "index": 33,
+      "name": "호박모자 몽글",
+      "emoji": "🎃",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/033-pumpkin-hat.webp",
+      "description": "작은 호박 모자를 쓴 가을 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle wearing cute tiny pumpkin hat, not scary, dot eyes tiny smile. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cotton-candy",
+      "index": 34,
+      "name": "솜사탕 몽글",
+      "emoji": "🍬",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/034-cotton-candy.webp",
+      "description": "솜사탕 구름을 살짝 들고 다니는 달콤한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: cotton candy mongle holding one fluffy pastel cotton candy puff, no stick text. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "mini-fisher",
+      "index": 35,
+      "name": "미니 낚시꾼",
+      "emoji": "🎣",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/035-mini-fisher.webp",
+      "description": "작은 별 조각을 낚는 조용한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mini fisher mongle holding toy fishing rod with tiny star charm, no real fish, soft clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "doorbell-keeper",
+      "index": 36,
+      "name": "초인종 지킴이",
+      "emoji": "🔔",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/036-doorbell-keeper.webp",
+      "description": "딸랑 종소리로 새 몽글을 불러오는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: bell keeper mongle holding one small round bell, no text, soft 3D toy. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "dandelion-runner",
+      "index": 37,
+      "name": "민들레 배달부",
+      "emoji": "🌼",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/037-dandelion-runner.webp",
+      "description": "민들레 홀씨를 조심히 배달하는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: dandelion delivery mongle carrying one dandelion puff, soft rounded silhouette. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "sleep-mask",
+      "index": 38,
+      "name": "수면안대 몽글",
+      "emoji": "😴",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/038-sleep-mask.webp",
+      "description": "수면안대를 머리에 얹고 쉬는 법을 알려주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle wearing tiny sleep mask on forehead, holding pillow corner, cute. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cupcake-guard",
+      "index": 39,
+      "name": "컵케이크 경비",
+      "emoji": "🧁",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/039-cupcake-guard.webp",
+      "description": "작은 컵케이크를 지키는 순한 경비 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: cupcake guard mongle beside one cupcake with no decoration text, toy shield shaped like cookie. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tiny-brush",
+      "index": 40,
+      "name": "작은 붓장이",
+      "emoji": "🖌️",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/040-tiny-brush.webp",
+      "description": "붓 한 번으로 도감 칸을 환하게 칠하는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: artist mongle holding one small paintbrush, no paint letters, soft plush. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "pond-frog-friend",
+      "index": 41,
+      "name": "연못 친구",
+      "emoji": "🐸",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/041-pond-frog-friend.webp",
+      "description": "개구리 모자를 쓰고 연못가에서 손 흔드는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle wearing cute frog hood, no real frog, rounded soft body, waving. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "toast-detective",
+      "index": 42,
+      "name": "토스트 탐정",
+      "emoji": "🍞",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/042-toast-detective.webp",
+      "description": "사라진 부스러기 단서를 찾는 아침 탐정 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: toast detective mongle with tiny detective cap and one toast crumb, cute harmless. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "mini-cactus",
+      "index": 43,
+      "name": "선인장 돌봄이",
+      "emoji": "🌵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/043-mini-cactus.webp",
+      "description": "가시 없는 작은 선인장을 돌보는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle holding a cute smooth cactus pot, no spikes, soft clay style. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "blanket-ghost",
+      "index": 44,
+      "name": "담요 유령",
+      "emoji": "👻",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/044-blanket-ghost.webp",
+      "description": "담요를 뒤집어쓴 척하는 장난스러운 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle pretending to be a blanket ghost, simple dot eyes, tiny smile, very cute. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "strawberry-scout",
+      "index": 45,
+      "name": "딸기 정찰대",
+      "emoji": "🍓",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/045-strawberry-scout.webp",
+      "description": "딸기 배지를 달고 길을 찾는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: strawberry scout mongle with one strawberry badge, tiny scarf, no text. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "paperclip-helper",
+      "index": 46,
+      "name": "클립 정리꾼",
+      "emoji": "📎",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/046-paperclip-helper.webp",
+      "description": "작은 클립 하나로 흩어진 조각을 정리해요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: organizer mongle holding one oversized paperclip, no office text, soft toy. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "moon-napper",
+      "index": 47,
+      "name": "달빛 낮잠이",
+      "emoji": "🌙",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/047-moon-napper.webp",
+      "description": "초승달 쿠션에 기대어 쉬는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: moon napper mongle leaning on one crescent moon cushion, soft dreamy pastel. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tiny-drummer",
+      "index": 48,
+      "name": "콩콩 드러머",
+      "emoji": "🥁",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/048-tiny-drummer.webp",
+      "description": "작은 북을 콩콩 두드리는 리듬 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: tiny drummer mongle with one small drum, no letters, rounded clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "moss-hiker",
+      "index": 49,
+      "name": "이끼 등산가",
+      "emoji": "🥾",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/049-moss-hiker.webp",
+      "description": "작은 등산화를 신고 이끼 언덕을 오르는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: moss hiker mongle wearing tiny boots and backpack, one moss pebble prop. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "orange-peeler",
+      "index": 50,
+      "name": "귤껍질 장인",
+      "emoji": "🍊",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/050-orange-peeler.webp",
+      "description": "귤껍질 모자를 쓴 상큼한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: orange peel mongle wearing cute citrus peel hat, no text, simple face. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tiny-librarian",
+      "index": 51,
+      "name": "꼬마 사서",
+      "emoji": "📖",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/051-tiny-librarian.webp",
+      "description": "책장 사이를 조용히 정리하는 사서 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: tiny librarian mongle holding one closed book, no readable cover text. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "puddle-boat",
+      "index": 52,
+      "name": "웅덩이 선장",
+      "emoji": "⛵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/052-puddle-boat.webp",
+      "description": "물웅덩이에 띄운 작은 배의 선장 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: puddle boat captain mongle with paper boat, cute cap, no text. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "muffin-watcher",
+      "index": 53,
+      "name": "머핀 감시꾼",
+      "emoji": "🧁",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/053-muffin-watcher.webp",
+      "description": "머핀이 식을 때까지 곁을 지키는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: muffin watcher mongle beside one muffin, tiny guard hat, harmless cute. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "peach-cheek",
+      "index": 54,
+      "name": "복숭아 볼",
+      "emoji": "🍑",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/054-peach-cheek.webp",
+      "description": "복숭아빛 볼이 말랑한 부끄럼 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: peach cheek mongle with peach-colored blush and one small peach leaf, soft clay. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tiny-sail",
+      "index": 55,
+      "name": "돛단 몽글",
+      "emoji": "⛵",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/055-tiny-sail.webp",
+      "description": "작은 돛을背고 바람을 기다리는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle carrying one tiny sail on back, soft pastel, rounded ghost-helper body. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "wool-ball",
+      "index": 56,
+      "name": "털실 굴림이",
+      "emoji": "🧶",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/056-wool-ball.webp",
+      "description": "털실 공을 굴리며 길을 만드는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle rolling one yarn ball, cozy soft plush, no needles. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "rain-snail",
+      "index": 57,
+      "name": "빗방울 달팽이",
+      "emoji": "🐌",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/057-rain-snail.webp",
+      "description": "달팽이 껍질 모양 우산을 쓴 느긋한 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: slow rain mongle with snail-shell umbrella, not slimy, cute rounded toy. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "small-clock",
+      "index": 58,
+      "name": "작은 시계꾼",
+      "emoji": "⏰",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/058-small-clock.webp",
+      "description": "시간을 재촉하지 않고 살짝 알려주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: timekeeper mongle holding one tiny blank round clock with no numbers, no letters. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "blueberry-hat",
+      "index": 59,
+      "name": "블루베리 모자",
+      "emoji": "🫐",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/059-blueberry-hat.webp",
+      "description": "블루베리 모자를 쓰고 통통 걷는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: mongle wearing blueberry cap, tiny feet, simple dot eyes, soft 3D. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cozy-key",
+      "index": 60,
+      "name": "포근 열쇠꾼",
+      "emoji": "🔑",
+      "rarity": "common",
+      "assetPath": "/mongles/premium/060-cozy-key.webp",
+      "description": "잠긴 도감 칸을 조용히 여는 열쇠 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: key keeper mongle holding one simple toy key, no key teeth sharp, soft cute. Rarity tier: common. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "detective-raindrop",
+      "index": 61,
+      "name": "빗방울 탐정",
+      "emoji": "🔍",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/061-detective-raindrop.webp",
+      "description": "빗소리 속에서 사라진 조각의 단서를 찾는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare raindrop detective mongle with detective cap and one magnifying glass, subtle sparkle, simple face. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "thief-marshmallow",
+      "index": 62,
+      "name": "마시멜로 도둑",
+      "emoji": "🍡",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/062-thief-marshmallow.webp",
+      "description": "마시멜로 하나를 몰래 숨긴 순한 장난꾸러기예요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare marshmallow thief mongle with tiny hood holding one marshmallow, playful not scary. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "lantern-guide",
+      "index": 63,
+      "name": "등불 안내자",
+      "emoji": "🏮",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/063-lantern-guide.webp",
+      "description": "길 잃은 몽글들을 따뜻한 불빛으로 안내해요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare lantern guide mongle with glowing lantern, soft halo, no symbols. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "pocket-wizard",
+      "index": 64,
+      "name": "주머니 마법사",
+      "emoji": "🪄",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/064-pocket-wizard.webp",
+      "description": "주머니에서 반짝 가루를 꺼내는 꼬마 마법 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare pocket wizard mongle with tiny wand and pouch, no stars as text, subtle magic particles. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "forest-mail",
+      "index": 65,
+      "name": "숲속 우편원",
+      "emoji": "✉️",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/065-forest-mail.webp",
+      "description": "빈 편지봉투에 좋은 기분을 담아 배달해요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare forest mail mongle holding blank envelope no markings, leaf satchel, cute. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "honey-guard",
+      "index": 66,
+      "name": "꿀단지 경비",
+      "emoji": "🍯",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/066-honey-guard.webp",
+      "description": "달콤한 꿀단지를 지키는 느긋한 경비 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare honey guard mongle with one plain honey pot no label and soft toy shield. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cloud-shepherd",
+      "index": 67,
+      "name": "구름 목동",
+      "emoji": "☁️",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/067-cloud-shepherd.webp",
+      "description": "작은 구름 양을 몰고 다니는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare cloud shepherd mongle with one tiny cloud sheep shape, shepherd crook toy. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "ribbon-dancer",
+      "index": 68,
+      "name": "리본 춤꾼",
+      "emoji": "🎀",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/068-ribbon-dancer.webp",
+      "description": "긴 리본으로 둥근 길을 그리며 춤추는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare ribbon dancer mongle with one flowing ribbon, dynamic cute pose, subtle sparkle. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "pebble-archivist",
+      "index": 69,
+      "name": "조약돌 기록관",
+      "emoji": "🪨",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/069-pebble-archivist.webp",
+      "description": "특별한 조약돌을 도감 칸에 차곡차곡 기록해요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare pebble archivist mongle with tiny satchel and one polished pebble, no paper text. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "cocoa-patrol",
+      "index": 70,
+      "name": "코코아 순찰대",
+      "emoji": "☕",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/070-cocoa-patrol.webp",
+      "description": "따뜻한 코코아 향으로 지친 몽글을 찾아내요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare cocoa patrol mongle with plain cocoa mug no logo, tiny patrol scarf. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "moon-baker",
+      "index": 71,
+      "name": "달빛 제빵사",
+      "emoji": "🌙",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/071-moon-baker.webp",
+      "description": "초승달 모양 빵을 굽는 밤의 제빵 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare moon baker mongle holding crescent bread, chef scarf, gentle moon glow. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "secret-sock",
+      "index": 72,
+      "name": "비밀 양말꾼",
+      "emoji": "🧦",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/072-secret-sock.webp",
+      "description": "사라진 양말을 찾아오는 비밀 임무 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare secret sock mongle with tiny spy mask and one sock, cute not creepy. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "bubble-orchestra",
+      "index": 73,
+      "name": "방울 지휘자",
+      "emoji": "🫧",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/073-bubble-orchestra.webp",
+      "description": "비누방울 악단을 조용히 지휘하는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare bubble conductor mongle with tiny baton and one bubble, no musical notes text. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "maple-scout",
+      "index": 74,
+      "name": "단풍 정찰병",
+      "emoji": "🍁",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/074-maple-scout.webp",
+      "description": "단풍잎을 지도처럼 들고 길을 찾는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare maple scout mongle holding one maple leaf like a map, no markings. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tea-alchemist",
+      "index": 75,
+      "name": "찻잎 연금술사",
+      "emoji": "🍵",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/075-tea-alchemist.webp",
+      "description": "찻잎 향으로 말랑한 기운을 만드는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare tea alchemist mongle with plain teacup and one leaf, soft green glow, no text. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "snow-post",
+      "index": 76,
+      "name": "눈송이 배달원",
+      "emoji": "❄️",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/076-snow-post.webp",
+      "description": "녹지 않는 눈송이를 조심히 배달하는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare snow post mongle carrying one snowflake parcel with no text, cozy scarf. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "star-mender",
+      "index": 77,
+      "name": "별빛 수선공",
+      "emoji": "⭐",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/077-star-mender.webp",
+      "description": "깨진 별 조각을 둥글게 다듬어주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare star mender mongle holding one soft star cushion, tiny sewing kit no needles text. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "garden-drum",
+      "index": 78,
+      "name": "정원 드러머",
+      "emoji": "🥁",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/078-garden-drum.webp",
+      "description": "새싹들이 자라도록 콩콩 박자를 맞춰요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare garden drummer mongle with small drum and sprout, no labels. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "paperboat-pirate",
+      "index": 79,
+      "name": "종이배 해적",
+      "emoji": "🏴‍☠️",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/079-paperboat-pirate.webp",
+      "description": "종이배를 타는 귀여운 장난 해적 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare paper boat pirate mongle with tiny harmless pirate scarf, one paper boat, no skull symbol. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "candle-cartographer",
+      "index": 80,
+      "name": "촛불 지도꾼",
+      "emoji": "🕯️",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/080-candle-cartographer.webp",
+      "description": "촛불 하나로 보이지 않는 길을 밝혀요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare candle cartographer mongle with candle and blank folded map no lines or text. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "strawberry-ninja",
+      "index": 81,
+      "name": "딸기 닌자",
+      "emoji": "🍓",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/081-strawberry-ninja.webp",
+      "description": "딸기잎 뒤에 숨어 있다가 휙 나타나는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare strawberry ninja mongle with soft berry hood, playful not aggressive, no weapons. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "wool-magician",
+      "index": 82,
+      "name": "털실 마술사",
+      "emoji": "🧶",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/082-wool-magician.webp",
+      "description": "털실 공에서 작은 구름을 꺼내는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare yarn magician mongle with yarn ball and tiny cloud puff, soft sparkle. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "compass-ranger",
+      "index": 83,
+      "name": "나침반 레인저",
+      "emoji": "🧭",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/083-compass-ranger.webp",
+      "description": "방향을 잃은 조각을 제자리로 보내요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare compass ranger mongle holding simple compass with no letters no numbers, explorer hat. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "flower-messenger",
+      "index": 84,
+      "name": "꽃잎 전령",
+      "emoji": "🌸",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/084-flower-messenger.webp",
+      "description": "꽃잎 편지를 바람에 실어 보내는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare flower messenger mongle holding one flower petal envelope, no text. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "tiny-rocket-mechanic",
+      "index": 85,
+      "name": "꼬마 로켓 정비공",
+      "emoji": "🚀",
+      "rarity": "rare",
+      "assetPath": "/mongles/premium/085-tiny-rocket-mechanic.webp",
+      "description": "작은 장난감 로켓을 닦아주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: rare toy rocket mechanic mongle with one tiny rocket, no logos, goggles on forehead. Rarity tier: rare. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "aurora-pillow-guardian",
+      "index": 86,
+      "name": "오로라 베개 수호자",
+      "emoji": "🌈",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/086-aurora-pillow-guardian.webp",
+      "description": "오로라빛 베개로 꿈 조각을 지키는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic pillow guardian mongle with aurora glow and one pillow, cinematic halo, soft 3D. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "crystal-librarian",
+      "index": 87,
+      "name": "수정 사서",
+      "emoji": "💎",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/087-crystal-librarian.webp",
+      "description": "수정 책갈피로 숨은 이야기를 찾아내는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic crystal librarian mongle holding one crystal bookmark and closed book no text, magical glow. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "moonlight-detective",
+      "index": 88,
+      "name": "달빛 탐정",
+      "emoji": "🔍",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/088-moonlight-detective.webp",
+      "description": "달빛 아래에서 가장 희미한 단서도 찾아내요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic moonlight detective mongle with detective cape and one magnifier, moon halo, cute simple face. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "thunder-teacup",
+      "index": 89,
+      "name": "번개 찻잔이",
+      "emoji": "⚡",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/089-thunder-teacup.webp",
+      "description": "찻잔 속 작은 번개로 기운을 깨우는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic thunder teacup mongle beside plain teacup with tiny lightning glow, safe cute. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "planet-shepherd",
+      "index": 90,
+      "name": "행성 목동",
+      "emoji": "🪐",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/090-planet-shepherd.webp",
+      "description": "작은 행성들을 조용히 줄 세우는 우주 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic planet shepherd mongle with one tiny pastel planet, cosmic but cute, no stars as text. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "rainbow-tailor",
+      "index": 91,
+      "name": "무지개 재봉사",
+      "emoji": "🌈",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/091-rainbow-tailor.webp",
+      "description": "무지개 실로 도감 칸을 부드럽게 이어줘요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic rainbow tailor mongle holding one spool of rainbow thread, no needles, glow. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "meteor-postman",
+      "index": 92,
+      "name": "별똥별 우체부",
+      "emoji": "☄️",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/092-meteor-postman.webp",
+      "description": "별똥별 소식을 빠르게 전하는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic meteor postman mongle with glowing satchel and one comet charm, no text. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "secret-crown-keeper",
+      "index": 93,
+      "name": "왕관 보관꾼",
+      "emoji": "👑",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/093-secret-crown-keeper.webp",
+      "description": "작은 왕관을 조심히 닦아 빛내는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic crown keeper mongle holding one tiny crown, not royal human, soft glow. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "deepsea-lantern",
+      "index": 94,
+      "name": "심해 등불이",
+      "emoji": "🌊",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/094-deepsea-lantern.webp",
+      "description": "깊은 바다빛 등불을 들고 나타나는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic deep sea lantern mongle with one glowing pearl lantern, no scary sea creature. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "skywhale-friend",
+      "index": 95,
+      "name": "하늘고래 친구",
+      "emoji": "🐋",
+      "rarity": "epic",
+      "assetPath": "/mongles/premium/095-skywhale-friend.webp",
+      "description": "하늘고래 구름 곁을 떠다니는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: epic sky whale friend mongle with one tiny cloud whale silhouette, dreamy glow. Rarity tier: epic. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "golden-sleepy-ghost",
+      "index": 96,
+      "name": "황금 낮잠 유령",
+      "emoji": "🌟",
+      "rarity": "unique",
+      "assetPath": "/mongles/premium/096-golden-sleepy-ghost.webp",
+      "description": "잠든 사이에 도감 칸을 반짝 채워주는 유니크 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: unique golden sleepy ghost mongle hugging pillow, aurora hero glow, extremely cute, premium collectible. Rarity tier: unique. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "baby-dragon-detective",
+      "index": 97,
+      "name": "아기 용 탐정",
+      "emoji": "🐉",
+      "rarity": "unique",
+      "assetPath": "/mongles/premium/097-baby-dragon-detective.webp",
+      "description": "꼬마 용이 된 탐정 몽글. 1% 확률로 만나는 특별한 친구예요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: unique baby dragon detective mongle with tiny wings, detective cap, one magnifier, adorable not fierce. Rarity tier: unique. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "aurora-cookie-thief",
+      "index": 98,
+      "name": "오로라 쿠키 도둑",
+      "emoji": "🍪",
+      "rarity": "unique",
+      "assetPath": "/mongles/premium/098-aurora-cookie-thief.webp",
+      "description": "쿠키 하나를 들고 오로라 속에서 슬쩍 나타나는 장난꾸러기예요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: unique aurora cookie thief mongle with hood and one cookie, magical glow, playful harmless. Rarity tier: unique. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "star-crown-ghost",
+      "index": 99,
+      "name": "별왕관 유령",
+      "emoji": "👑",
+      "rarity": "unique",
+      "assetPath": "/mongles/premium/099-star-crown-ghost.webp",
+      "description": "별왕관을 쓴 유령 친구. 도감 끝에서 가장 밝게 빛나요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: unique star crown ghost mongle wearing tiny crown, ghost helper silhouette, aurora and gold glow. Rarity tier: unique. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    },
+    {
+      "id": "rainbow-dragon-helper",
+      "index": 100,
+      "name": "무지개 용 도우미",
+      "emoji": "🐲",
+      "rarity": "unique",
+      "assetPath": "/mongles/premium/100-rainbow-dragon-helper.webp",
+      "description": "무지개 꼬리를 흔들며 마지막 조각을 도와주는 몽글이에요.",
+      "prompt": "premium soft 3D toy collectible character for a mobile puzzle game, Mongle village helper IP, cute small rounded clay/plush body, simple dot eyes, tiny smile, soft blush cheeks, chubby proportions, one readable role prop, gentle storybook personality, square composition, centered character, warm pastel studio background, soft floor shadow. Character concept: unique rainbow baby dragon helper mongle with tiny wings and rainbow tail, cute soft clay, hero glow. Rarity tier: unique. Keep it cute like a friendly ghost helper or tiny detective/thief mascot, never creepy, never slimy, no teeth, no many eyes, no thin limbs."
+    }
+  ]
+}

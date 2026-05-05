@@ -1,0 +1,902 @@
+[
+  {
+    "id": "nap-1",
+    "name": "말랑 낮잠 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/nap-1.png"
+  },
+  {
+    "id": "nap-2",
+    "name": "동글 낮잠 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/nap-2.png"
+  },
+  {
+    "id": "nap-3",
+    "name": "포근 낮잠 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/nap-3.png"
+  },
+  {
+    "id": "nap-4",
+    "name": "반짝 낮잠 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/nap-4.png"
+  },
+  {
+    "id": "rain-1",
+    "name": "말랑 우산 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/rain-1.png"
+  },
+  {
+    "id": "rain-2",
+    "name": "동글 우산 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/rain-2.png"
+  },
+  {
+    "id": "rain-3",
+    "name": "포근 우산 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/rain-3.png"
+  },
+  {
+    "id": "rain-4",
+    "name": "반짝 우산 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/rain-4.png"
+  },
+  {
+    "id": "leaf-1",
+    "name": "말랑 새싹 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/leaf-1.png"
+  },
+  {
+    "id": "leaf-2",
+    "name": "동글 새싹 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/leaf-2.png"
+  },
+  {
+    "id": "leaf-3",
+    "name": "포근 새싹 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/leaf-3.png"
+  },
+  {
+    "id": "leaf-4",
+    "name": "반짝 새싹 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/leaf-4.png"
+  },
+  {
+    "id": "cloud-1",
+    "name": "말랑 구름 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cloud-1.png"
+  },
+  {
+    "id": "cloud-2",
+    "name": "동글 구름 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cloud-2.png"
+  },
+  {
+    "id": "cloud-3",
+    "name": "포근 구름 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cloud-3.png"
+  },
+  {
+    "id": "cloud-4",
+    "name": "반짝 구름 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cloud-4.png"
+  },
+  {
+    "id": "berry-1",
+    "name": "말랑 베리 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/berry-1.png"
+  },
+  {
+    "id": "berry-2",
+    "name": "동글 베리 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/berry-2.png"
+  },
+  {
+    "id": "berry-3",
+    "name": "포근 베리 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/berry-3.png"
+  },
+  {
+    "id": "berry-4",
+    "name": "반짝 베리 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/berry-4.png"
+  },
+  {
+    "id": "book-1",
+    "name": "말랑 책갈피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/book-1.png"
+  },
+  {
+    "id": "book-2",
+    "name": "동글 책갈피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/book-2.png"
+  },
+  {
+    "id": "book-3",
+    "name": "포근 책갈피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/book-3.png"
+  },
+  {
+    "id": "book-4",
+    "name": "반짝 책갈피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/book-4.png"
+  },
+  {
+    "id": "cookie-1",
+    "name": "말랑 쿠키 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cookie-1.png"
+  },
+  {
+    "id": "cookie-2",
+    "name": "동글 쿠키 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cookie-2.png"
+  },
+  {
+    "id": "cookie-3",
+    "name": "포근 쿠키 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cookie-3.png"
+  },
+  {
+    "id": "cookie-4",
+    "name": "반짝 쿠키 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/cookie-4.png"
+  },
+  {
+    "id": "music-1",
+    "name": "말랑 멜로디 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/music-1.png"
+  },
+  {
+    "id": "music-2",
+    "name": "동글 멜로디 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/music-2.png"
+  },
+  {
+    "id": "music-3",
+    "name": "포근 멜로디 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/music-3.png"
+  },
+  {
+    "id": "music-4",
+    "name": "반짝 멜로디 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/music-4.png"
+  },
+  {
+    "id": "pencil-1",
+    "name": "말랑 연필 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pencil-1.png"
+  },
+  {
+    "id": "pencil-2",
+    "name": "동글 연필 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pencil-2.png"
+  },
+  {
+    "id": "pencil-3",
+    "name": "포근 연필 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pencil-3.png"
+  },
+  {
+    "id": "pencil-4",
+    "name": "반짝 연필 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pencil-4.png"
+  },
+  {
+    "id": "pillow-1",
+    "name": "말랑 베개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pillow-1.png"
+  },
+  {
+    "id": "pillow-2",
+    "name": "동글 베개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pillow-2.png"
+  },
+  {
+    "id": "pillow-3",
+    "name": "포근 베개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pillow-3.png"
+  },
+  {
+    "id": "pillow-4",
+    "name": "반짝 베개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/pillow-4.png"
+  },
+  {
+    "id": "coffee-1",
+    "name": "말랑 커피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/coffee-1.png"
+  },
+  {
+    "id": "coffee-2",
+    "name": "동글 커피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/coffee-2.png"
+  },
+  {
+    "id": "coffee-3",
+    "name": "포근 커피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/coffee-3.png"
+  },
+  {
+    "id": "coffee-4",
+    "name": "반짝 커피 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/coffee-4.png"
+  },
+  {
+    "id": "spark-1",
+    "name": "말랑 반짝 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/spark-1.png"
+  },
+  {
+    "id": "spark-2",
+    "name": "동글 반짝 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/spark-2.png"
+  },
+  {
+    "id": "spark-3",
+    "name": "포근 반짝 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/spark-3.png"
+  },
+  {
+    "id": "spark-4",
+    "name": "반짝 반짝 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/spark-4.png"
+  },
+  {
+    "id": "moon-1",
+    "name": "말랑 달빛 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/moon-1.png"
+  },
+  {
+    "id": "moon-2",
+    "name": "동글 달빛 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/moon-2.png"
+  },
+  {
+    "id": "moon-3",
+    "name": "포근 달빛 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/moon-3.png"
+  },
+  {
+    "id": "moon-4",
+    "name": "반짝 달빛 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/moon-4.png"
+  },
+  {
+    "id": "flower-1",
+    "name": "말랑 꽃잎 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/flower-1.png"
+  },
+  {
+    "id": "flower-2",
+    "name": "동글 꽃잎 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/flower-2.png"
+  },
+  {
+    "id": "flower-3",
+    "name": "포근 꽃잎 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/flower-3.png"
+  },
+  {
+    "id": "flower-4",
+    "name": "반짝 꽃잎 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/flower-4.png"
+  },
+  {
+    "id": "shell-1",
+    "name": "말랑 조개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/shell-1.png"
+  },
+  {
+    "id": "shell-2",
+    "name": "동글 조개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/shell-2.png"
+  },
+  {
+    "id": "shell-3",
+    "name": "포근 조개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/shell-3.png"
+  },
+  {
+    "id": "shell-4",
+    "name": "반짝 조개 몽글",
+    "rarity": "common",
+    "rarityLabel": "커먼",
+    "scoreMultiplier": 1,
+    "chanceLabel": "자주 나와요",
+    "image": "/mongles/shell-4.png"
+  },
+  {
+    "id": "compass-1",
+    "name": "말랑 나침반 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/compass-1.png"
+  },
+  {
+    "id": "compass-2",
+    "name": "동글 나침반 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/compass-2.png"
+  },
+  {
+    "id": "compass-3",
+    "name": "포근 나침반 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/compass-3.png"
+  },
+  {
+    "id": "compass-4",
+    "name": "반짝 나침반 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/compass-4.png"
+  },
+  {
+    "id": "paint-1",
+    "name": "말랑 물감 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/paint-1.png"
+  },
+  {
+    "id": "paint-2",
+    "name": "동글 물감 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/paint-2.png"
+  },
+  {
+    "id": "paint-3",
+    "name": "포근 물감 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/paint-3.png"
+  },
+  {
+    "id": "paint-4",
+    "name": "반짝 물감 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/paint-4.png"
+  },
+  {
+    "id": "bubble-1",
+    "name": "말랑 방울 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/bubble-1.png"
+  },
+  {
+    "id": "bubble-2",
+    "name": "동글 방울 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/bubble-2.png"
+  },
+  {
+    "id": "bubble-3",
+    "name": "포근 방울 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/bubble-3.png"
+  },
+  {
+    "id": "bubble-4",
+    "name": "반짝 방울 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/bubble-4.png"
+  },
+  {
+    "id": "candy-1",
+    "name": "말랑 캔디 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/candy-1.png"
+  },
+  {
+    "id": "candy-2",
+    "name": "동글 캔디 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/candy-2.png"
+  },
+  {
+    "id": "candy-3",
+    "name": "포근 캔디 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/candy-3.png"
+  },
+  {
+    "id": "candy-4",
+    "name": "반짝 캔디 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/candy-4.png"
+  },
+  {
+    "id": "ticket-1",
+    "name": "말랑 티켓 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/ticket-1.png"
+  },
+  {
+    "id": "ticket-2",
+    "name": "동글 티켓 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/ticket-2.png"
+  },
+  {
+    "id": "ticket-3",
+    "name": "포근 티켓 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/ticket-3.png"
+  },
+  {
+    "id": "ticket-4",
+    "name": "반짝 티켓 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/ticket-4.png"
+  },
+  {
+    "id": "clover-1",
+    "name": "말랑 네잎 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/clover-1.png"
+  },
+  {
+    "id": "clover-2",
+    "name": "동글 네잎 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/clover-2.png"
+  },
+  {
+    "id": "clover-3",
+    "name": "포근 네잎 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/clover-3.png"
+  },
+  {
+    "id": "clover-4",
+    "name": "반짝 네잎 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/clover-4.png"
+  },
+  {
+    "id": "planet-1",
+    "name": "말랑 행성 몽글",
+    "rarity": "rare",
+    "rarityLabel": "레어",
+    "scoreMultiplier": 1.15,
+    "chanceLabel": "가끔 나와요",
+    "image": "/mongles/planet-1.png"
+  },
+  {
+    "id": "planet-2",
+    "name": "동글 행성 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/planet-2.png"
+  },
+  {
+    "id": "planet-3",
+    "name": "포근 행성 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/planet-3.png"
+  },
+  {
+    "id": "planet-4",
+    "name": "반짝 행성 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/planet-4.png"
+  },
+  {
+    "id": "rocket-1",
+    "name": "말랑 로켓 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/rocket-1.png"
+  },
+  {
+    "id": "rocket-2",
+    "name": "동글 로켓 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/rocket-2.png"
+  },
+  {
+    "id": "rocket-3",
+    "name": "포근 로켓 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/rocket-3.png"
+  },
+  {
+    "id": "rocket-4",
+    "name": "반짝 로켓 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/rocket-4.png"
+  },
+  {
+    "id": "crystal-1",
+    "name": "말랑 수정 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/crystal-1.png"
+  },
+  {
+    "id": "crystal-2",
+    "name": "동글 수정 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/crystal-2.png"
+  },
+  {
+    "id": "crystal-3",
+    "name": "포근 수정 몽글",
+    "rarity": "epic",
+    "rarityLabel": "에픽",
+    "scoreMultiplier": 1.5,
+    "chanceLabel": "잘 안 나와요",
+    "image": "/mongles/crystal-3.png"
+  },
+  {
+    "id": "crystal-4",
+    "name": "반짝 수정 몽글",
+    "rarity": "unique",
+    "rarityLabel": "유니크",
+    "scoreMultiplier": 2,
+    "chanceLabel": "1% 대박",
+    "image": "/mongles/crystal-4.png"
+  },
+  {
+    "id": "dragon-1",
+    "name": "말랑 용 몽글",
+    "rarity": "unique",
+    "rarityLabel": "유니크",
+    "scoreMultiplier": 2,
+    "chanceLabel": "1% 대박",
+    "image": "/mongles/dragon-1.png"
+  },
+  {
+    "id": "dragon-2",
+    "name": "동글 용 몽글",
+    "rarity": "unique",
+    "rarityLabel": "유니크",
+    "scoreMultiplier": 2,
+    "chanceLabel": "1% 대박",
+    "image": "/mongles/dragon-2.png"
+  },
+  {
+    "id": "dragon-3",
+    "name": "포근 용 몽글",
+    "rarity": "unique",
+    "rarityLabel": "유니크",
+    "scoreMultiplier": 2,
+    "chanceLabel": "1% 대박",
+    "image": "/mongles/dragon-3.png"
+  },
+  {
+    "id": "dragon-4",
+    "name": "반짝 용 몽글",
+    "rarity": "unique",
+    "rarityLabel": "유니크",
+    "scoreMultiplier": 2,
+    "chanceLabel": "1% 대박",
+    "image": "/mongles/dragon-4.png"
+  }
+]

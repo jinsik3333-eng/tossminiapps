@@ -1,0 +1,110 @@
+[
+  {
+    "id": "nap-1",
+    "rarity": "common",
+    "assetPath": "/mongles/premium/001-nap-1.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231209_ab66d775.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "nap-2",
+    "rarity": "common",
+    "assetPath": "/mongles/premium/002-nap-2.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231313_1589a63a.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "nap-3",
+    "rarity": "common",
+    "assetPath": "/mongles/premium/003-nap-3.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231354_729c4613.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "nap-4",
+    "rarity": "common",
+    "assetPath": "/mongles/premium/004-nap-4.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231522_a7fb5b6c.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "compass-1",
+    "rarity": "rare",
+    "assetPath": "/mongles/premium/061-compass-1.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231622_5e517877.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "compass-2",
+    "rarity": "rare",
+    "assetPath": "/mongles/premium/062-compass-2.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231737_3c2a85ca.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "compass-3",
+    "rarity": "rare",
+    "assetPath": "/mongles/premium/063-compass-3.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231850_fc4e109a.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "planet-2",
+    "rarity": "epic",
+    "assetPath": "/mongles/premium/086-planet-2.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_231958_58793202.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "planet-3",
+    "rarity": "epic",
+    "assetPath": "/mongles/premium/087-planet-3.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_232530_f354c1b3.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "planet-4",
+    "rarity": "epic",
+    "assetPath": "/mongles/premium/088-planet-4.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_232213_58b55bc3.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "crystal-4",
+    "rarity": "unique",
+    "assetPath": "/mongles/premium/096-crystal-4.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_232324_e0e1ba6d.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  },
+  {
+    "id": "dragon-1",
+    "rarity": "unique",
+    "assetPath": "/mongles/premium/097-dragon-1.webp",
+    "source": "/Users/jinsik/.hermes/cache/images/openai_codex_gpt-image-2-high_20260504_232419_781b6d8c.png",
+    "width": 768,
+    "height": 768,
+    "status": "sample_generated"
+  }
+]

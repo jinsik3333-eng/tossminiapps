@@ -39,7 +39,8 @@ interface ResultProfile {
   visualLabel: string;
 }
 
-const DETAIL_AD_GROUP_ID = "ait-ad-test-rewarded-id";
+const DETAIL_AD_GROUP_ID =
+  import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "ait-ad-test-rewarded-id";
 const SHOW_DEV_TOOLS = import.meta.env.DEV;
 const DAILY_PATCH_KEY = "money-leak-test:daily-patches";
 
