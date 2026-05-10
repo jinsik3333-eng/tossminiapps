@@ -229,7 +229,7 @@ MVP 스테이지 1개:
 ## 9. 1차 구현 산출물
 
 앱 폴더 후보:
-- `apps/mongle-match-puzzle`
+- `apps/07-mongle-match-puzzle`
 
 필수 파일/구조:
 - `src/App.tsx`

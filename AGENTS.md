@@ -61,3 +61,13 @@
 - `docs/app-factory-checklist.md`
 - `docs/common-template-decisions.md`
 - `docs/debug-log.md`
+
+
+## AI 실행/스킬 관리 정책
+
+- 상세 실행 분리는 `docs/ops/ai-execution-policy.md`를 따른다.
+- 스킬 추가/활성화 기준은 `docs/ops/skill-governance.md`를 따른다.
+- 구현/수정/테스트/리팩터링 요청은 Hermes가 직접 오래 편집하지 말고 기본적으로 OMX/Codex에 위임한다.
+- Hermes는 task packet 작성, 결과 파일 readback, 빌드/모바일 QA 검증, 짧은 보고를 담당한다.
+- 프로젝트 wrapper는 `.codex/skills/tossminiapps-dev-loop/SKILL.md` 1개만 유지한다.
+- 앱별 세부 규칙은 새 skill로 만들지 말고 `apps/<app-slug>/APP_CONTEXT.md`에 둔다.

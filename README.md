@@ -11,7 +11,7 @@ Apps in Toss 미니앱 10개 제작/수익화 실험 프로젝트.
 ## 현재 1호 앱
 
 ```txt
-apps/money-leak-test
+apps/01-money-leak-test
 ```
 
 - 앱명: 돈 새는 구멍 테스트
@@ -31,7 +31,7 @@ apps/money-leak-test
 ## 기본 명령
 
 ```bash
-cd apps/money-leak-test
+cd apps/01-money-leak-test
 npm run dev
 npm run build
 npm run lint

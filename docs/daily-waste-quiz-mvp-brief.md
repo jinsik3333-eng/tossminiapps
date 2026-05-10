@@ -77,7 +77,7 @@
 
 ## 구현 지침
 
-- `apps/daily-waste-quiz`에 생성
+- `apps/02-daily-waste-quiz`에 생성
 - React + Vite + Apps in Toss Web Framework
 - 공식 스캐폴드/TDS/인앱광고 샘플 기반
 - 과한 게임/현금 보상 표현 금지

@@ -26,8 +26,8 @@
 ### 제출 상태
 
 - 상태: 승인 요청 접수 완료로 관리.
-- 앱 경로: `apps/money-leak-test`
-- AIT 번들: `apps/money-leak-test/money-leak-test.ait`
+- 앱 경로: `apps/01-money-leak-test`
+- AIT 번들: `apps/01-money-leak-test/money-leak-test.ait`
 - 등록 이미지 패키지: `assets/app-store/money-leak-test/money-leak-test-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/money-leak-test/contact-sheet.png`
 - 최신 build deploymentId: `019dee29-9976-7ba4-ae1d-bd53e760ba43`
@@ -63,8 +63,8 @@
 ### 제출 상태
 
 - 상태: 승인 요청 준비 완료.
-- 앱 경로: `apps/daily-waste-quiz`
-- AIT 번들: `apps/daily-waste-quiz/daily-waste-quiz.ait`
+- 앱 경로: `apps/02-daily-waste-quiz`
+- AIT 번들: `apps/02-daily-waste-quiz/daily-waste-quiz.ait`
 - 최신 build deploymentId: `019dee2d-6f87-7dcd-83d2-c525d2c04f24`
 - 상세 카피 문서: `docs/daily-waste-quiz-listing-copy.md`
 
@@ -117,8 +117,8 @@
 ### 제출 상태
 
 - 상태: 승인 요청 준비 완료.
-- 앱 경로: `apps/subscription-ghost-finder`
-- AIT 번들: `apps/subscription-ghost-finder/subscription-ghost-finder.ait`
+- 앱 경로: `apps/05-subscription-ghost-finder`
+- AIT 번들: `apps/05-subscription-ghost-finder/subscription-ghost-finder.ait`
 - 최신 build deploymentId: `019dee2a-1402-7424-9bd8-beb3724ccada`
 - MVP/심사 브리프: `docs/subscription-ghost-finder-mvp-brief.md`
 
@@ -173,8 +173,8 @@
 ### 제출 상태
 
 - 상태: 승인 요청 준비 완료.
-- 앱 경로: `apps/salary-thief-finder`
-- AIT 번들: `apps/salary-thief-finder/salary-thief-finder.ait`
+- 앱 경로: `apps/03-salary-thief-finder`
+- AIT 번들: `apps/03-salary-thief-finder/salary-thief-finder.ait`
 - 최신 build deploymentId: `019dee2a-4c93-78a6-9bec-ed93df964c06`
 - MVP/심사 브리프: `docs/salary-thief-finder-mvp-brief.md`
 - 등록 이미지 패키지: `assets/app-store/salary-thief-finder/salary-thief-finder-appstore-assets.zip`
@@ -228,8 +228,8 @@
 ### 제출 상태
 
 - 상태: 승인 요청 준비 완료.
-- 앱 경로: `apps/spending-defense-roulette`
-- AIT 번들: `apps/spending-defense-roulette/spending-defense-roulette.ait`
+- 앱 경로: `apps/04-spending-defense-roulette`
+- AIT 번들: `apps/04-spending-defense-roulette/spending-defense-roulette.ait`
 - 최신 build deploymentId: `019df05f-189e-718d-9c42-591e0b52919a`
 - MVP/심사 브리프: `docs/spending-defense-roulette-mvp-brief.md`
 - 등록 이미지 패키지: `assets/app-store/spending-defense-roulette/spending-defense-roulette-appstore-assets.zip`
@@ -283,8 +283,8 @@
 ### 제출 상태
 
 - 상태: 승인 요청 준비 완료.
-- 앱 경로: `apps/receipt-monster-catcher`
-- AIT 번들: `apps/receipt-monster-catcher/receipt-monster-catcher.ait`
+- 앱 경로: `apps/06-receipt-monster-catcher`
+- AIT 번들: `apps/06-receipt-monster-catcher/receipt-monster-catcher.ait`
 - 최신 build deploymentId: `019df13b-a31f-7a43-a218-58953d0e4bd5`
 - MVP/심사 브리프: `docs/receipt-monster-catcher-mvp-brief.md`
 - 등록 이미지 패키지: `assets/app-store/receipt-monster-catcher/receipt-monster-catcher-appstore-assets.zip`

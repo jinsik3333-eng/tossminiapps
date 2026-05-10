@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "assets/app-store/receipt-monster-catcher"
-SRC = ROOT / "apps/receipt-monster-catcher/src/assets/receipt-monster-hero.jpg"
+SRC = ROOT / "apps/06-receipt-monster-catcher/src/assets/receipt-monster-hero.jpg"
 APP = "영수증 몬스터 잡기"
 PRIMARY = "#21C997"
 INK = "#101828"

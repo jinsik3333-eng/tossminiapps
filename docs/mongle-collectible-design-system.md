@@ -1,7 +1,7 @@
 # 몽글 컬렉터블 디자인 시스템
 
 작성일: 2026-05-04
-대상 앱: `apps/mongle-match-puzzle`
+대상 앱: `apps/07-mongle-match-puzzle`
 
 ## 1. 핵심 방향
 
@@ -135,7 +135,7 @@ Hermes image2 단계:
 
 ## 9. 100종 프리미엄 3D 에셋 준비 상태
 
-- 최종 노출 예정 위치: `apps/mongle-match-puzzle/public/mongles/premium/`
+- 최종 노출 예정 위치: `apps/07-mongle-match-puzzle/public/mongles/premium/`
 - 앱 매핑: `/mongles/premium/{001-100}-{series}-{variant}.webp`
 - Prompt manifest: `docs/mongle-premium-prompt-manifest.json` 100종 준비 완료
 - 1차 MVP 에셋 격리 위치: `docs/mongle-legacy-draft-assets/`

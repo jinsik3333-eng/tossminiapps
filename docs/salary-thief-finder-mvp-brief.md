@@ -5,7 +5,7 @@
 - 앱명: 월급 도둑 찾기
 - 영문명: Salary Thief Finder
 - 앱 ID: `salary-thief-finder`
-- 앱 경로: `apps/salary-thief-finder`
+- 앱 경로: `apps/03-salary-thief-finder`
 - 유형: 60초 소비 습관 자가 점검 / 결과 카드형 미니앱
 - 한줄 소개: 이번 달 내 월급을 사라지게 한 소비 패턴을 60초만에 점검해요.
 
@@ -39,7 +39,7 @@
 
 ## 이미지 패키지
 
-- 앱 내부 hero: `apps/salary-thief-finder/src/assets/salary-thief-hero.jpg`
+- 앱 내부 hero: `apps/03-salary-thief-finder/src/assets/salary-thief-hero.jpg`
 - 앱스토어 이미지 패키지: `assets/app-store/salary-thief-finder/salary-thief-finder-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/salary-thief-finder/contact-sheet.png`
 - 생성형 원본 소스: `assets/app-store/salary-thief-finder/sources/salary-thief-hero-source.png`
@@ -49,5 +49,5 @@
 - `npm run format` 성공
 - `npm run lint` 성공
 - `npm run build` 성공
-- AIT 번들: `apps/salary-thief-finder/salary-thief-finder.ait`
+- AIT 번들: `apps/03-salary-thief-finder/salary-thief-finder.ait`
 - 최신 build deploymentId: `019dee2a-4c93-78a6-9bec-ed93df964c06`

@@ -1,6 +1,6 @@
 # 1호 앱 승인 후 광고/배포 운영 메모
 
-대상 앱: `apps/money-leak-test`
+대상 앱: `apps/01-money-leak-test`
 작성일: 2026-05-04
 
 ## 1. 먼저 구분해야 할 값
@@ -20,7 +20,7 @@ Apps in Toss 승인 후 받는 값은 보통 두 종류가 섞여 헷갈릴 수 
 
 ```bash
 export AIT_DEPLOY_API_KEY="[REDACTED]"
-cd apps/money-leak-test
+cd apps/01-money-leak-test
 npx ait deploy --api-key "$AIT_DEPLOY_API_KEY" -m "광고 연동 테스트 후보"
 ```
 
@@ -70,7 +70,7 @@ npx ait deploy -m "광고 연동 테스트 후보"
 4. 발급된 `리워드 광고 그룹 ID`를 로컬 `.env.local`에 저장
 
 ```bash
-cd apps/money-leak-test
+cd apps/01-money-leak-test
 cp .env.example .env.local
 # .env.local 안의 VITE_TOSS_REWARDED_AD_GROUP_ID를 실제 광고 그룹 ID로 교체
 ```

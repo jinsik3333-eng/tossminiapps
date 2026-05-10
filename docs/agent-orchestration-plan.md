@@ -113,7 +113,7 @@ Paperclip 회사/팀을 만드는 기준:
 예시:
 
 ```bash
-codex exec --full-auto -p medium "apps/money-leak-test에서 테스트형 결과 화면을 구현하고 npm run build로 검증해. 실패하면 원인을 수정하고 다시 빌드해. Apps in Toss MCP를 참고해."
+codex exec --full-auto -p medium "apps/01-money-leak-test에서 테스트형 결과 화면을 구현하고 npm run build로 검증해. 실패하면 원인을 수정하고 다시 빌드해. Apps in Toss MCP를 참고해."
 ```
 
 ### Claude Code 루프

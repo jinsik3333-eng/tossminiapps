@@ -44,8 +44,8 @@
 
 ## 산출물
 
-- 앱 경로: `apps/receipt-monster-catcher`
-- AIT 번들: `apps/receipt-monster-catcher/receipt-monster-catcher.ait`
+- 앱 경로: `apps/06-receipt-monster-catcher`
+- AIT 번들: `apps/06-receipt-monster-catcher/receipt-monster-catcher.ait`
 - 등록 이미지 패키지: `assets/app-store/receipt-monster-catcher/receipt-monster-catcher-appstore-assets.zip`
 - 대표 확인용 이미지: `assets/app-store/receipt-monster-catcher/contact-sheet.png`
 - 최신 build deploymentId: `019df13b-a31f-7a43-a218-58953d0e4bd5`

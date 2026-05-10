@@ -1,7 +1,7 @@
 # 몽글 프리미엄 3D 아트 디렉션
 
 작성일: 2026-05-04  
-대상 앱: `apps/mongle-match-puzzle`
+대상 앱: `apps/07-mongle-match-puzzle`
 
 ## 목적
 
@@ -52,5 +52,5 @@
 ## 산출물
 
 - Prompt manifest: `docs/mongle-premium-prompt-manifest.json`
-- 앱 stable asset path: `apps/mongle-match-puzzle/public/mongles/premium/`
+- 앱 stable asset path: `apps/07-mongle-match-puzzle/public/mongles/premium/`
 - 격리된 legacy draft: `docs/mongle-legacy-draft-assets/`

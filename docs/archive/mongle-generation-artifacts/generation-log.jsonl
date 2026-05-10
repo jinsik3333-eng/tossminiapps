@@ -87,7 +87,7 @@
 {"ts": "2026-05-05T07:37:46", "event": "generated", "asset": "098-dragon-2.webp", "id": "dragon-2", "rarity": "unique", "attempt": 1}
 {"ts": "2026-05-05T07:38:48", "event": "generated", "asset": "099-dragon-3.webp", "id": "dragon-3", "rarity": "unique", "attempt": 1}
 {"ts": "2026-05-05T07:39:56", "event": "generated", "asset": "100-dragon-4.webp", "id": "dragon-4", "rarity": "unique", "attempt": 1}
-{"ts": "2026-05-05T07:39:56", "event": "done", "generated_now": 88, "failed": [], "final_count": 100, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T07:39:56", "event": "done", "generated_now": 88, "failed": [], "final_count": 100, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T18:57:28", "event": "start", "manifest_items": 100, "existing_webp": 4, "todo": 96}
 {"ts": "2026-05-05T18:58:35", "event": "generated", "asset": "002-raincoat-puddle.webp", "id": "raincoat-puddle", "rarity": "common", "attempt": 1}
 {"ts": "2026-05-05T18:59:20", "event": "start", "manifest_items": 100, "existing_webp": 5, "todo": 95}
@@ -184,25 +184,25 @@
 {"ts": "2026-05-05T19:13:49", "event": "generated", "asset": "063-lantern-guide.webp", "id": "lantern-guide", "rarity": "rare", "attempt": 1}
 {"ts": "2026-05-05T19:13:52", "event": "generated", "asset": "089-thunder-teacup.webp", "id": "thunder-teacup", "rarity": "epic", "attempt": 1}
 {"ts": "2026-05-05T19:13:52", "event": "generated", "asset": "090-planet-shepherd.webp", "id": "planet-shepherd", "rarity": "epic", "attempt": 1}
-{"ts": "2026-05-05T19:13:53", "event": "done", "generated_now": 10, "failed": [], "final_count": 86, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:13:53", "event": "done", "generated_now": 10, "failed": [], "final_count": 86, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:13:56", "event": "generated", "asset": "094-deepsea-lantern.webp", "id": "deepsea-lantern", "rarity": "epic", "attempt": 1}
-{"ts": "2026-05-05T19:13:56", "event": "done", "generated_now": 11, "failed": [], "final_count": 87, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:13:56", "event": "done", "generated_now": 11, "failed": [], "final_count": 87, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:14:03", "event": "generated", "asset": "083-compass-ranger.webp", "id": "compass-ranger", "rarity": "rare", "attempt": 1}
 {"ts": "2026-05-05T19:14:21", "event": "generated", "asset": "096-golden-sleepy-ghost.webp", "id": "golden-sleepy-ghost", "rarity": "unique", "attempt": 1}
-{"ts": "2026-05-05T19:14:22", "event": "done", "generated_now": 11, "failed": [], "final_count": 89, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:14:22", "event": "done", "generated_now": 11, "failed": [], "final_count": 89, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:14:26", "event": "generated", "asset": "093-secret-crown-keeper.webp", "id": "secret-crown-keeper", "rarity": "epic", "attempt": 1}
-{"ts": "2026-05-05T19:14:27", "event": "done", "generated_now": 11, "failed": [], "final_count": 90, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:14:27", "event": "done", "generated_now": 11, "failed": [], "final_count": 90, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:14:38", "event": "generated", "asset": "084-flower-messenger.webp", "id": "flower-messenger", "rarity": "rare", "attempt": 1}
 {"ts": "2026-05-05T19:14:41", "event": "generated", "asset": "098-aurora-cookie-thief.webp", "id": "aurora-cookie-thief", "rarity": "unique", "attempt": 1}
-{"ts": "2026-05-05T19:14:41", "event": "done", "generated_now": 10, "failed": [], "final_count": 92, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:14:41", "event": "done", "generated_now": 10, "failed": [], "final_count": 92, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:14:50", "event": "generated", "asset": "071-moon-baker.webp", "id": "moon-baker", "rarity": "rare", "attempt": 1}
 {"ts": "2026-05-05T19:15:14", "event": "generated", "asset": "091-rainbow-tailor.webp", "id": "rainbow-tailor", "rarity": "epic", "attempt": 1}
 {"ts": "2026-05-05T19:15:59", "event": "generated", "asset": "092-meteor-postman.webp", "id": "meteor-postman", "rarity": "epic", "attempt": 1}
 {"ts": "2026-05-05T19:16:20", "event": "generated", "asset": "099-star-crown-ghost.webp", "id": "star-crown-ghost", "rarity": "unique", "attempt": 1}
-{"ts": "2026-05-05T19:16:21", "event": "done", "generated_now": 12, "failed": [], "final_count": 96, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:16:21", "event": "done", "generated_now": 12, "failed": [], "final_count": 96, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:16:34", "event": "generated", "asset": "079-paperboat-pirate.webp", "id": "paperboat-pirate", "rarity": "rare", "attempt": 1}
 {"ts": "2026-05-05T19:17:08", "event": "generated", "asset": "100-rainbow-dragon-helper.webp", "id": "rainbow-dragon-helper", "rarity": "unique", "attempt": 1}
-{"ts": "2026-05-05T19:17:09", "event": "done", "generated_now": 12, "failed": [], "final_count": 98, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:17:09", "event": "done", "generated_now": 12, "failed": [], "final_count": 98, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
 {"ts": "2026-05-05T19:17:40", "event": "generated", "asset": "087-crystal-librarian.webp", "id": "crystal-librarian", "rarity": "epic", "attempt": 1}
 {"ts": "2026-05-05T19:18:51", "event": "generated", "asset": "095-skywhale-friend.webp", "id": "skywhale-friend", "rarity": "epic", "attempt": 1}
-{"ts": "2026-05-05T19:18:52", "event": "done", "generated_now": 12, "failed": [], "final_count": 100, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}
+{"ts": "2026-05-05T19:18:52", "event": "done", "generated_now": 12, "failed": [], "final_count": 100, "contact_sheet": "/Users/jinsik/Desktop/Workspace/01_project_tossminiapps/apps/07-mongle-match-puzzle/public/mongles/premium/_all-100-contact-sheet-clean.jpg"}

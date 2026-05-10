@@ -5,13 +5,13 @@
 전제: 프로젝트 루트가 Git 저장소여야 한다.
 
 ```bash
-codex exec --full-auto -p medium "apps/money-leak-test에서 docs/money-leak-test-mvp-brief.md 기준으로 테스트형 MVP를 구현해. 기존 인앱광고 샘플은 보존하되 결과 화면/상세 처방 지점에서 쓸 수 있게 정리해. 구현 후 npm run build를 실행하고 실패하면 원인을 고쳐 다시 빌드해."
+codex exec --full-auto -p medium "apps/01-money-leak-test에서 docs/money-leak-test-mvp-brief.md 기준으로 테스트형 MVP를 구현해. 기존 인앱광고 샘플은 보존하되 결과 화면/상세 처방 지점에서 쓸 수 있게 정리해. 구현 후 npm run build를 실행하고 실패하면 원인을 고쳐 다시 빌드해."
 ```
 
 ## Claude Code UX/SDK 리뷰 루프
 
 ```bash
-claude -p "apps/money-leak-test의 구현을 검토해. Apps in Toss/TDS/WebView 기준으로 모바일 UX, SDK 사용, 광고 fallback, 빌드 안정성을 개선해. 변경 후 npm run build로 검증해." --model sonnet --allowedTools "Read,Write,Edit,Bash" --max-turns 12
+claude -p "apps/01-money-leak-test의 구현을 검토해. Apps in Toss/TDS/WebView 기준으로 모바일 UX, SDK 사용, 광고 fallback, 빌드 안정성을 개선해. 변경 후 npm run build로 검증해." --model sonnet --allowedTools "Read,Write,Edit,Bash" --max-turns 12
 ```
 
 ## Hermes 검증 루프

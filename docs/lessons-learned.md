@@ -16,3 +16,36 @@
 - 5호 seed를 복사할 때 `granite.config.ts`는 반드시 `@apps-in-toss/web-framework/config` 기반 최신 구조로 맞춰야 한다. 예전 `@apps-in-toss/framework/config` 형태를 쓰면 `ait build`가 RN 번들 생성 경로에서 실패할 수 있다.
 - 새 앱에서 `npm install`만 실행하면 peer dependency/CLI 호환 문제가 날 수 있으므로, seed 앱의 `package.json`/`package-lock.json` 조합을 유지하고 필요 시 `npm ci --legacy-peer-deps`를 사용한다. `npm audit fix --force`는 사용하지 않는다.
 - 탭 게임형 앱은 룰렛형보다 구현이 빠르고 반복 진입 루프를 만들기 쉽다. 핵심 상태는 `home → hunt → result`, 탭 HP, 결과 루틴 카드, 30일 기록이면 충분하다.
+
+## 2026-05-07 — 8호 `몽글 디펜스` lane defense MVP
+
+- `mongle-match-puzzle`를 seed로 쓰더라도 3매치/100종 이미지 구현은 `App.tsx`, `gameLogic.ts`, 앱 내부 docs/scripts에서 제거해야 새 게임의 맥락 오염을 막을 수 있다.
+- Toss 게임 공식 예제 반영점은 `webViewProps.type = "game"`, `overScrollMode = "never"`, local/sandbox/unsupported fallback, 종료 후 playId 기준 1회 점수 제출로 충분히 공통 adapter화할 수 있다.
+- 30초 탭 디펜스는 순수 로직을 `tickDefense`, `tapMonster`, `activateCloudShieldSkill`, `finishDefense`로 분리하면 UI 반복 수정과 빌드 검증이 빠르다.
+- React hook lint는 `useCloudShieldSkill` 같은 순수 함수 이름도 hook으로 오인하므로 게임 로직 함수에는 `activate*`, `apply*` 같은 이름을 쓴다.
+
+## 2026-05-07 — money-leak-test 실기기 테스트 UX 교훈
+
+- 결과 이후에 쓰는 보조/리텐션 메뉴를 첫 화면에 먼저 노출하면 사용자는 기능 진입 전 과한 메뉴로 느낀다. 테스트형 앱은 첫 화면을 진단 시작에 집중시키고, 보조 루프/광고/공유 액션은 결과 화면 하단에 둔다.
+- 메뉴형 버튼은 MVP라도 반드시 실제 액션 또는 명확한 비활성 상태를 가져야 한다. label 배열만 렌더링하는 더미 버튼은 토스 실기기 테스트에서 즉시 품질 이슈로 드러난다.
+- `매일 들어올 이유`처럼 제작자 관점의 리텐션 표현은 사용자 화면에서 삭제하고, 실제 사용자 가치 중심 문구로만 남긴다.
+## UI 표준: 한 화면 한 행동 원칙
+
+토스 미니앱의 모든 일반앱/비게임 앱 화면은 아래 7개 원칙을 기본 판정 기준으로 삼는다.
+
+1. 첫 화면에서 앱의 목적을 바로 알 수 있게 하기
+2. 주요 행동 버튼을 하나만 또렷하게 두기
+3. 입력은 최대한 줄이고 기본값을 제공하기
+4. 화면 이동 흐름을 짧게 만들기
+5. 저장·로딩·실패·완료 상태 피드백을 즉시 보여주기
+6. 빈 화면·에러 화면에도 다음 행동을 넣기
+7. 비슷한 기능은 같은 패턴으로 반복하기
+
+### 적용 방식
+
+- 첫 화면에는 “무엇을 하는 앱인지”와 “지금 누를 버튼”이 바로 보여야 한다.
+- 광고/리워드/알림/크로스앱 이동은 사용자의 다음 행동을 흐리게 하지 않고, 보상 맥락에서 제공한다.
+- 리워드 허브형 화면도 한 번에 여러 버튼을 난사하지 않고, 대표 CTA 1개와 보조 행동 묶음으로 구성한다.
+- 각 앱의 결과 화면은 “결과 확인 → 광고 보고 보상/루틴 받기 → 다른 앱/내일 재방문” 흐름을 짧게 유지한다.
+- 앱별 차이는 콘텐츠와 캐릭터만 바꾸고, 버튼/피드백/광고 보상 패턴은 공통화한다.
+

@@ -134,13 +134,13 @@ claude mcp add --transport stdio apps-in-toss ax mcp start
 
 생성 위치:
 
-- `apps/money-leak-test`
+- `apps/01-money-leak-test`
 
 실행 명령:
 
 ```bash
 mkdir -p apps
-npx create-ait-app apps/money-leak-test --inline --pm npm --tds --skills --ai claude --sample iaa
+npx create-ait-app apps/01-money-leak-test --inline --pm npm --tds --skills --ai claude --sample iaa
 ```
 
 포함 옵션:
@@ -152,7 +152,7 @@ npx create-ait-app apps/money-leak-test --inline --pm npm --tds --skills --ai cl
 
 수정한 설정:
 
-- `apps/money-leak-test/granite.config.ts`
+- `apps/01-money-leak-test/granite.config.ts`
   - `appName`: `money-leak-test`
   - `displayName`: `돈 새는 구멍 테스트`
   - `primaryColor`: `#3182F6`
@@ -190,7 +190,7 @@ ax list examples
 ### 1호 앱 빌드 검증
 
 ```bash
-cd apps/money-leak-test
+cd apps/01-money-leak-test
 npm run build
 ```
 
@@ -215,11 +215,11 @@ npm run build
 
 ### 생성 경로 관련 보정
 
-`npx create-ait-app apps/money-leak-test ...`처럼 경로를 넘기면 초기 `granite.config.ts`의 `appName`이 `apps/money-leak-test`로 잡혔다. 앱인토스 딥링크/식별키에는 슬래시가 부적절하므로 `money-leak-test`로 수정했다.
+`npx create-ait-app apps/01-money-leak-test ...`처럼 경로를 넘기면 초기 `granite.config.ts`의 `appName`이 `apps/01-money-leak-test`로 잡혔다. 앱인토스 딥링크/식별키에는 슬래시가 부적절하므로 `money-leak-test`로 수정했다.
 
 ## 6. 다음 작업
 
-1. `apps/money-leak-test`를 공통 템플릿 구조로 바꾼다.
+1. `apps/01-money-leak-test`를 공통 템플릿 구조로 바꾼다.
 2. 공식 예제 중 아래를 우선 참고한다.
    - 광고: `with-rewarded-ad`, `with-interstitial-ad`
    - 공유: `with-share-text`, `with-share-link`
