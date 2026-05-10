@@ -1509,10 +1509,6 @@ function App() {
     toast.openToast("테스트 환경이라 바로 열었어요");
   };
 
-  const openBonusDirect = () => {
-    setBonusOpen(true);
-    toast.openToast("보너스 루틴을 열었어요");
-  };
 
   const shareResult = async () => {
     const text = `오늘 ${today.enemy} ${defenseGrade.label}. 너도 5초 컷 해봐.`;

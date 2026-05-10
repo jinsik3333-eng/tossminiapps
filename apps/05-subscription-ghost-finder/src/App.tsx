@@ -505,10 +505,6 @@ function App() {
     });
   }
 
-  function openRoutineDirect() {
-    setRoutineOpen(true);
-    toast.openToast("정리 루틴을 열었어요");
-  }
 
   function openRoutine() {
     if (ads.isSupported && ads.isAdLoaded) {

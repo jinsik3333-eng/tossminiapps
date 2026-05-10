@@ -451,11 +451,6 @@ function App() {
   };
 
 
-  const patchLeakFromMenu = () => {
-    setPatchCount((count) => Math.min(count + 1, patchGoal));
-    toast.openToast("소비 구멍 패치를 하나 진행했어요.");
-  };
-
   const openDetailFromMenu = () => {
     setIsDetailOpen(true);
     toast.openToast("보너스 루틴을 열었어요.");

@@ -648,10 +648,5 @@ function ResultScene({
 }
 
 function BannerAd({ label }: { label: string }) {
-  return (
-    <aside className="banner-ad" aria-label={label}>
-      <strong>{label}</strong>
-      <span>광고 영역</span>
-    </aside>
-  );
+  return <TossBannerAd adGroupId={BANNER_AD_GROUP_ID} className="banner-ad" label={label} />;
 }
