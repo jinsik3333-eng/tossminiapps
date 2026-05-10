@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export type RewardHubLink = {
   label: string;
   description: string;
@@ -95,6 +97,26 @@ export function NotificationRewardSheet({
   appLabel,
   onClose,
 }: NotificationRewardSheetProps) {
+  const [rewardAlertOn, setRewardAlertOn] = useState(true);
+  const [questAlertOn, setQuestAlertOn] = useState(true);
+  const [feedback, setFeedback] = useState("알림을 켜두면 보상 기회를 놓치지 않게 알려드릴게요.");
+
+  const toggleRewardAlert = () => {
+    setRewardAlertOn((current) => {
+      const next = !current;
+      setFeedback(next ? "보상 도착 알림을 켰어요." : "보상 도착 알림을 껐어요.");
+      return next;
+    });
+  };
+
+  const toggleQuestAlert = () => {
+    setQuestAlertOn((current) => {
+      const next = !current;
+      setFeedback(next ? "오늘 퀘스트 알림을 켰어요." : "오늘 퀘스트 알림을 껐어요.");
+      return next;
+    });
+  };
+
   if (!open) {
     return null;
   }
@@ -113,20 +135,35 @@ export function NotificationRewardSheet({
         <div className="reward-notify-sheet__icon" aria-hidden="true">
           🔔
         </div>
-        <div className="reward-notify-row">
+        <button
+          className="reward-notify-row"
+          type="button"
+          role="switch"
+          aria-checked={rewardAlertOn}
+          onClick={toggleRewardAlert}
+        >
           <div>
             <strong>보상 도착 알림</strong>
             <span>새로운 광고 보상이 열리면 알려드려요</span>
           </div>
-          <span className="reward-toggle" aria-hidden="true" />
-        </div>
-        <div className="reward-notify-row">
+          <span className={`reward-toggle ${rewardAlertOn ? "is-on" : ""}`} aria-hidden="true" />
+        </button>
+        <button
+          className="reward-notify-row"
+          type="button"
+          role="switch"
+          aria-checked={questAlertOn}
+          onClick={toggleQuestAlert}
+        >
           <div>
             <strong>오늘 퀘스트 알림</strong>
             <span>다시 받을 수 있는 혜택을 놓치지 않게 알려드려요</span>
           </div>
-          <span className="reward-toggle" aria-hidden="true" />
-        </div>
+          <span className={`reward-toggle ${questAlertOn ? "is-on" : ""}`} aria-hidden="true" />
+        </button>
+        <p className="reward-notify-feedback" aria-live="polite">
+          {feedback}
+        </p>
         <button className="reward-notify-close" type="button" onClick={onClose}>
           닫기
         </button>

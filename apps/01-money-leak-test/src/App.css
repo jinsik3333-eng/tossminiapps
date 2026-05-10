@@ -1375,8 +1375,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
   padding: 17px 0;
+  border: 0;
   border-top: 1px solid #edf0f3;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .reward-notify-row strong,
@@ -1388,20 +1394,41 @@
   width: 54px;
   height: 32px;
   border-radius: 999px;
-  background: #3182f6;
+  background: #d1d6db;
   position: relative;
   flex: 0 0 auto;
+  transition: background 0.18s ease;
+}
+
+.reward-toggle.is-on {
+  background: #3182f6;
 }
 
 .reward-toggle::after {
   content: "";
   position: absolute;
   top: 4px;
-  right: 4px;
+  left: 4px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
   background: #ffffff;
+  transition: transform 0.18s ease;
+}
+
+.reward-toggle.is-on::after {
+  transform: translateX(22px);
+}
+
+.reward-notify-feedback {
+  margin: 8px 0 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #f2f4f6;
+  color: #4e5968;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .reward-notify-close {
