@@ -523,7 +523,7 @@ function App() {
     openContactsViralReward({
       moduleId: CONTACTS_VIRAL_MODULE_ID,
       onReward: ({ rewardAmount, rewardUnit }) => {
-        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요.`);
+        toast.openToast(`친구 추천 완료! ${rewardUnit} ${rewardAmount}개를 받았어요.`);
       },
       onClose: ({ sentRewardsCount }) => {
         if ((sentRewardsCount ?? 0) > 0) {
@@ -762,7 +762,7 @@ function App() {
           items={[
             { label: "AD 보너스 처방", onClick: openDetail },
             { label: "AD 절약 배지", onClick: completeBadge },
-            { label: "친구 추천 보상", onClick: shareResultFromMenuWithReward },
+            { label: "친구 추천하고 보상 받기", onClick: shareResultFromMenuWithReward },
             { label: "기록 카드", onClick: () => setIsDailyBenefitOpen(true) },
             { label: "다시 진단", onClick: startQuiz },
           ]}
