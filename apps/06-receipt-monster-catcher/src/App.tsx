@@ -11,11 +11,12 @@ const REWARDED_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 
 const REWARD_APP_LINKS = [
-  { label: "헛돈 퀴즈", description: "소비 점검", href: "intoss://daily-waste-quiz" },
-  { label: "월급 도둑", description: "새는 돈 찾기", href: "intoss://salary-thief-finder" },
-  { label: "소비 룰렛", description: "오늘 방어", href: "intoss://spending-defense-roulette" },
-  { label: "구독 유령", description: "자동결제 점검", href: "intoss://subscription-ghost-finder" },
-  { label: "영수증 몬스터", description: "소비 단서 찾기", href: "intoss://receipt-monster-catcher" },
+  { label: "돈 새는 구멍", visual: "/cross-app-icons/money-leak-test.png", description: "절약 진단", href: "intoss://money-leak-test" },
+  { label: "헛돈 퀴즈", visual: "/cross-app-icons/daily-waste-quiz.png", description: "소비 점검", href: "intoss://daily-waste-quiz" },
+  { label: "월급 도둑", visual: "/cross-app-icons/salary-thief-finder.png", description: "새는 돈 찾기", href: "intoss://salary-thief-finder" },
+  { label: "소비 룰렛", visual: "/cross-app-icons/spending-defense-roulette.png", description: "오늘 방어", href: "intoss://spending-defense-roulette" },
+  { label: "구독 유령", visual: "/cross-app-icons/subscription-ghost-finder.png", description: "자동결제 점검", href: "intoss://subscription-ghost-finder" },
+  { label: "영수증 몬스터", visual: "/cross-app-icons/receipt-monster-catcher.png", description: "소비 단서 찾기", href: "intoss://receipt-monster-catcher" },
 ];
 
 type Screen = "home" | "hunt" | "result";
@@ -376,7 +377,7 @@ function ResultActionMenu({
   items: Array<{ label: string; onClick: () => void | Promise<void> }>;
 }) {
   return (
-    <nav className="cherry-menu" aria-label="결과 활용 메뉴">
+    <nav className="cherry-menu" aria-label="보상 실행 메뉴">
       <span>광고 보상 받기</span>
       <div className="cherry-menu__grid">
         {items.map((item) => (

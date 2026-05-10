@@ -17,11 +17,12 @@ const REWARDED_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 
 const REWARD_APP_LINKS = [
-  { label: "헛돈 퀴즈", description: "소비 점검", href: "intoss://daily-waste-quiz" },
-  { label: "월급 도둑", description: "새는 돈 찾기", href: "intoss://salary-thief-finder" },
-  { label: "소비 룰렛", description: "오늘 방어", href: "intoss://spending-defense-roulette" },
-  { label: "구독 유령", description: "자동결제 점검", href: "intoss://subscription-ghost-finder" },
-  { label: "영수증 몬스터", description: "소비 단서 찾기", href: "intoss://receipt-monster-catcher" },
+  { label: "돈 새는 구멍", visual: "/cross-app-icons/money-leak-test.png", description: "절약 진단", href: "intoss://money-leak-test" },
+  { label: "헛돈 퀴즈", visual: "/cross-app-icons/daily-waste-quiz.png", description: "소비 점검", href: "intoss://daily-waste-quiz" },
+  { label: "월급 도둑", visual: "/cross-app-icons/salary-thief-finder.png", description: "새는 돈 찾기", href: "intoss://salary-thief-finder" },
+  { label: "소비 룰렛", visual: "/cross-app-icons/spending-defense-roulette.png", description: "오늘 방어", href: "intoss://spending-defense-roulette" },
+  { label: "구독 유령", visual: "/cross-app-icons/subscription-ghost-finder.png", description: "자동결제 점검", href: "intoss://subscription-ghost-finder" },
+  { label: "영수증 몬스터", visual: "/cross-app-icons/receipt-monster-catcher.png", description: "소비 단서 찾기", href: "intoss://receipt-monster-catcher" },
 ];
 
 type ThiefType =
@@ -486,9 +487,7 @@ export default function App() {
           <ResultActionMenu
             items={[
               { label: "AD 방어 보상", onClick: openRewardRoutine },
-              { label: "도둑 추적 게임", onClick: start },
               { label: "친구에게 보내기", onClick: shareResult },
-              { label: "기록 보기", onClick: collectEvidence },
               { label: "다시 찾기", onClick: start },
             ]}
             helperCopy="AD 버튼은 광고 시청 후 앱 안 보상 루틴이 열려요"
@@ -580,9 +579,9 @@ function ResultActionMenu({
   helperCopy: string;
 }) {
   return (
-    <section className="cherry-menu" aria-label="결과 활용 메뉴">
+    <section className="cherry-menu" aria-label="보상 실행 메뉴">
       <div className="cherry-menu__head">
-        <strong>광고 보상 받기</strong>
+        <strong>보상 받기</strong>
       </div>
       <div className="cherry-menu__grid">
         {items.map((item) => (

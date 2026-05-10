@@ -2,6 +2,7 @@ export type RewardHubLink = {
   label: string;
   description: string;
   href: string;
+  visual: string;
 };
 
 type RewardHubProps = {
@@ -51,7 +52,7 @@ export function RewardHub({
         <div>
           <p className="reward-hub__eyebrow">내 기록</p>
           <h2>{pointsLabel}</h2>
-          <span>광고 보상과 오늘 퀘스트를 한곳에서 확인해요</span>
+          <span>보상과 다른 서비스를 한 화면에서 바로 실행해요</span>
         </div>
         <button className="reward-hub__bell" type="button" onClick={onOpenNotification}>
           🔔 알림
@@ -74,9 +75,12 @@ export function RewardHub({
         </div>
       </div>
 
-      <div className="reward-hub__links" aria-label="다른 미니앱으로 이동">
-        {links.slice(0, 3).map((link) => (
+      <div className="reward-hub__links" aria-label="다른 서비스 이용하기">
+        {links.slice(0, 4).map((link) => (
           <button key={link.href} type="button" onClick={() => openLink(link.href)}>
+            <span className="reward-hub__link-visual" aria-hidden="true">
+              {link.visual.startsWith("/") ? <img src={link.visual} alt="" /> : link.visual}
+            </span>
             <strong>{link.label}</strong>
             <span>{link.description}</span>
           </button>
