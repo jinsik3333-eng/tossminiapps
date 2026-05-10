@@ -5,6 +5,7 @@ import ghostSceneSource from "./assets/ghost-scene-source.jpg";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
+import { openContactsViralReward } from "./hooks/useContactsViralReward";
 
 const REWARDED_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
@@ -19,6 +20,8 @@ const REWARD_APP_LINKS = [
 ];
 const BANNER_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const CONTACTS_VIRAL_MODULE_ID =
+  import.meta.env.VITE_TOSS_CONTACTS_VIRAL_MODULE_ID ?? "";
 
 const STORAGE_KEY = "subscription-ghost-finder-history";
 
@@ -485,6 +488,23 @@ function App() {
     }
   }
 
+
+  function shareWithReward() {
+    openContactsViralReward({
+      moduleId: CONTACTS_VIRAL_MODULE_ID,
+      onReward: ({ rewardAmount, rewardUnit }) => {
+        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요`);
+      },
+      onClose: ({ sentRewardsCount }) => {
+        if ((sentRewardsCount ?? 0) > 0) {
+          openRoutine();
+        }
+      },
+      onFallback: share,
+      onError: (error) => console.info("공유 리워드 실행 실패:", error),
+    });
+  }
+
   function openRoutineDirect() {
     setRoutineOpen(true);
     toast.openToast("정리 루틴을 열었어요");
@@ -661,7 +681,7 @@ function App() {
           items={[
             { label: "AD 정리 보상", onClick: openRoutine },
             { label: "유령 퇴치 게임", onClick: start },
-            { label: "친구에게 보내기", onClick: share },
+            { label: "친구 추천 보상", onClick: shareWithReward },
             { label: "다시 점검", onClick: start },
           ]}
           helperCopy="AD 버튼은 광고 시청 후 앱 안 보상 루틴이 열려요"

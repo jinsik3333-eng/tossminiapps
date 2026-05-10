@@ -13,6 +13,7 @@ import {
   getTodayMissionLabel,
 } from "./game";
 import { useInAppAds } from "./hooks/useInAppAds";
+import { openContactsViralReward } from "./hooks/useContactsViralReward";
 import { InAppAdsPage } from "./pages/InAppAdsPage";
 
 type Screen = "home" | "quiz" | "result" | "iaa";
@@ -59,6 +60,8 @@ const REWARD_APP_LINKS = [
 ];
 const BANNER_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const CONTACTS_VIRAL_MODULE_ID =
+  import.meta.env.VITE_TOSS_CONTACTS_VIRAL_MODULE_ID ?? "";
 const STAMP_KEY = "daily-waste-quiz-stamps-v2";
 
 const daySets: DaySet[] = [
@@ -1529,6 +1532,23 @@ function App() {
     }
   };
 
+
+  const shareResultWithReward = () => {
+    openContactsViralReward({
+      moduleId: CONTACTS_VIRAL_MODULE_ID,
+      onReward: ({ rewardAmount, rewardUnit }) => {
+        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요`);
+      },
+      onClose: ({ sentRewardsCount }) => {
+        if ((sentRewardsCount ?? 0) > 0) {
+          openBonus();
+        }
+      },
+      onFallback: shareResult,
+      onError: (error) => console.info("공유 리워드 실행 실패:", error),
+    });
+  };
+
   if (screen === "iaa")
     return <InAppAdsPage onBack={() => setScreen("home")} />;
 
@@ -1712,7 +1732,7 @@ function App() {
         <ResultActionMenu
           items={[
             { label: "AD 절약 보상", onClick: openBonus },
-            { label: "친구에게 보내기", onClick: shareResult },
+            { label: "친구 추천 보상", onClick: shareResultWithReward },
             { label: "다시 풀기", onClick: startQuiz },
           ]}
           helperCopy="AD 버튼은 광고 시청 후 앱 안 보상 루틴이 열려요"

@@ -1,12 +1,16 @@
+import { useToast } from "@toss/tds-mobile";
 import { useEffect, useState } from "react";
 import heroImage from "./assets/receipt-monster-hero.jpg";
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
+import { openContactsViralReward } from "./hooks/useContactsViralReward";
 
 const BANNER_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const CONTACTS_VIRAL_MODULE_ID =
+  import.meta.env.VITE_TOSS_CONTACTS_VIRAL_MODULE_ID ?? "";
 const REWARDED_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 
@@ -86,6 +90,7 @@ function todayIndex() {
 }
 
 function App() {
+  const toast = useToast();
   const [screen, setScreen] = useState<Screen>("home");
   const [monsterIndex, setMonsterIndex] = useState(() => todayIndex());
   const [hp, setHp] = useState(7);
@@ -145,6 +150,23 @@ function App() {
 
     setPendingRewardCount(null);
     setRoutineOpen(true);
+  };
+
+
+  const shareResultWithReward = () => {
+    openContactsViralReward({
+      moduleId: CONTACTS_VIRAL_MODULE_ID,
+      onReward: ({ rewardAmount, rewardUnit }) => {
+        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요.`);
+      },
+      onClose: ({ sentRewardsCount }) => {
+        if ((sentRewardsCount ?? 0) > 0) {
+          openRewardRoutine();
+        }
+      },
+      onFallback: shareResult,
+      onError: (error) => console.info("공유 리워드 실행 실패:", error),
+    });
   };
 
   const resetHome = () => {
@@ -304,7 +326,7 @@ function App() {
             items={[
               { label: "AD 몬스터 보상", onClick: openRewardRoutine },
               { label: "터치하기", onClick: startHunt },
-              { label: "친구에게 보내기", onClick: shareResult },
+              { label: "친구 추천 보상", onClick: shareResultWithReward },
               { label: "30일 기록", onClick: openRewardRoutine },
               { label: "다시 잡기", onClick: startHunt },
             ]}

@@ -1,13 +1,17 @@
+import { useToast } from "@toss/tds-mobile";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
+import { openContactsViralReward } from "./hooks/useContactsViralReward";
 import rouletteHero from "./assets/roulette-hero.jpg";
 
 const BANNER_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const CONTACTS_VIRAL_MODULE_ID =
+  import.meta.env.VITE_TOSS_CONTACTS_VIRAL_MODULE_ID ?? "";
 const REWARDED_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 
@@ -134,6 +138,7 @@ function saveStamp(label: string) {
 }
 
 export default function App() {
+  const toast = useToast();
   const [screen, setScreen] = useState<Screen>("home");
   const [missionIndex, setMissionIndex] = useState(todayIndex());
   const [spinCount, setSpinCount] = useState(0);
@@ -228,6 +233,23 @@ export default function App() {
     }
 
     await navigator.clipboard?.writeText(text);
+  };
+
+
+  const shareResultWithReward = () => {
+    openContactsViralReward({
+      moduleId: CONTACTS_VIRAL_MODULE_ID,
+      onReward: ({ rewardAmount, rewardUnit }) => {
+        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요.`);
+      },
+      onClose: ({ sentRewardsCount }) => {
+        if ((sentRewardsCount ?? 0) > 0) {
+          openRewardRoutine();
+        }
+      },
+      onFallback: shareResult,
+      onError: (error) => console.info("공유 리워드 실행 실패:", error),
+    });
   };
 
   return (
@@ -397,7 +419,7 @@ export default function App() {
           <ResultActionMenu
             items={[
               { label: "AD 방어 보상", onClick: openRewardRoutine },
-              { label: "친구에게 보내기", onClick: shareResult },
+              { label: "친구 추천 보상", onClick: shareResultWithReward },
               { label: "다시 돌리기", onClick: startSpin },
             ]}
             helperCopy="AD 버튼은 광고 시청 후 앱 안 보상 카드가 열려요"

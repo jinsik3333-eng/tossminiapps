@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import moneyLeakHero from "./assets/money-leak-hero.jpg";
 import { useInAppAds } from "./hooks/useInAppAds";
+import { openContactsViralReward } from "./hooks/useContactsViralReward";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { InAppAdsPage } from "./pages/InAppAdsPage";
@@ -45,6 +46,8 @@ const DETAIL_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 const BANNER_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const CONTACTS_VIRAL_MODULE_ID =
+  import.meta.env.VITE_TOSS_CONTACTS_VIRAL_MODULE_ID ?? "";
 
 const REWARD_APP_LINKS = [
   { label: "돈 새는 구멍", visual: "/cross-app-icons/money-leak-test.png", description: "절약 진단", href: "intoss://money-leak-test" },
@@ -515,6 +518,26 @@ function App() {
     }
   };
 
+
+  const openShareReward = (fallback: () => void | Promise<void>) => {
+    openContactsViralReward({
+      moduleId: CONTACTS_VIRAL_MODULE_ID,
+      onReward: ({ rewardAmount, rewardUnit }) => {
+        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요.`);
+      },
+      onClose: ({ sentRewardsCount }) => {
+        if ((sentRewardsCount ?? 0) > 0) {
+          runRewardGate("shareBenefit", () => setIsShareBenefitOpen(true));
+        }
+      },
+      onFallback: fallback,
+      onError: (error) => console.info("공유 리워드 실행 실패:", error),
+    });
+  };
+
+  const shareResultFromMenuWithReward = () => openShareReward(shareResultFromMenu);
+  const shareResultWithReward = () => openShareReward(shareResult);
+
   if (step === "ads" && SHOW_DEV_TOOLS) {
     return <InAppAdsPage onBack={() => setStep("intro")} />;
   }
@@ -693,7 +716,7 @@ function App() {
           <Button
             loading={pendingRewardAction === "shareBenefit"}
             variant="weak"
-            onClick={shareResult}
+            onClick={shareResultWithReward}
           >
 친구에게 공유하기
           </Button>
@@ -739,7 +762,7 @@ function App() {
           items={[
             { label: "AD 보너스 처방", onClick: openDetail },
             { label: "AD 절약 배지", onClick: completeBadge },
-            { label: "친구에게 공유", onClick: shareResultFromMenu },
+            { label: "친구 추천 보상", onClick: shareResultFromMenuWithReward },
             { label: "기록 카드", onClick: () => setIsDailyBenefitOpen(true) },
             { label: "다시 진단", onClick: startQuiz },
           ]}

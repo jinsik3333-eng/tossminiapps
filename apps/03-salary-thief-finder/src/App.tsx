@@ -1,9 +1,11 @@
+import { useToast } from "@toss/tds-mobile";
 import { useEffect, useMemo, useState } from "react";
 
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
 import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
+import { openContactsViralReward } from "./hooks/useContactsViralReward";
 import salaryThiefHero from "./assets/salary-thief-hero.jpg";
 import convenienceResult from "./assets/convenience-result.jpg";
 import deliveryResult from "./assets/delivery-result.jpg";
@@ -13,6 +15,8 @@ import taxiResult from "./assets/taxi-result.jpg";
 
 const BANNER_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const CONTACTS_VIRAL_MODULE_ID =
+  import.meta.env.VITE_TOSS_CONTACTS_VIRAL_MODULE_ID ?? "";
 const REWARDED_AD_GROUP_ID =
   import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 
@@ -291,6 +295,7 @@ function pickResult(answers: ThiefType[]) {
 }
 
 export default function App() {
+  const toast = useToast();
   const [screen, setScreen] = useState<"home" | "quiz" | "result">("home");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<ThiefType[]>([]);
@@ -363,6 +368,23 @@ export default function App() {
     }
 
     await navigator.clipboard?.writeText(text);
+  };
+
+
+  const shareResultWithReward = () => {
+    openContactsViralReward({
+      moduleId: CONTACTS_VIRAL_MODULE_ID,
+      onReward: ({ rewardAmount, rewardUnit }) => {
+        toast.openToast(`${rewardUnit} ${rewardAmount}개를 받았어요.`);
+      },
+      onClose: ({ sentRewardsCount }) => {
+        if ((sentRewardsCount ?? 0) > 0) {
+          openRewardRoutine();
+        }
+      },
+      onFallback: shareResult,
+      onError: (error) => console.info("공유 리워드 실행 실패:", error),
+    });
   };
 
   if (screen === "quiz") {
@@ -487,7 +509,7 @@ export default function App() {
           <ResultActionMenu
             items={[
               { label: "AD 방어 보상", onClick: openRewardRoutine },
-              { label: "친구에게 보내기", onClick: shareResult },
+              { label: "친구 추천 보상", onClick: shareResultWithReward },
               { label: "다시 찾기", onClick: start },
             ]}
             helperCopy="AD 버튼은 광고 시청 후 앱 안 보상 루틴이 열려요"

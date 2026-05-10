@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate local Apps in Toss ad env values without printing secret IDs."""
+"""Validate local Apps in Toss monetization env values without printing secret IDs."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -10,6 +10,7 @@ APP_GLOB = "0[1-6]-*"
 REQUIRED_KEYS = (
     "VITE_TOSS_BANNER_AD_GROUP_ID",
     "VITE_TOSS_REWARDED_AD_GROUP_ID",
+    "VITE_TOSS_CONTACTS_VIRAL_MODULE_ID",
 )
 
 
