@@ -30,6 +30,7 @@
 | 썸네일 1932×828 | 1~6호 `public/thumbnail.png` 모두 1932×828 검사 통과 | 완료 |
 | 스크린샷 최소 규격 | 1~6호 `public/screenshots`: 세로 636×1048 3장, 가로 1504×741 1장 검사 통과 | 완료 |
 | lint | 1~6호 `npm run lint` 성공 | 완료 |
+| test | 2호 `npm test` / Vitest 1 file, 4 tests passed. 나머지 앱은 test script 없음 | 가능한 범위 완료 |
 | build | 1~6호 `npm run build` 성공. 최신 전체 빌드 ID는 세션 로그 참조, 1호 자산 보강 후 빌드 `019e10bd-8525-7e0e-a040-7a575a2b3319` | 완료 |
 | 검수 리뷰 후 재구현 | 3/4호 배너 placeholder 누락, 미사용 함수, 1호 등록 자산 누락을 재구현/보강 | 부분 완료 |
 | Toss 실기기 최종 검수 | 배너 실제 노출, 리워드 영상 완료 콜백, contactsViral 완료 이벤트, 375~390px 화면 밀도 | 미완료 |
@@ -40,6 +41,7 @@
 scripts/check_ad_env.py
 for app in apps/0{1,2,3,4,5,6}-*; do (cd "$app" && npm run lint); done
 for app in apps/0{1,2,3,4,5,6}-*; do (cd "$app" && npm run build); done
+(cd apps/02-daily-waste-quiz && npm test)
 ```
 
 자산 규격 검사 결과:
