@@ -59,3 +59,19 @@ Apps in Toss 콘솔 반려 문구:
 
 - Toss 콘솔 수정 화면에서 위 콘솔 업로드 파일을 다시 선택한 뒤 검토 요청한다.
 - 실기기 테스트에서 앱 홈/결과 화면과 광고/공유 리워드 동작은 기존 체크리스트대로 다시 확인한다.
+
+## 후속 보강 — 업로드 번들 검증기
+
+반려 사유가 이미지 파일 자체에서 발생했으므로 `scripts/check_store_assets.py`를 추가해 다음 항목을 한 번에 검사한다.
+
+- 1~6호 앱 `public`의 앱 아이콘/로고/썸네일 규격과 투명 픽셀 여부
+- `assets/app-store`의 콘솔 업로드용 로고/썸네일/스크린샷 규격과 투명 픽셀 여부
+- `*-appstore-assets.zip` 내부 파일이 최신 불투명 자산을 포함하는지 여부
+
+검증 명령:
+
+```bash
+python3 scripts/check_store_assets.py
+```
+
+현재 결과: `Store assets passed: exact sizes, opaque square canvas, and upload bundles verified.`
