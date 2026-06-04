@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 
 const appSource = readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8");
@@ -103,5 +103,20 @@ describe("ending and hidden fighter reward contract", () => {
   it("lets the selected fighter drive the chart chase runner instead of hardcoding the ant", () => {
     assert.match(appSource, /data-fighter-id=\{selectedFighter\.id\}/);
     assert.match(cssSource, /\.runner\.fighter-runner:not\(\[data-fighter-id="ant-fighter"\]\)/);
+    assert.match(cssSource, /background-image:\s*var\(--fighter-runner-image\)/);
+  });
+
+  it("ships separate hidden fighter quiz and runner PNGs", () => {
+    const quizFullFiles = readdirSync(
+      new URL("../public/assets/stock-fighter/fighters/quiz-full", import.meta.url),
+    ).filter((fileName) => fileName.endsWith(".png"));
+    const runnerFiles = readdirSync(
+      new URL("../public/assets/stock-fighter/fighters/runner", import.meta.url),
+    ).filter((fileName) => fileName.endsWith(".png"));
+
+    assert.equal(quizFullFiles.length, 19);
+    assert.equal(runnerFiles.length, 19);
+    assert.ok(quizFullFiles.includes("hoodie-social-king.png"));
+    assert.ok(runnerFiles.includes("hoodie-social-king.png"));
   });
 });

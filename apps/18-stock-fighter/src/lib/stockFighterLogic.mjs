@@ -1,7 +1,7 @@
 export const MINI_GAME_SECONDS = 15;
 export const MAX_HINTS = 3;
 export const MINI_GAME_TRIGGER_CHARGE = 10;
-export const QUIZ_CHARGE_MISS_PENALTY = 2;
+export const QUIZ_CHARGE_MISS_PENALTY = 1;
 export const INVINCIBLE_MS = 1000;
 export const DASH_MS = 1000;
 export const COMBO_BURST_INTERVAL = 10;
@@ -10,6 +10,8 @@ export const MINI_GAME_BASE_INPUT_WINDOW_MS = 680;
 export const MINI_GAME_MIN_INPUT_WINDOW_MS = 520;
 export const CHASE_RUNNER_TARGET_GAP = 1;
 export const CHASE_CHASER_EXTRA_GAP = 1;
+export const QUIZ_SET_COUNT = 3;
+export const QUESTIONS_PER_SET = 100;
 export const QUIZ_BATTLE_CRY_LINES = [
   "단, 한 주도 뺏기지 마라!",
   "개미의 힘을 보여줘!",
@@ -230,6 +232,13 @@ const makeQuestion = (
   topic,
 });
 
+function normalizeQuizSetIndex(setIndex = 0) {
+  const number = Number(setIndex);
+  const safeIndex = Number.isFinite(number) ? Math.trunc(number) : 0;
+
+  return ((safeIndex % QUIZ_SET_COUNT) + QUIZ_SET_COUNT) % QUIZ_SET_COUNT;
+}
+
 const beginnerQuestions = [
   makeQuestion("beginner", 1, "한국 주식 차트에서 보통 빨간 캔들은 무엇을 뜻할까?", ["상승", "전일과 같은 보합"], 0, "국내 차트 색상 기준에서는 빨강이 위쪽 힘을 뜻해.", "candlestick", "binary"),
   makeQuestion("beginner", 2, "파란 캔들이 많이 이어졌다는 말에 가장 가까운 뜻은?", ["가격이 내려간 날이 많았다", "거래량이 많아진 날이 많았다"], 0, "색은 결과를 보여줄 뿐 회사의 좋고 나쁨을 확정하지 않아.", "candlestick", "binary"),
@@ -339,11 +348,91 @@ const advancedQuestions = [
   makeQuestion("advanced", 30, "투자 기록을 남기는 가장 큰 이유는?", ["판단 근거와 감정 실수를 복기하기 위해", "다음 가격을 정확히 맞히기 위해", "공시 확인을 대신하기 위해", "거래 비용을 없애기 위해"], 0, "복기는 다음 판단을 더 차분하게 만들어.", "learning"),
 ];
 
-export const QUIZ_QUESTIONS = [
+const baseQuizQuestions = [
   ...beginnerQuestions,
   ...intermediateQuestions,
   ...advancedQuestions,
 ];
+
+const quizQuestionGroups = [
+  beginnerQuestions,
+  intermediateQuestions,
+  advancedQuestions,
+];
+
+const quizSetRotations = [
+  [0, 0, 0],
+  [13, 9, 8],
+  [27, 19, 17],
+];
+
+const quizSetVariants = [
+  {
+    label: "1세트",
+    promptPrefix: "",
+    hintSuffix: "",
+  },
+  {
+    label: "2세트 실전 복습",
+    promptPrefix: "실전 복습 2세트. ",
+    hintSuffix: " 2세트 포인트: 비슷한 보기끼리 끝 단어를 비교해 봐.",
+  },
+  {
+    label: "3세트 고수 점검",
+    promptPrefix: "고수 점검 3세트. ",
+    hintSuffix: " 3세트 포인트: 너무 단정적인 보기는 한 번 더 의심해 봐.",
+  },
+];
+
+function rotateQuestions(questions, amount = 0) {
+  const offset = amount % questions.length;
+
+  return [...questions.slice(offset), ...questions.slice(0, offset)];
+}
+
+function getBaseQuestionsForSet(setIndex) {
+  const rotations = quizSetRotations[setIndex] ?? quizSetRotations[0];
+
+  if (setIndex === 0) {
+    return baseQuizQuestions;
+  }
+
+  return quizQuestionGroups.flatMap((questions, groupIndex) =>
+    rotateQuestions(questions, rotations[groupIndex] ?? 0),
+  );
+}
+
+function makeQuestionForSet(question, setIndex) {
+  const setNumber = setIndex + 1;
+  const variant = quizSetVariants[setIndex] ?? quizSetVariants[0];
+
+  return {
+    ...question,
+    id: `set-${setNumber}-${question.id}`,
+    quizSetIndex: setIndex,
+    setLabel: variant.label,
+    prompt:
+      setIndex === 0
+        ? question.prompt
+        : `${variant.promptPrefix}${question.prompt}`,
+    hint:
+      setIndex === 0
+        ? question.hint
+        : `${question.hint}${variant.hintSuffix}`,
+  };
+}
+
+export const QUIZ_SETS = Array.from({ length: QUIZ_SET_COUNT }, (_, setIndex) =>
+  getBaseQuestionsForSet(setIndex).map((question) =>
+    makeQuestionForSet(question, setIndex),
+  ),
+);
+
+export const QUIZ_QUESTIONS = QUIZ_SETS.flat();
+
+export function getQuizQuestionsForSet(setIndex = 0) {
+  return QUIZ_SETS[normalizeQuizSetIndex(setIndex)];
+}
 
 export function getDifficultyCounts(questions = QUIZ_QUESTIONS) {
   return questions.reduce(
@@ -431,6 +520,7 @@ export function createAppState(overrides = {}) {
     reviveTickets: 0,
     selectedFighterId: "ant-fighter",
     unlockedFighterIds: [],
+    quizSetIndex: 0,
     quizCursor: 0,
     miniGameRuns: 0,
     completed: false,
@@ -573,6 +663,24 @@ export function selectFighter(state, fighterId) {
   return { ...state, selectedFighterId: fighterId };
 }
 
+export function resetQuizProgress(state) {
+  const currentSetIndex = normalizeQuizSetIndex(state.quizSetIndex ?? 0);
+  const nextSetIndex =
+    state.completed || (state.quizCursor ?? 0) >= QUESTIONS_PER_SET
+      ? normalizeQuizSetIndex(currentSetIndex + 1)
+      : currentSetIndex;
+
+  return createAppState({
+    hasSeenIntro: state.hasSeenIntro ?? false,
+    hints: state.hints ?? 0,
+    fighterUnlockTickets: state.fighterUnlockTickets ?? 0,
+    reviveTickets: state.reviveTickets ?? 0,
+    selectedFighterId: state.selectedFighterId ?? "ant-fighter",
+    unlockedFighterIds: [...new Set(state.unlockedFighterIds ?? [])],
+    quizSetIndex: nextSetIndex,
+  });
+}
+
 export function applyQuizAnswer(state, question, selectedOptionIndex) {
   const isCorrect = selectedOptionIndex === question.answerIndex;
   const currentCharge = state.quizCharge ?? 0;
@@ -582,7 +690,8 @@ export function applyQuizAnswer(state, question, selectedOptionIndex) {
     : Math.max(0, currentCharge - QUIZ_CHARGE_MISS_PENALTY);
   const shouldLaunchMiniGame =
     isCorrect && nextCharge >= MINI_GAME_TRIGGER_CHARGE;
-  const nextCursor = Math.min(state.quizCursor + 1, QUIZ_QUESTIONS.length);
+  const setQuestionCount = getQuizQuestionsForSet(state.quizSetIndex).length;
+  const nextCursor = Math.min(state.quizCursor + 1, setQuestionCount);
 
   return {
     isCorrect,
@@ -596,7 +705,7 @@ export function applyQuizAnswer(state, question, selectedOptionIndex) {
       correctStreak: nextStreak,
       quizCharge: shouldLaunchMiniGame ? 0 : nextCharge,
       quizCursor: nextCursor,
-      completed: nextCursor >= QUIZ_QUESTIONS.length,
+      completed: nextCursor >= setQuestionCount,
     },
   };
 }

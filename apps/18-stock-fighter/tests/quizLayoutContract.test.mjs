@@ -10,6 +10,26 @@ describe("quiz layout contract", () => {
     assert.match(appSource, /data-option-count=\{currentQuestionChoices\.length\}/);
   });
 
+  it("does not append answer keywords to quiz hints", () => {
+    assert.doesNotMatch(appSource, /정답 쪽 키워드/);
+    assert.doesNotMatch(appSource, /question\.options\[question\.answerIndex\]/);
+    assert.match(
+      appSource,
+      /function formatQuestionHint\(question: Question\)\s*{\s*return `힌트: \$\{question\.hint\}`;\s*}/,
+    );
+  });
+
+  it("renders the selected fighter over the quiz scene instead of hardcoding only the ant", () => {
+    assert.match(appSource, /className="quiz-fighter-stand"/);
+    assert.match(appSource, /data-fighter-id=\{selectedFighter\.id\}/);
+    assert.match(
+      cssSource,
+      /\.quiz-fighter-stand:not\(\[data-fighter-id="ant-fighter"\]\)\s*{[\s\S]*?background-image:\s*var\(--fighter-quiz-image\)/,
+    );
+    assert.match(appSource, /--fighter-quiz-image/);
+    assert.match(appSource, /--fighter-runner-image/);
+  });
+
   it("makes two-choice beginner answers fill the upper and lower background slots", () => {
     assert.match(
       cssSource,

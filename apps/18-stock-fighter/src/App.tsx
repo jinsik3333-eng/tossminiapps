@@ -6,7 +6,7 @@ import {
   MAX_HINTS,
   MISS_LIMIT,
   MINI_GAME_TRIGGER_CHARGE,
-  QUIZ_QUESTIONS,
+  QUESTIONS_PER_SET,
   applyQuizAnswer,
   canUnlockFighter,
   claimEndingRandomFighterReward,
@@ -18,9 +18,11 @@ import {
   getFighterById,
   getChaseActorIndexes,
   getQuestionChoices,
+  getQuizQuestionsForSet,
   getQuizBattleCry,
   getUnlockedFighterIds,
   resolveCandleInput,
+  resetQuizProgress,
   reviveMiniGame,
   selectFighter,
   tickMiniGame,
@@ -76,6 +78,7 @@ type AppState = {
   reviveTickets: number;
   selectedFighterId: string;
   unlockedFighterIds: string[];
+  quizSetIndex: number;
   quizCursor: number;
   miniGameRuns: number;
   completed: boolean;
@@ -132,7 +135,6 @@ type RewardBridge = {
 const fighters = FIGHTERS as Fighter[];
 const mainFighter = fighters.find((fighter) => fighter.unlockedDefault) ?? fighters[0];
 const hiddenFighters = fighters.filter((fighter) => !fighter.unlockedDefault);
-const questions = QUIZ_QUESTIONS as Question[];
 const STORAGE_KEY = "stock-fighter-state-v1";
 const ASSET_BASE = "/assets/stock-fighter";
 const CHASE_VIEWBOX_WIDTH = 390;
@@ -235,11 +237,16 @@ function spritePosition(candle: VisualCandle) {
 function fighterPortraitStyle(fighter: Fighter, index: number) {
   const column = index % 5;
   const row = Math.floor(index / 5);
+  const hiddenAssetBase = fighter.unlockedDefault ? null : `${ASSET_BASE}/fighters`;
 
   return {
     "--fighter-accent": fighter.accent,
     "--portrait-x": `${column * 25}%`,
     "--portrait-y": `${row * (100 / 3)}%`,
+    "--fighter-quiz-image":
+      hiddenAssetBase == null ? "none" : `url("${hiddenAssetBase}/quiz-full/${fighter.id}.png")`,
+    "--fighter-runner-image":
+      hiddenAssetBase == null ? "none" : `url("${hiddenAssetBase}/runner/${fighter.id}.png")`,
   } as CSSProperties;
 }
 
@@ -324,9 +331,7 @@ const topicLabel: Record<string, string> = {
 };
 
 function formatQuestionHint(question: Question) {
-  const answer = question.options[question.answerIndex];
-
-  return `힌트: ${question.hint} 정답 쪽 키워드: ${answer}`;
+  return `힌트: ${question.hint}`;
 }
 
 function formatTopicLabel(topic: string) {
@@ -377,9 +382,9 @@ function readInitialState(isEndingPreview: boolean): AppState {
     score: Math.max(state.score, 5000),
     correctStreak: 10,
     quizCharge: 0,
-    answeredCount: questions.length,
-    correctCount: questions.length,
-    quizCursor: questions.length - 1,
+    answeredCount: QUESTIONS_PER_SET,
+    correctCount: QUESTIONS_PER_SET,
+    quizCursor: QUESTIONS_PER_SET - 1,
     completed: true,
     hasSeenIntro: true,
     endingRewardClaimed: false,
@@ -399,6 +404,8 @@ function getRewardBridge(): RewardBridge | undefined {
 }
 
 function nextQuestionFrom(state: AppState): Question {
+  const questions = getQuizQuestionsForSet(state.quizSetIndex) as Question[];
+
   return questions[Math.min(state.quizCursor, questions.length - 1)];
 }
 
@@ -440,6 +447,10 @@ function App() {
   const previewFighter = previewFighterId == null
     ? null
     : (getFighterById(previewFighterId) as Fighter);
+  const questions = useMemo(
+    () => getQuizQuestionsForSet(appState.quizSetIndex) as Question[],
+    [appState.quizSetIndex],
+  );
   const currentQuestion = nextQuestionFrom(appState);
   const currentQuestionChoices = useMemo(
     () => getQuestionChoices(currentQuestion) as QuestionChoice[],
@@ -577,7 +588,7 @@ function App() {
     state.completed && !state.endingRewardClaimed ? "ending" : "result";
 
   const resetGame = () => {
-    const fresh = createAppState() as AppState;
+    const fresh = resetQuizProgress(appState) as AppState;
     persistState(fresh);
     setMiniGame(null);
     setChaseOverlay(null);
@@ -898,7 +909,7 @@ function App() {
         </div>
         {!compact && (
           <p className="fighter-effect">
-            {unlocked ? fighter.effect : "퀴즈 100개 달성 또는 광고 보상으로 랜덤 오픈"}
+            {unlocked ? fighter.effect : "퀴즈 세트 완주 또는 광고 보상으로 랜덤 오픈"}
           </p>
         )}
       </article>
@@ -946,7 +957,7 @@ function App() {
           <span className="kicker">{unlocked ? "FIGHTER READY" : "HIDDEN FIGHTER"}</span>
           <h2>{previewFighter.name}</h2>
           <strong>{previewFighter.signature}</strong>
-          <p>{unlocked ? previewFighter.effect : "아직 정체는 비밀. 퀴즈 100개를 끝내거나 광고 보상을 완료하면 잠긴 히든파이터 중 한 명이 랜덤으로 열린다."}</p>
+          <p>{unlocked ? previewFighter.effect : "아직 정체는 비밀. 퀴즈 세트를 끝내거나 광고 보상을 완료하면 잠긴 히든파이터 중 한 명이 랜덤으로 열린다."}</p>
           <div className="modal-actions">
             {unlocked ? (
               <button
@@ -1002,7 +1013,7 @@ function App() {
           <span className="kicker">SYSTEM RESET</span>
           <h2>퀴즈 리셋</h2>
           <strong>진행도와 점수를 초기화할까?</strong>
-          <p>점수, 진행률, 힌트, 파이터 선택 상태가 처음으로 돌아간다.</p>
+          <p>퀴즈는 1번으로 돌아가고, 모은 히든파이터와 현재 선택은 유지된다.</p>
           <div className="modal-actions">
             <button
               className="ghost-button"
@@ -1339,6 +1350,16 @@ function App() {
         <span>{selectedFighter.name}</span>
         <strong>{quizBattleCry}</strong>
       </section>
+
+      <div
+        aria-hidden="true"
+        className="quiz-fighter-stand"
+        data-fighter-id={selectedFighter.id}
+        style={fighterPortraitStyle(
+          selectedFighter,
+          Math.max(0, fighters.findIndex((fighter) => fighter.id === selectedFighter.id)),
+        )}
+      />
 
       <section
         aria-label="퀴즈 문제"

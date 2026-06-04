@@ -43,6 +43,14 @@ describe("home layout contract", () => {
       cssSource,
       /\.home-title-plate \.kicker\s*{[\s\S]*?font-size:\s*13px;[\s\S]*?margin-bottom:\s*2px;/,
     );
+    assert.match(
+      cssSource,
+      /\.home-title-plate h1\s*{[\s\S]*?animation:\s*homeTitlePulse/,
+    );
+    assert.match(cssSource, /@keyframes homeTitlePulse/);
+    const titlePulse = cssSource.match(/@keyframes homeTitlePulse\s*{[\s\S]*?\n}/)?.[0] ?? "";
+    assert.doesNotMatch(titlePulse, /transform:\s*scale/);
+    assert.match(cssSource, /\.home-title-plate h1::before/);
   });
 
   it("keeps the collection control in the roster header and reset as a confirmed secondary action", () => {
@@ -81,8 +89,10 @@ describe("home layout contract", () => {
   it("keeps collection access in the hero section header and the dock weighted toward quiz start", () => {
     assert.match(
       cssSource,
-      /\.home-roster-heading\s*{[\s\S]*?position:\s*static;/,
+      /\.home-roster-heading\s*{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*minmax\(0,\s*1fr\)\s*58px;/,
     );
+    assert.match(cssSource, /\.home-roster-heading span\s*{[\s\S]*?border:\s*2px solid/);
+    assert.match(cssSource, /\.home-roster-heading \.mini-button\s*{[\s\S]*?width:\s*58px;/);
     assert.match(
       cssSource,
       /\.home-dock\s*{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*3fr\)\s*minmax\(0,\s*1fr\);/,

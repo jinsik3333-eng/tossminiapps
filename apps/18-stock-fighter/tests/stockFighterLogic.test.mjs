@@ -7,6 +7,8 @@ import {
   MINI_GAME_BASE_INPUT_WINDOW_MS,
   MISS_LIMIT,
   QUIZ_QUESTIONS,
+  QUIZ_SETS,
+  QUESTIONS_PER_SET,
   applyQuizAnswer,
   claimEndingRandomFighterReward,
   completeRewardedAd,
@@ -17,19 +19,36 @@ import {
   getDifficultyCounts,
   getQuestionChoices,
   getQuizBattleCry,
+  getQuizQuestionsForSet,
   resolveCandleInput,
+  resetQuizProgress,
   tickMiniGame,
   unlockRandomHiddenFighter,
 } from "../src/lib/stockFighterLogic.mjs";
 
 describe("stock fighter content rules", () => {
-  it("keeps the quiz bank at 40/30/30 across 100 questions", () => {
-    assert.equal(QUIZ_QUESTIONS.length, 100);
+  it("ships three 100-question quiz sets with 300 total question entries", () => {
+    assert.equal(QUIZ_SETS.length, 3);
+    assert.equal(QUIZ_QUESTIONS.length, 300);
+    assert.equal(QUESTIONS_PER_SET, 100);
     assert.deepEqual(getDifficultyCounts(QUIZ_QUESTIONS), {
-      beginner: 40,
-      intermediate: 30,
-      advanced: 30,
+      beginner: 120,
+      intermediate: 90,
+      advanced: 90,
     });
+
+    for (let setIndex = 0; setIndex < QUIZ_SETS.length; setIndex += 1) {
+      const setQuestions = getQuizQuestionsForSet(setIndex);
+
+      assert.equal(setQuestions.length, 100);
+      assert.deepEqual(getDifficultyCounts(setQuestions), {
+        beginner: 40,
+        intermediate: 30,
+        advanced: 30,
+      });
+    }
+
+    assert.equal(new Set(QUIZ_QUESTIONS.map((question) => question.id)).size, 300);
   });
 
   it("ships 20 fighters with only the main fighter unlocked by default", () => {
@@ -128,18 +147,18 @@ describe("stock fighter progression rules", () => {
     }
   });
 
-  it("keeps quiz charge cumulative and trims two charge on wrong answers", () => {
+  it("keeps quiz charge cumulative and trims one charge on wrong answers", () => {
     let state = createAppState();
     const question = QUIZ_QUESTIONS[0];
 
-    for (let count = 0; count < 6; count += 1) {
+    for (let count = 0; count < 4; count += 1) {
       state = applyQuizAnswer(state, question, question.answerIndex).state;
     }
 
     const wrong = applyQuizAnswer(state, question, 1);
 
     assert.equal(wrong.shouldLaunchMiniGame, false);
-    assert.equal(wrong.state.quizCharge, 4);
+    assert.equal(wrong.state.quizCharge, 3);
     assert.equal(wrong.state.correctStreak, 0);
   });
 
@@ -154,6 +173,15 @@ describe("stock fighter progression rules", () => {
     assert.equal(result.state.fighterUnlockTickets, 0);
     assert.equal(result.state.selectedFighterId, lockedFighter.id);
     assert.equal(result.state.unlockedFighterIds.includes(lockedFighter.id), true);
+  });
+
+  it("spreads random hidden fighter rewards across the locked roster", () => {
+    const sampledIds = [0, 0.24, 0.51, 0.99].map(
+      (randomValue) =>
+        unlockRandomHiddenFighter(createAppState(), () => randomValue).fighter.id,
+    );
+
+    assert.equal(new Set(sampledIds).size, sampledIds.length);
   });
 
   it("opens a random hidden fighter from a completed rewarded ad", () => {
@@ -191,6 +219,44 @@ describe("stock fighter progression rules", () => {
 
     assert.equal(secondClaim.claimed, false);
     assert.deepEqual(secondClaim.state.unlockedFighterIds, firstClaim.state.unlockedFighterIds);
+  });
+
+  it("resets quiz progress without clearing collected hidden fighters", () => {
+    const reset = resetQuizProgress(
+      createAppState({
+        score: 999,
+        correctStreak: 9,
+        quizCharge: 9,
+        answeredCount: 100,
+        correctCount: 88,
+        hints: 2,
+        fighterUnlockTickets: 1,
+        reviveTickets: 1,
+        selectedFighterId: "chart-master",
+        unlockedFighterIds: ["chart-master"],
+        quizCursor: QUESTIONS_PER_SET,
+        miniGameRuns: 4,
+        completed: true,
+        hasSeenIntro: true,
+        endingRewardClaimed: true,
+        quizSetIndex: 0,
+      }),
+    );
+
+    assert.equal(reset.score, 0);
+    assert.equal(reset.correctStreak, 0);
+    assert.equal(reset.quizCharge, 0);
+    assert.equal(reset.answeredCount, 0);
+    assert.equal(reset.correctCount, 0);
+    assert.equal(reset.quizCursor, 0);
+    assert.equal(reset.completed, false);
+    assert.equal(reset.endingRewardClaimed, false);
+    assert.equal(reset.quizSetIndex, 1);
+    assert.equal(reset.hints, 2);
+    assert.equal(reset.fighterUnlockTickets, 1);
+    assert.equal(reset.reviveTickets, 1);
+    assert.equal(reset.selectedFighterId, "chart-master");
+    assert.deepEqual(reset.unlockedFighterIds, ["chart-master"]);
   });
 
   it("caps quiz hints at three after a 10-combo mini game", () => {
