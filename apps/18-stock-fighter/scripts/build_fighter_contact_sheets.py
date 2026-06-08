@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 APP_ROOT = Path(__file__).resolve().parents[1]
 ASSET_ROOT = APP_ROOT / "public/assets/stock-fighter"
-PREVIEW_DIR = ASSET_ROOT / "fighters/canonical/preview"
+PREVIEW_DIR = APP_ROOT / "_source-assets/fighters/canonical/preview"
 
 FIGHTER_IDS = [
     "gold-tariff-king",

@@ -14,7 +14,28 @@ function chaseMarkup() {
   return match[0];
 }
 
+function chaseOverlayMarkup() {
+  const match = appSource.match(
+    /const renderChaseOverlay = \(\) => \{[\s\S]*?const renderHome = \(\) =>/,
+  );
+
+  assert.ok(match, "chase overlay markup should be present");
+  return match[0];
+}
+
 describe("chart chase layout contract", () => {
+  it("uses learning-oriented guide copy instead of fight wording", () => {
+    const chase = chaseOverlayMarkup();
+
+    assert.match(chase, /미니 차트 학습/);
+    assert.match(chase, /15초 동안 하락과 상승을 맞춰라/);
+    assert.match(chase, /차트 읽는 법/);
+    assert.match(chase, /빨간 상승봉은 상승, 파란 하락봉은 하락/);
+    assert.doesNotMatch(chase, /장 끝나기 전/);
+    assert.doesNotMatch(chase, /15초를 불태워야 한다/);
+    assert.doesNotMatch(chase, /HOW TO FIGHT/);
+  });
+
   it("does not reveal the current candle answer with direction labels", () => {
     const chase = chaseMarkup();
 

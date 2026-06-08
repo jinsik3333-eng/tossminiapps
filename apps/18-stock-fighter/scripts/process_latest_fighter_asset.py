@@ -11,6 +11,7 @@ from copy_latest_generated_image import main as copy_latest_main
 
 
 APP_ROOT = Path(__file__).resolve().parents[1]
+SOURCE_ASSET_ROOT = APP_ROOT / "_source-assets/fighters"
 CHROMA_HELPER = Path(
     "/Users/jinsik/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py"
 )
@@ -35,13 +36,13 @@ def main() -> None:
     args = parser.parse_args()
 
     source = (
-        APP_ROOT
-        / "public/assets/stock-fighter/fighters/canonical/source"
+        SOURCE_ASSET_ROOT
+        / "canonical/source"
         / f"{args.id}-{args.kind}-generated-green.png"
     )
     alpha = (
-        APP_ROOT
-        / "public/assets/stock-fighter/fighters/canonical/alpha"
+        SOURCE_ASSET_ROOT
+        / "canonical/alpha"
         / f"{args.id}-{args.kind}-alpha.png"
     )
 

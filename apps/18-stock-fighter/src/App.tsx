@@ -276,8 +276,8 @@ const introPanels = [
   },
   {
     image: `${ASSET_BASE}/intro-02-rumor.png`,
-    title: "수익률 300%의 속삭임",
-    copy: "친구의 친구의 사촌이 봤다던 전설의 종목. 그는 공부 대신 믿음을 눌렀다.",
+    title: "달콤한 소문의 속삭임",
+    copy: "누군가 확신하던 뜨거운 소문. 그는 공부 대신 분위기를 믿었다.",
   },
   {
     image: `${ASSET_BASE}/intro-03-blue-candle.png`,
@@ -300,12 +300,12 @@ const endingPanels = [
   {
     image: `${ASSET_BASE}/ending-01-study.png`,
     title: "위험한 장에도 공부는 계속된다",
-    copy: "개미 파이터는 손실의 공포를 무릎쓰고 투자를 진행하며 기술적, 기업분석을 씹어먹었다.",
+    copy: "개미 파이터는 퀴즈 수련을 이어가며 차트와 기업분석의 기초를 익혔다.",
   },
   {
     image: `${ASSET_BASE}/ending-02-mentor.png`,
-    title: "워매 버핏의 가르침",
-    copy: "전설의 가치투자 스승 워매 버핏은 말했다.\n싼 이유를 묻고, 오래 버틸 이유를 찾아라.",
+    title: "가치투자 스승의 가르침",
+    copy: "오래 버티는 파이터는 먼저 묻는다.\n왜 싸고, 왜 버틸 수 있는가.",
   },
   {
     image: `${ASSET_BASE}/ending-03-mansion.png`,
@@ -1000,14 +1000,14 @@ function App() {
       audio.playSfx("cardReveal");
       setRewardStatus(
         newlyOpened
-          ? `${newlyOpened.name} 랜덤 합류!`
-          : "모든 히든파이터가 이미 열렸다.",
+          ? `${newlyOpened.name} 카드 오픈!`
+          : "모든 캐릭터 카드가 이미 열렸다.",
       );
     }, ENDING_DRAW_REVEAL_DELAY_MS);
   };
 
   const startCountdown = () => {
-    setBattleMessage("3, 2, 1... 차트 위로!");
+    setBattleMessage("3, 2, 1... 차트 훈련 시작!");
     setChaseOverlay("3");
   };
 
@@ -1025,7 +1025,7 @@ function App() {
     setCurrentCandle(
       createCandle(CHASE_SOURCE_OFFSET, initialGame.candleSeed) as Candle,
     );
-    setBattleMessage(`${selectedFighter.name}, 차트 추격전 돌입!`);
+    setBattleMessage(`${selectedFighter.name}, 차트 판독 훈련 시작!`);
     setScreen("chase");
   };
 
@@ -1074,7 +1074,7 @@ function App() {
 
     if (!result.used) {
       audio.playSfx("wrong");
-      setActiveHint("힌트가 없다. 차트 추격전 10콤보로 벌어오자.");
+      setActiveHint("힌트가 없다. 차트 판독 훈련 10콤보로 얻자.");
       return;
     }
 
@@ -1125,7 +1125,7 @@ function App() {
             persistState(reviveResult.state);
             setMiniGame(reviveResult.game);
             setIsChasePaused(false);
-            setRewardStatus("광고 부활 완료!");
+            setRewardStatus("광고 이어하기 완료!");
             startCountdown();
             return;
           }
@@ -1133,7 +1133,7 @@ function App() {
 
         persistState(nextState);
         audio.playSfx("chargeReady");
-        setRewardStatus("차트 추격전 부활권 +1");
+        setRewardStatus("차트 훈련 이어하기 +1");
       } else {
         audio.playSfx("wrong");
         setRewardStatus("완료 보상이 확인되지 않았다.");
@@ -1220,7 +1220,7 @@ function App() {
 
     if (!result.revived) {
       audio.playSfx("wrong");
-      setBattleMessage("부활권이 없다.");
+      setBattleMessage("이어하기 기회가 없다.");
       return;
     }
 
@@ -1228,7 +1228,7 @@ function App() {
     persistState(result.state);
     setMiniGame(result.game);
     setIsChasePaused(false);
-    setBattleMessage("부활! 다시 캔들 위로!");
+    setBattleMessage("이어하기! 다시 차트로!");
     startCountdown();
   };
 
@@ -1260,7 +1260,7 @@ function App() {
         </div>
         {!compact && (
           <p className="fighter-effect">
-            {unlocked ? fighter.effect : "퀴즈 세트 완주 또는 광고 보상으로 랜덤 오픈"}
+            {unlocked ? fighter.effect : "퀴즈 세트 완주 또는 광고 보상으로 카드 오픈"}
           </p>
         )}
       </article>
@@ -1305,10 +1305,10 @@ function App() {
           <div className="modal-portrait">
             <span className="portrait-image" />
           </div>
-          <span className="kicker">{unlocked ? "FIGHTER READY" : "HIDDEN FIGHTER"}</span>
+          <span className="kicker">{unlocked ? "CARD READY" : "LOCKED CARD"}</span>
           <h2>{previewFighter.name}</h2>
           <strong>{previewFighter.signature}</strong>
-          <p>{unlocked ? previewFighter.effect : "아직 정체는 비밀. 퀴즈 세트를 끝내거나 광고 보상을 완료하면 잠긴 히든파이터 중 한 명이 랜덤으로 열린다."}</p>
+          <p>{unlocked ? previewFighter.effect : "아직 정체는 비밀. 퀴즈 세트를 끝내거나 광고 보상을 완료하면 잠긴 캐릭터 카드 중 하나가 랜덤으로 열린다."}</p>
           <div className="modal-actions">
             {unlocked ? (
               <button
@@ -1320,7 +1320,7 @@ function App() {
                 }}
                 type="button"
               >
-                {selected ? "선택 완료" : "이 파이터 선택"}
+                {selected ? "선택 완료" : "이 캐릭터 선택"}
               </button>
             ) : (
               <>
@@ -1329,7 +1329,7 @@ function App() {
                   disabled
                   type="button"
                 >
-                  랜덤 오픈 대기
+                  카드 오픈 대기
                 </button>
                 <button
                   className={
@@ -1377,8 +1377,8 @@ function App() {
           </button>
           <span className="kicker">SYSTEM RESET</span>
           <h2>퀴즈 리셋</h2>
-          <strong>진행도와 점수를 초기화할까?</strong>
-          <p>퀴즈는 1번으로 돌아가고, 모은 히든파이터와 현재 선택은 유지된다.</p>
+          <strong>진행도와 학습점수를 초기화할까?</strong>
+          <p>퀴즈는 1번으로 돌아가고, 모은 캐릭터 카드와 현재 선택은 유지된다.</p>
           <div className="modal-actions">
             <button
               className="ghost-button"
@@ -1433,8 +1433,8 @@ function App() {
         <main className="cutscene-shell ending-draw-shell">
           {renderCutsceneAudioButton()}
           <section className={`ending-draw-card is-${endingDrawPhase}`}>
-            <span className="kicker">RANDOM FIGHTER</span>
-            <h1>{isRevealed ? endingPrizeFighter ? "히든 파이터 등장!" : "전원 합류 완료!" : "히든 파이터 뽑기"}</h1>
+            <span className="kicker">CARD OPEN</span>
+            <h1>{isRevealed ? endingPrizeFighter ? "캐릭터 카드 오픈!" : "카드 전부 열림!" : "캐릭터 카드 열기"}</h1>
             {!isRevealed ? (
               <>
                 <div className={`ending-roulette ${isRolling ? "is-rolling" : "is-ready"}`}>
@@ -1463,8 +1463,8 @@ function App() {
                 </strong>
                 <p className="ending-draw-copy">
                   {endingDrawSource === "reward-ad"
-                    ? "광고 보상으로 잠긴 히든파이터를 랜덤 호출한다"
-                    : "100문항을 버틴 파이터에게는 숨은 파이터를 보상한다"}
+                    ? "광고 보상으로 잠긴 캐릭터 카드 하나를 연다"
+                    : "100문항을 끝낸 학습자에게는 캐릭터 카드 하나를 연다"}
                 </p>
                 <button
                   className="primary-button ending-draw-button"
@@ -1472,7 +1472,7 @@ function App() {
                   onClick={startEndingDraw}
                   type="button"
                 >
-                  {isRolling ? "파이터 호출 중..." : "랜덤 히든파이터 뽑기"}
+                  {isRolling ? "카드 여는 중..." : "랜덤 캐릭터 카드 열기"}
                 </button>
               </>
             ) : (
@@ -1489,11 +1489,11 @@ function App() {
                 <span className="ending-prize-portrait">
                   {endingPrizeFighter && <span className="portrait-image" />}
                 </span>
-                <strong>{endingPrizeFighter?.name ?? "모든 파이터"}</strong>
+                <strong>{endingPrizeFighter?.name ?? "모든 카드"}</strong>
                 <p>
                   {endingPrizeFighter
-                    ? "이제 미니게임에서 이 파이터로 차트 위를 뛴다."
-                    : "이미 모든 히든파이터가 열려 있다."}
+                    ? "이제 차트 판독 훈련에서 이 캐릭터로 진행한다."
+                    : "이미 모든 캐릭터 카드가 열려 있다."}
                 </p>
                 <span className="kicker ending-collection-status">
                   {endingPrizeFighter ? "도감 누적" : "도감 완료"} · 오픈{" "}
@@ -1568,13 +1568,13 @@ function App() {
             <span className="guide-alert">!</span>
             {chaseOverlay === "guide-heat" ? (
               <>
-                <strong>장 끝나기 전</strong>
-                <p>15초를 불태워야 한다!</p>
+                <strong>미니 차트 학습</strong>
+                <p>15초 동안 하락과 상승을 맞춰라</p>
               </>
             ) : (
               <>
-                <strong>HOW TO FIGHT</strong>
-                <p>빨간 상승봉은 오른쪽! 파란 하락봉은 왼쪽! 늦거나 틀리면 깡패가 다가온다.</p>
+                <strong>차트 읽는 법</strong>
+                <p>빨간 상승봉은 상승, 파란 하락봉은 하락. 오른쪽은 상승, 왼쪽은 하락.</p>
               </>
             )}
             <em>탭해서 계속</em>
@@ -1593,14 +1593,14 @@ function App() {
   const renderHome = () => (
     <main className="app-shell home-screen">
       <section className="home-title-plate" aria-label="주식 파이터 홈">
-        <span className="kicker">개미가 국장의 미래다</span>
+        <span className="kicker">공부한 개미의 미래는 밝다</span>
         <h1>주식 파이터</h1>
         <p>100문항 상식과 차트까지 깨부순다</p>
       </section>
 
       <section className="home-status-bar" aria-label="플레이 상태">
         <div>
-          <span>점수</span>
+          <span>학습점수</span>
           <strong>{appState.score.toLocaleString()}</strong>
         </div>
         <div>
@@ -1615,9 +1615,9 @@ function App() {
         </div>
       </section>
 
-      <section className="home-roster" aria-label="히어로 선택">
+      <section className="home-roster" aria-label="캐릭터 선택">
         <div className="home-roster-heading">
-          <span>히어로 선택</span>
+          <span>캐릭터 선택</span>
           <button className="mini-button" onClick={() => setScreen("collection")} type="button">
             도감
           </button>
@@ -1683,7 +1683,7 @@ function App() {
 
       <section className="home-dock">
         <button className="primary-button" onClick={startQuiz} type="button">
-          퀴즈 모드
+          퀴즈 학습
         </button>
         <button
           className="home-reset-button"
@@ -1719,9 +1719,9 @@ function App() {
         </button>
       </header>
 
-      <section className="spirit-gauge" aria-label="개미 투지 게이지">
+      <section className="spirit-gauge" aria-label="학습 게이지">
         <div className="spirit-copy">
-          <span>개미 투지</span>
+          <span>학습 게이지</span>
           <strong>
             (연속 정답 {appState.correctStreak}) {quizCharge}/{MINI_GAME_TRIGGER_CHARGE}
           </strong>
@@ -1729,7 +1729,7 @@ function App() {
         <div className="spirit-bar">
           <span style={{ width: `${quizChargePercent}%` }} />
         </div>
-        <p>10칸을 채우면 차트 추격전 발동!</p>
+        <p>10칸을 채우면 차트 판독 훈련 시작!</p>
       </section>
 
       <section className="ant-cry-panel" aria-live="polite">
@@ -1784,22 +1784,22 @@ function App() {
         <img
           className="mini-ending-art"
           src={`${ASSET_BASE}/${isKo ? "minigame-fail-v1.png" : "minigame-success-v1.png"}`}
-          alt={isKo ? "털렸다 엔딩" : "상한가 성공 엔딩"}
+          alt={isKo ? "훈련 실패 장면" : "훈련 성공 장면"}
         />
         {!isKo && <div className="ending-bubble-text">상한가!</div>}
         <section className="ending-panel">
           <strong>{isKo ? "털렸다..." : "15초 생존 성공!"}</strong>
           <p>
             {isKo
-              ? "깡패가 개미 주머니를 탈탈 털었다. 광고를 보면 한 번 더 뛸 수 있다."
+              ? "차트 판독 훈련이 종료됐다. 광고를 보면 한 번 더 이어갈 수 있다."
               : game.hintEarned
-                ? "개미가 돈다발을 쥐고 환호한다. 10콤보 힌트 +1!"
+                ? "개미가 차트를 맞히고 환호한다. 10콤보 힌트 +1!"
                 : "다음 판에는 10콤보 힌트까지 노려보자!"}
           </p>
           <div className="reward-zone ending-actions">
             {isKo && appState.reviveTickets > 0 && (
               <button className="primary-button" onClick={handleRevive} type="button">
-                부활권 사용
+                이어하기 사용
               </button>
             )}
             {isKo && appState.reviveTickets <= 0 && (
@@ -1809,7 +1809,7 @@ function App() {
                 onClick={() => handleReward("revive")}
                 type="button"
               >
-                광고보고 부활하기
+                광고보고 이어하기
               </button>
             )}
             <button className="ghost-button" onClick={completeMiniGame} type="button">
@@ -1872,7 +1872,7 @@ function App() {
 
         <section
           className="chart-stage"
-          aria-label="차트 추격전"
+          aria-label="차트 판독 훈련"
           data-chaser-index={actorIndexes.chaserIndex}
           data-runner-index={actorIndexes.runnerIndex}
           data-target-index={actorIndexes.targetIndex}
@@ -2051,10 +2051,10 @@ function App() {
           ←
         </button>
         <div>
-          <span className="kicker">FIGHTER BOOK</span>
-          <strong>히든 파이터 도감</strong>
+          <span className="kicker">CARD BOOK</span>
+          <strong>캐릭터 카드 도감</strong>
           <p className="collection-rule">
-            히든파이터는 퀴즈 100개 달성 혹은 광고 시청 후 랜덤으로 열려요.
+            캐릭터 카드는 퀴즈 100개 달성 혹은 광고 시청 후 랜덤으로 열려요.
           </p>
         </div>
         <span className="hint-pill">오픈 {unlockedIds.size}/20</span>

@@ -1,1 +1,4 @@
+*.DS_Store
 node_modules
+_source-assets/fighters/canonical/
+_source-assets/fighters/source/quiz-frame-hidden-base-source-v1.png

@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 
 const appSource = readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8");
+const graniteConfigSource = readFileSync(new URL("../granite.config.ts", import.meta.url), "utf8");
 const cssSource = readFileSync(new URL("../src/App.css", import.meta.url), "utf8");
 
 function homeRosterMarkup() {
@@ -33,6 +34,12 @@ function collectionMarkup() {
 }
 
 describe("home layout contract", () => {
+  it("positions the app as a non-game education quiz miniapp for launch", () => {
+    assert.doesNotMatch(graniteConfigSource, /type:\s*"game"/);
+    assert.match(appSource, /퀴즈 학습/);
+    assert.match(appSource, /차트 판독 훈련/);
+  });
+
   it("uses one main fighter profile followed by hidden fighters in the home grid", () => {
     const roster = homeRosterMarkup();
 
@@ -66,7 +73,8 @@ describe("home layout contract", () => {
   });
 
   it("uses the compact revised home copy and tighter title spacing", () => {
-    assert.match(appSource, /개미가 국장의 미래다/);
+    assert.match(appSource, /공부한 개미의 미래는 밝다/);
+    assert.doesNotMatch(appSource, /개미가 국장의 미래다/);
     assert.match(appSource, /100문항 상식과 차트까지 깨부순다/);
     assert.doesNotMatch(appSource, /PIXEL STOCK QUIZ BATTLE/);
     assert.doesNotMatch(appSource, /100문항 상식을 깨고 투지 10칸마다 차트 추격전에 뛰어든다\./);
@@ -95,7 +103,7 @@ describe("home layout contract", () => {
     assert.match(roster, /setScreen\("collection"\)/);
     assert.match(appSource, /isResetConfirmOpen/);
     assert.match(appSource, /home-reset-button/);
-    assert.match(appSource, /진행도와 점수를 초기화할까\?/);
+    assert.match(appSource, /진행도와 학습점수를 초기화할까\?/);
   });
 
   it("right-aligns square fighter cards so the ant-fighter background remains visible", () => {
@@ -186,7 +194,7 @@ describe("home layout contract", () => {
   it("adds a yellow rewarded-ad unlock action under the locked hidden fighter waiting button", () => {
     const preview = fighterPreviewMarkup();
 
-    assert.match(preview, /랜덤 오픈 대기/);
+    assert.match(preview, /카드 오픈 대기/);
     assert.match(preview, /광고 보고 오픈하기/);
     assert.match(preview, /onClick=\{\(\) => handleReward\("fighter-unlock"\)\}/);
     assert.match(

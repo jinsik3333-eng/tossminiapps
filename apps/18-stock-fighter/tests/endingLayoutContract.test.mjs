@@ -12,6 +12,10 @@ const processLatestAssetScript = readFileSync(
   new URL("../scripts/process_latest_fighter_asset.py", import.meta.url),
   "utf8",
 );
+const buildFighterContactSheetsScript = readFileSync(
+  new URL("../scripts/build_fighter_contact_sheets.py", import.meta.url),
+  "utf8",
+);
 
 function introMarkup() {
   const match = appSource.match(
@@ -79,7 +83,7 @@ describe("ending and hidden fighter reward contract", () => {
     assert.match(appSource, /const startEndingDraw = \(\) => \{/);
     assert.match(appSource, /setEndingDrawPhase\("rolling"\)/);
     assert.match(appSource, /window\.setTimeout\(\(\) => \{[\s\S]*claimEndingRandomFighterReward/);
-    assert.match(appSource, /랜덤 히든파이터 뽑기/);
+    assert.match(appSource, /랜덤 캐릭터 카드 열기/);
     assert.match(appSource, /ending-roulette/);
     assert.match(appSource, /ending-roll-sfx/);
     assert.match(appSource, /ending-prize-card is-revealed/);
@@ -149,7 +153,7 @@ describe("ending and hidden fighter reward contract", () => {
     assert.match(appSource, /<span>셔플!<\/span>/);
     assert.match(
       appSource,
-      /100문항을 버틴 파이터에게는 숨은 파이터를 보상한다/,
+      /100문항을 끝낸 학습자에게는 캐릭터 카드 하나를 연다/,
     );
     assert.doesNotMatch(appSource, /100문항을 버틴 개미에게는 숨은 파이터를 보상한다/);
     assert.doesNotMatch(appSource, /파\s*파\s*박/);
@@ -167,12 +171,28 @@ describe("ending and hidden fighter reward contract", () => {
   it("uses the revised ending script and preserves the mentor page line break", () => {
     assert.match(
       appSource,
-      /copy: "개미 파이터는 손실의 공포를 무릎쓰고 투자를 진행하며 기술적, 기업분석을 씹어먹었다\."/,
+      /title: "달콤한 소문의 속삭임"/,
     );
     assert.match(
       appSource,
-      /copy: "전설의 가치투자 스승 워매 버핏은 말했다\.\\n싼 이유를 묻고, 오래 버틸 이유를 찾아라\."/,
+      /copy: "누군가 확신하던 뜨거운 소문\. 그는 공부 대신 분위기를 믿었다\."/,
     );
+    assert.match(
+      appSource,
+      /copy: "개미 파이터는 퀴즈 수련을 이어가며 차트와 기업분석의 기초를 익혔다\."/,
+    );
+    assert.match(
+      appSource,
+      /title: "가치투자 스승의 가르침"/,
+    );
+    assert.match(
+      appSource,
+      /copy: "오래 버티는 파이터는 먼저 묻는다\.\\n왜 싸고, 왜 버틸 수 있는가\."/,
+    );
+    assert.match(appSource, /title: "100배의 기적"/);
+    assert.doesNotMatch(appSource, /수익률 300%의 속삭임/);
+    assert.doesNotMatch(appSource, /전설의 종목/);
+    assert.doesNotMatch(appSource, /워매 버핏/);
     assert.match(cssSource, /\.cutscene-caption\s*{[\s\S]*?white-space:\s*pre-line;/);
   });
 
@@ -204,10 +224,10 @@ describe("ending and hidden fighter reward contract", () => {
     assert.match(appSource, /isChasePreview \? createMiniGameState\(readInitialState\(localPreviewMode\)\.selectedFighterId\)/);
   });
 
-  it("explains that hidden fighters open randomly through quiz completion or ads", () => {
+  it("explains that character cards open randomly through quiz completion or ads", () => {
     assert.match(
       appSource,
-      /히든파이터는 퀴즈 100개 달성 혹은 광고 시청 후 랜덤으로 열려요\./,
+      /캐릭터 카드는 퀴즈 100개 달성 혹은 광고 시청 후 랜덤으로 열려요\./,
     );
     assert.match(appSource, /광고 보고 오픈하기/);
     assert.doesNotMatch(appSource, /티켓 사용/);
@@ -216,7 +236,7 @@ describe("ending and hidden fighter reward contract", () => {
     assert.doesNotMatch(appSource, /파이터 티켓/);
   });
 
-  it("uses the Toss rewarded ad bridge for hidden fighter unlocks and mini-game revives", () => {
+  it("uses the Toss rewarded ad bridge for character card unlocks and quiz continues", () => {
     assert.match(appSource, /loadFullScreenAd/);
     assert.match(appSource, /showFullScreenAd/);
     assert.match(appSource, /VITE_TOSS_REWARDED_AD_GROUP_ID/);
@@ -225,9 +245,10 @@ describe("ending and hidden fighter reward contract", () => {
     assert.match(appSource, /handleReward\("revive"\)/);
   });
 
-  it("uses ad-based revive copy on the ko screen", () => {
-    assert.match(appSource, /광고를 보면 한 번 더 뛸 수 있다/);
-    assert.match(appSource, /광고보고 부활하기/);
+  it("uses ad-based continue copy on the ko screen", () => {
+    assert.match(appSource, /광고를 보면 한 번 더 이어갈 수 있다/);
+    assert.match(appSource, /광고보고 이어하기/);
+    assert.doesNotMatch(appSource, /광고보고 부활하기/);
     assert.doesNotMatch(appSource, /부활권이 있으면 한 번 더 뛴다/);
     assert.doesNotMatch(appSource, /부활 광고 준비 중/);
   });
@@ -284,6 +305,20 @@ describe("ending and hidden fighter reward contract", () => {
       existsSync(new URL("../public/assets/stock-fighter/fighters/quiz-bg", import.meta.url)),
       false,
     );
+  });
+
+  it("keeps generated source and contact-sheet assets outside the public launch bundle", () => {
+    assert.equal(
+      existsSync(new URL("../public/assets/stock-fighter/fighters/canonical", import.meta.url)),
+      false,
+    );
+    assert.equal(
+      existsSync(new URL("../public/assets/stock-fighter/fighters/source", import.meta.url)),
+      false,
+    );
+    assert.match(processLatestAssetScript, /_source-assets\/fighters/);
+    assert.match(processLatestAssetScript, /canonical\/source/);
+    assert.match(buildFighterContactSheetsScript, /_source-assets\/fighters\/canonical\/preview/);
   });
 
   it("removes the outer outline from the revealed ending fighter card", () => {
