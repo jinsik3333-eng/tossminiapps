@@ -32,15 +32,20 @@ function endingMarkup() {
 }
 
 describe("ending and hidden fighter reward contract", () => {
-  it("routes completion through a five-panel ending before the final report", () => {
+  it("routes completion through the ending reward draw without a final report screen", () => {
     assert.match(appSource, /type Screen = [\s\S]*"ending"/);
+    assert.doesNotMatch(appSource, /type Screen = [^\n]*"result"/);
     assert.match(appSource, /const endingPanels = \[/);
 
     const endingImages = appSource.match(/ending-0[1-5]-[a-z-]+\.png/g) ?? [];
     assert.equal(new Set(endingImages).size, 5);
     assert.match(appSource, /completionDestination/);
-    assert.match(appSource, /state\.completed && !state\.endingRewardClaimed \? "ending" : "result"/);
+    assert.match(appSource, /state\.completed && !state\.endingRewardClaimed \? "ending" : "home"/);
     assert.match(appSource, /claimEndingRandomFighterReward/);
+    assert.doesNotMatch(appSource, /CLEAR REPORT/);
+    assert.doesNotMatch(appSource, /파이터 리포트/);
+    assert.doesNotMatch(appSource, /const renderResult/);
+    assert.doesNotMatch(cssSource, /\.result-screen/);
   });
 
   it("skips ant-specific ending panels when a hidden fighter completes a later run", () => {
@@ -52,7 +57,6 @@ describe("ending and hidden fighter reward contract", () => {
       appSource,
       /const completionEndingIndex = \(state: AppState\) =>\s*shouldSkipAntEndingPanels\(state\) \? endingPanels\.length : 0;/,
     );
-    assert.match(appSource, /setEndingIndex\(completionEndingIndex\(appState\)\)/);
     assert.match(appSource, /setEndingIndex\(completionEndingIndex\(result\.state\)\)/);
     assert.match(appSource, /setEndingIndex\(completionEndingIndex\(nextState\)\)/);
   });
@@ -90,6 +94,55 @@ describe("ending and hidden fighter reward contract", () => {
     );
     assert.match(cssSource, /\.ending-prize-card\.is-revealed\s*{[\s\S]*?animation:\s*endingPrizeReveal/);
     assert.match(cssSource, /@keyframes endingPrizeReveal/);
+  });
+
+  it("shows that the revealed ending fighter is added to the accumulated collection", () => {
+    assert.match(appSource, /className="kicker ending-collection-status"/);
+    assert.match(appSource, /도감 누적/);
+    assert.match(appSource, /unlockedIds\.size/);
+    assert.match(appSource, /fighters\.length/);
+  });
+
+  it("routes rewarded-ad fighter unlocks through the same random shuffle draw", () => {
+    const rewardBody = appSource.match(
+      /const handleReward = async \(rewardKind: RewardKind\) => \{[\s\S]*?\n  \};\n\n  const handleCandleInput/,
+    )?.[0] ?? "";
+
+    assert.match(appSource, /type EndingDrawSource = "completion" \| "reward-ad"/);
+    assert.match(appSource, /const \[endingDrawSource, setEndingDrawSource\]/);
+    assert.match(appSource, /const startRewardedFighterDraw = \(state: AppState\) => \{/);
+    assert.match(appSource, /setEndingDrawSource\("reward-ad"\)/);
+    assert.match(appSource, /setEndingIndex\(endingPanels\.length\)/);
+    assert.match(appSource, /setEndingDrawPhase\("rolling"\)/);
+    assert.match(appSource, /setScreen\("ending"\)/);
+    assert.match(appSource, /completeRewardedAd\(state, "fighter-unlock"\)/);
+    assert.match(rewardBody, /if \(rewardKind === "fighter-unlock"\) \{[\s\S]*startRewardedFighterDraw\(appState\);[\s\S]*return;/);
+    assert.doesNotMatch(rewardBody, /rewardKind === "fighter-unlock" \? "cardReveal"/);
+  });
+
+  it("plays shuffle ticks during the ending draw and a reveal effect when the card appears", () => {
+    const drawBody = appSource.match(
+      /const startEndingDraw = \(\) => \{[\s\S]*?\n  \};\n\n  const startCountdown/,
+    )?.[0] ?? "";
+
+    assert.match(appSource, /const ENDING_DRAW_REVEAL_DELAY_MS = 1250;/);
+    assert.match(
+      appSource,
+      /const ENDING_DRAW_SHUFFLE_SFX_DELAYS_MS = \[0, 180, 360, 540, 720, 900, 1080\] as const;/,
+    );
+    assert.match(
+      appSource,
+      /const playEndingShuffleSfx = \(\) => \{[\s\S]*for \(const delayMs of ENDING_DRAW_SHUFFLE_SFX_DELAYS_MS\) \{/,
+    );
+    assert.match(drawBody, /playEndingShuffleSfx\(\)/);
+    assert.match(
+      appSource,
+      /window\.setTimeout\(\(\) => audio\.playSfx\("shuffleTick"\), delayMs\)/,
+    );
+    assert.match(
+      drawBody,
+      /window\.setTimeout\(\(\) => \{[\s\S]*audio\.playSfx\("cardReveal"\)[\s\S]*}, ENDING_DRAW_REVEAL_DELAY_MS\)/,
+    );
   });
 
   it("uses shuffle copy and a heavier retro draw button on the final reward screen", () => {

@@ -115,8 +115,9 @@ button {
 }
 
 .home-title-plate .kicker {
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: 2px;
+  transform: translateY(-15px);
 }
 
 .home-title-plate h1 {
@@ -132,6 +133,7 @@ button {
     3px 3px 0 #e53935,
     6px 6px 0 #0d47a1,
     0 0 18px rgba(255, 255, 255, .66);
+  transform: translateY(-5px);
   isolation: isolate;
   animation: homeTitlePulse 2.25s steps(3, end) infinite;
 }
@@ -1131,6 +1133,10 @@ button {
 
 .quiz-screen:not([data-fighter-id="ant-fighter"]) .ant-cry-panel {
   padding-left: 33px;
+}
+
+.quiz-screen[data-fighter-id="ant-fighter"] .ant-cry-panel :is(span, strong) {
+  transform: translateX(15px);
 }
 
 .quiz-screen .ant-cry-panel span {
@@ -2433,20 +2439,6 @@ button {
 
 .collection-screen .fighter-grid {
   margin-top: 14px;
-}
-
-.result-screen {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.result-hero {
-  padding: 20px;
-}
-
-.score-board.result {
-  margin-top: 0;
 }
 
 @keyframes chartMarquee {

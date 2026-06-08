@@ -25,7 +25,7 @@ function fighterPreviewMarkup() {
 
 function collectionMarkup() {
   const match = appSource.match(
-    /const renderCollection = \(\) => \([\s\S]*?const renderResult = \(\) => \(/,
+    /const renderCollection = \(\) => \([\s\S]*?\n  \);\n\n  if \(screen === "quiz"\)/,
   );
 
   assert.ok(match, "collection screen markup should be present");
@@ -76,11 +76,11 @@ describe("home layout contract", () => {
     );
     assert.match(
       cssSource,
-      /\.home-title-plate \.kicker\s*{[\s\S]*?font-size:\s*13px;[\s\S]*?margin-bottom:\s*2px;/,
+      /\.home-title-plate \.kicker\s*{[\s\S]*?font-size:\s*15px;[\s\S]*?margin-bottom:\s*2px;[\s\S]*?transform:\s*translateY\(-15px\);/,
     );
     assert.match(
       cssSource,
-      /\.home-title-plate h1\s*{[\s\S]*?animation:\s*homeTitlePulse/,
+      /\.home-title-plate h1\s*{[\s\S]*?transform:\s*translateY\(-5px\);[\s\S]*?animation:\s*homeTitlePulse/,
     );
     assert.match(cssSource, /@keyframes homeTitlePulse/);
     const titlePulse = cssSource.match(/@keyframes homeTitlePulse\s*{[\s\S]*?\n}/)?.[0] ?? "";
@@ -198,5 +198,19 @@ describe("home layout contract", () => {
       cssSource,
       /\.primary-button\.is-reward-unlock\.is-disabled[\s\S]*?background:\s*#7a6420;/,
     );
+  });
+
+  it("starts a fresh quiz instead of opening the old fighter report after completion", () => {
+    const startQuizBody = appSource.match(
+      /const startQuiz = \(\) => \{[\s\S]*?\n  \};\n\n  const advanceIntro/,
+    )?.[0] ?? "";
+
+    assert.match(startQuizBody, /if \(appState\.completed\) \{/);
+    assert.match(startQuizBody, /resetQuizProgress\(appState\)/);
+    assert.match(startQuizBody, /persistState\(fresh\)/);
+    assert.match(startQuizBody, /setScreen\(fresh\.hasSeenIntro \? "quiz" : "intro"\)/);
+    assert.doesNotMatch(startQuizBody, /completionDestination\(appState\)/);
+    assert.doesNotMatch(appSource, /screen === "result"/);
+    assert.doesNotMatch(appSource, /파이터 리포트/);
   });
 });

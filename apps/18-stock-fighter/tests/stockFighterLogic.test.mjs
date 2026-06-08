@@ -21,6 +21,7 @@ import {
   getQuestionChoices,
   getQuizBattleCry,
   getQuizQuestionsForSet,
+  reviveMiniGame,
   resolveCandleInput,
   resetQuizProgress,
   tickMiniGame,
@@ -316,6 +317,38 @@ describe("stock fighter progression rules", () => {
     const state = finishMiniGame(createAppState({ hints: 3 }), game);
 
     assert.equal(state.hints, 3);
+  });
+
+  it("continues rewarded-ad revives from the ko state instead of restarting the mini game", () => {
+    const koGame = {
+      ...createMiniGameState("ant-fighter"),
+      candleSeed: 12345,
+      remainingMs: 6200,
+      combo: 4,
+      bestCombo: 7,
+      score: 130,
+      mistakes: MISS_LIMIT,
+      distance: 0,
+      inputDueMs: 180,
+      ended: true,
+      result: "ko",
+    };
+    const stateAfterAd = completeRewardedAd(createAppState(), "revive");
+
+    const revived = reviveMiniGame(stateAfterAd, koGame);
+
+    assert.equal(revived.revived, true);
+    assert.equal(revived.state.reviveTickets, 0);
+    assert.equal(revived.game.ended, false);
+    assert.equal(revived.game.result, "running");
+    assert.equal(revived.game.candleSeed, koGame.candleSeed);
+    assert.equal(revived.game.remainingMs, koGame.remainingMs);
+    assert.equal(revived.game.score, koGame.score);
+    assert.equal(revived.game.bestCombo, koGame.bestCombo);
+    assert.equal(revived.game.inputDueMs, koGame.inputDueMs);
+    assert.equal(revived.game.mistakes, MISS_LIMIT - 1);
+    assert.equal(revived.game.distance, 1);
+    assert.equal(revived.game.combo, 0);
   });
 });
 

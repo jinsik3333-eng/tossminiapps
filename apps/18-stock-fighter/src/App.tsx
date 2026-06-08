@@ -38,12 +38,13 @@ import {
 } from "./audio/stockFighterAudio";
 import "./App.css";
 
-type Screen = "home" | "intro" | "quiz" | "chase" | "collection" | "ending" | "result";
+type Screen = "home" | "intro" | "quiz" | "chase" | "collection" | "ending";
 type LocalPreviewMode = "ending" | "quiz" | "chase" | null;
 type RewardKind = "fighter-unlock" | "revive";
 type Direction = "up" | "down" | "late";
 type ChaseOverlay = "guide-heat" | "guide-controls" | "3" | "2" | "1" | "GO" | null;
 type EndingDrawPhase = "ready" | "rolling" | "revealed";
+type EndingDrawSource = "completion" | "reward-ad";
 
 type Fighter = {
   id: string;
@@ -166,6 +167,8 @@ const CHASE_PLOT_BOTTOM = 258;
 const CHASE_VOLUME_BASE = 310;
 const CHASE_GRID_X = [40, 88, 136, 184, 232, 280, 328, 376];
 const CHASE_GRID_Y = [54, 94, 134, 174, 214, 254];
+const ENDING_DRAW_REVEAL_DELAY_MS = 1250;
+const ENDING_DRAW_SHUFFLE_SFX_DELAYS_MS = [0, 180, 360, 540, 720, 900, 1080] as const;
 
 function chartPriceAt(step: number) {
   return (
@@ -481,6 +484,7 @@ function App() {
   const [endingIndex, setEndingIndex] = useState(0);
   const [endingPrizeId, setEndingPrizeId] = useState<string | null>(null);
   const [endingDrawPhase, setEndingDrawPhase] = useState<EndingDrawPhase>("ready");
+  const [endingDrawSource, setEndingDrawSource] = useState<EndingDrawSource>("completion");
   const [miniGame, setMiniGame] = useState<MiniGameState | null>(() => (
     isChasePreview ? createMiniGameState(readInitialState(localPreviewMode).selectedFighterId) as MiniGameState : null
   ));
@@ -536,10 +540,7 @@ function App() {
     100,
     Math.round((quizCharge / MINI_GAME_TRIGGER_CHARGE) * 100),
   );
-  const accuracy =
-    appState.answeredCount === 0
-      ? 0
-      : Math.round((appState.correctCount / appState.answeredCount) * 100);
+  const isEndingDrawAudioMuted = screen === "ending" && endingIndex >= endingPanels.length;
   const candleSeed = miniGame?.candleSeed ?? 0;
   const advanceCandleBy = useCallback((amount = 1) => {
     setCandleStep((step) => {
@@ -707,8 +708,10 @@ function App() {
       return;
     }
 
-    audio.setTrack(stockFighterTrackForScreen(screen, miniGame));
-  }, [audio, audioEnabled, miniGame, screen]);
+    audio.setTrack(
+      stockFighterTrackForScreen(screen, miniGame, { isEndingDraw: isEndingDrawAudioMuted }),
+    );
+  }, [audio, audioEnabled, isEndingDrawAudioMuted, miniGame, screen]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -817,7 +820,7 @@ function App() {
   };
 
   const completionDestination = (state: AppState): Screen =>
-    state.completed && !state.endingRewardClaimed ? "ending" : "result";
+    state.completed && !state.endingRewardClaimed ? "ending" : "home";
   const completionEndingIndex = (state: AppState) =>
     shouldSkipAntEndingPanels(state) ? endingPanels.length : 0;
 
@@ -837,7 +840,9 @@ function App() {
       }
 
       audio.playSfx("uiTap");
-      audio.setTrack(stockFighterTrackForScreen(screen, miniGame));
+      audio.setTrack(
+        stockFighterTrackForScreen(screen, miniGame, { isEndingDraw: isEndingDrawAudioMuted }),
+      );
     });
   };
 
@@ -866,6 +871,7 @@ function App() {
     setEndingIndex(0);
     setEndingPrizeId(null);
     setEndingDrawPhase("ready");
+    setEndingDrawSource("completion");
     setScreen("home");
     setFeedback(null);
     setAnswerFx(null);
@@ -880,6 +886,7 @@ function App() {
     setEndingIndex(state.completed ? completionEndingIndex(state) : 0);
     setEndingPrizeId(null);
     setEndingDrawPhase("ready");
+    setEndingDrawSource("completion");
     setScreen(state.completed ? completionDestination(state) : "quiz");
   };
 
@@ -888,10 +895,15 @@ function App() {
     setFeedback(null);
 
     if (appState.completed) {
-      setEndingIndex(completionEndingIndex(appState));
+      const fresh = resetQuizProgress(appState) as AppState;
+
+      persistState(fresh);
+      setIntroIndex(0);
+      setEndingIndex(0);
       setEndingPrizeId(null);
       setEndingDrawPhase("ready");
-      setScreen(completionDestination(appState));
+      setEndingDrawSource("completion");
+      setScreen(fresh.hasSeenIntro ? "quiz" : "intro");
       return;
     }
 
@@ -928,7 +940,14 @@ function App() {
 
     setEndingPrizeId(null);
     setEndingDrawPhase("ready");
+    setEndingDrawSource("completion");
     setEndingIndex(endingPanels.length);
+  };
+
+  const playEndingShuffleSfx = () => {
+    for (const delayMs of ENDING_DRAW_SHUFFLE_SFX_DELAYS_MS) {
+      window.setTimeout(() => audio.playSfx("shuffleTick"), delayMs);
+    }
   };
 
   const startEndingDraw = () => {
@@ -936,9 +955,10 @@ function App() {
       return;
     }
 
-    audio.playSfx("shuffleTick");
     setEndingPrizeId(null);
+    setEndingDrawSource("completion");
     setEndingDrawPhase("rolling");
+    playEndingShuffleSfx();
 
     window.setTimeout(() => {
       const reward = claimEndingRandomFighterReward(appState) as {
@@ -952,7 +972,38 @@ function App() {
       setEndingPrizeId(reward.fighter?.id ?? null);
       setEndingDrawPhase("revealed");
       audio.playSfx("cardReveal");
-    }, 1250);
+    }, ENDING_DRAW_REVEAL_DELAY_MS);
+  };
+
+  const startRewardedFighterDraw = (state: AppState) => {
+    const beforeUnlocked = new Set(getUnlockedFighterIds(state) as string[]);
+
+    setEndingPrizeId(null);
+    setEndingDrawSource("reward-ad");
+    setEndingDrawPhase("rolling");
+    setPreviewFighterId(null);
+    setEndingIndex(endingPanels.length);
+    setScreen("ending");
+    playEndingShuffleSfx();
+
+    window.setTimeout(() => {
+      const nextState = completeRewardedAd(state, "fighter-unlock") as AppState;
+      const newlyOpened = fighters.find(
+        (fighter) =>
+          !beforeUnlocked.has(fighter.id) &&
+          nextState.unlockedFighterIds.includes(fighter.id),
+      );
+
+      persistState(nextState);
+      setEndingPrizeId(newlyOpened?.id ?? null);
+      setEndingDrawPhase("revealed");
+      audio.playSfx("cardReveal");
+      setRewardStatus(
+        newlyOpened
+          ? `${newlyOpened.name} 랜덤 합류!`
+          : "모든 히든파이터가 이미 열렸다.",
+      );
+    }, ENDING_DRAW_REVEAL_DELAY_MS);
   };
 
   const startCountdown = () => {
@@ -1003,6 +1054,7 @@ function App() {
       if (result.state.completed) {
         setEndingIndex(completionEndingIndex(result.state));
         setEndingPrizeId(null);
+        setEndingDrawSource("completion");
         setScreen(completionDestination(result.state));
         return;
       }
@@ -1054,13 +1106,12 @@ function App() {
       const event = await showRewardedAd(rewardKind);
 
       if (event.userEarnedReward) {
-        const beforeUnlocked = new Set(getUnlockedFighterIds(appState) as string[]);
+        if (rewardKind === "fighter-unlock") {
+          startRewardedFighterDraw(appState);
+          return;
+        }
+
         const nextState = completeRewardedAd(appState, rewardKind) as AppState;
-        const newlyOpened = fighters.find(
-          (fighter) =>
-            !beforeUnlocked.has(fighter.id) &&
-            nextState.unlockedFighterIds.includes(fighter.id),
-        );
 
         if (rewardKind === "revive" && miniGame?.ended && miniGame.result === "ko") {
           const reviveResult = reviveMiniGame(nextState, miniGame) as {
@@ -1081,14 +1132,8 @@ function App() {
         }
 
         persistState(nextState);
-        audio.playSfx(rewardKind === "fighter-unlock" ? "cardReveal" : "chargeReady");
-        setRewardStatus(
-          rewardKind === "fighter-unlock"
-            ? newlyOpened
-              ? `${newlyOpened.name} 랜덤 합류!`
-              : "모든 히든파이터가 이미 열렸다."
-            : "차트 추격전 부활권 +1",
-        );
+        audio.playSfx("chargeReady");
+        setRewardStatus("차트 추격전 부활권 +1");
       } else {
         audio.playSfx("wrong");
         setRewardStatus("완료 보상이 확인되지 않았다.");
@@ -1157,6 +1202,7 @@ function App() {
     if (nextState.completed) {
       setEndingIndex(completionEndingIndex(nextState));
       setEndingPrizeId(null);
+      setEndingDrawSource("completion");
     }
     setScreen(nextState.completed ? completionDestination(nextState) : "quiz");
   };
@@ -1416,7 +1462,9 @@ function App() {
                   <span>셔플!</span>
                 </strong>
                 <p className="ending-draw-copy">
-                  100문항을 버틴 파이터에게는 숨은 파이터를 보상한다
+                  {endingDrawSource === "reward-ad"
+                    ? "광고 보상으로 잠긴 히든파이터를 랜덤 호출한다"
+                    : "100문항을 버틴 파이터에게는 숨은 파이터를 보상한다"}
                 </p>
                 <button
                   className="primary-button ending-draw-button"
@@ -1447,6 +1495,10 @@ function App() {
                     ? "이제 미니게임에서 이 파이터로 차트 위를 뛴다."
                     : "이미 모든 히든파이터가 열려 있다."}
                 </p>
+                <span className="kicker ending-collection-status">
+                  {endingPrizeFighter ? "도감 누적" : "도감 완료"} · 오픈{" "}
+                  {unlockedIds.size}/{fighters.length}
+                </span>
               </div>
             )}
             {isRevealed && (
@@ -2014,41 +2066,6 @@ function App() {
     </main>
   );
 
-  const renderResult = () => (
-    <main className="app-shell result-screen">
-      <section className="result-hero">
-        <span className="kicker">CLEAR REPORT</span>
-        <h1>파이터 리포트</h1>
-        <p>정답률 {accuracy}% · 차트 추격전 {appState.miniGameRuns}회</p>
-      </section>
-      <div className="score-board result">
-        <div>
-          <span>총점</span>
-          <strong>{appState.score.toLocaleString()}</strong>
-        </div>
-        <div>
-          <span>정답</span>
-          <strong>
-            {appState.correctCount}/{appState.answeredCount}
-          </strong>
-        </div>
-        <div>
-          <span>파이터</span>
-          <strong>{unlockedIds.size}/20</strong>
-        </div>
-      </div>
-      <section className="reward-zone">
-        <button className="primary-button" onClick={() => setScreen("collection")} type="button">
-          도감 보기
-        </button>
-        <button className="ghost-button" onClick={resetGame} type="button">
-          다시 시작
-        </button>
-      </section>
-      {renderAdStrip()}
-    </main>
-  );
-
   if (screen === "quiz") {
     return renderQuiz();
   }
@@ -2067,10 +2084,6 @@ function App() {
 
   if (screen === "ending") {
     return renderEnding();
-  }
-
-  if (screen === "result") {
-    return renderResult();
   }
 
   return renderHome();

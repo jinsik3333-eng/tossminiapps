@@ -75,6 +75,17 @@ describe("quiz layout contract", () => {
     assert.doesNotMatch(cssSource, /--fighter-quiz-bg-image/);
   });
 
+  it("nudges only the ant fighter quiz cry text to the right", () => {
+    assert.match(
+      cssSource,
+      /\.quiz-screen\[data-fighter-id="ant-fighter"\] \.ant-cry-panel :is\(span,\s*strong\)\s*{[\s\S]*?transform:\s*translateX\(15px\);/,
+    );
+    assert.match(
+      cssSource,
+      /\.quiz-screen:not\(\[data-fighter-id="ant-fighter"\]\) \.ant-cry-panel\s*{[\s\S]*?padding-left:\s*33px;/,
+    );
+  });
+
   it("makes two-choice beginner answers fill the upper and lower background slots", () => {
     assert.match(
       cssSource,

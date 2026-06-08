@@ -26,12 +26,15 @@ type StockFighterAudioMiniGame = {
   readonly result: "running" | "ko" | "survived";
 } | null;
 
-type TrackPattern = {
-  readonly tempoMs: number;
-  readonly wave: OscillatorType;
+type StockFighterAudioScene = {
+  readonly isEndingDraw: boolean;
+};
+
+type AudioFileTrack = "home" | "intro" | "quiz" | "chase" | "ending";
+
+type AudioFileTrackSettings = {
+  readonly src: string;
   readonly volume: number;
-  readonly notes: readonly number[];
-  readonly bass: readonly number[];
 };
 
 type SfxStep = {
@@ -49,43 +52,34 @@ declare global {
   }
 }
 
-const trackPatterns: Record<Exclude<StockFighterTrack, "none">, TrackPattern> = {
+const BGM_ASSET_BASE = "/assets/stock-fighter/bgm";
+const SFX_GAIN_SCALE = 2.4;
+const SFX_GAIN_CEILING = 0.16;
+const BGM_DUCK_VOLUME_SCALE = 0.35;
+const BGM_DUCK_MS = 380;
+
+const audioFileTracks = {
   home: {
-    tempoMs: 315,
-    wave: "triangle",
-    volume: 0.052,
-    notes: [392, 494, 523, 659, 587, 523, 494, 440],
-    bass: [98, 123.47, 130.81, 146.83],
+    src: `${BGM_ASSET_BASE}/18-stock-fighter-main%20home.mp3`,
+    volume: 0.18,
   },
   intro: {
-    tempoMs: 380,
-    wave: "sine",
-    volume: 0.048,
-    notes: [261.63, 329.63, 392, 493.88, 440, 392],
-    bass: [65.41, 82.41, 98, 82.41],
+    src: `${BGM_ASSET_BASE}/18-stock-fighter-intro.mp3`,
+    volume: 0.18,
   },
   quiz: {
-    tempoMs: 280,
-    wave: "square",
-    volume: 0.042,
-    notes: [329.63, 392, 440, 523.25, 493.88, 440, 392, 349.23],
-    bass: [82.41, 110, 98, 123.47],
+    src: `${BGM_ASSET_BASE}/18-stock-fighter-quiz.mp3`,
+    volume: 0.18,
   },
   chase: {
-    tempoMs: 178,
-    wave: "sawtooth",
-    volume: 0.036,
-    notes: [523.25, 659.25, 783.99, 698.46, 659.25, 587.33, 523.25, 493.88],
-    bass: [130.81, 146.83, 164.81, 146.83],
+    src: `${BGM_ASSET_BASE}/18-stock-fighter-minigame.mp3`,
+    volume: 0.12,
   },
   ending: {
-    tempoMs: 430,
-    wave: "triangle",
-    volume: 0.054,
-    notes: [392, 523.25, 659.25, 783.99, 659.25, 587.33, 523.25, 493.88],
-    bass: [98, 130.81, 146.83, 123.47],
+    src: `${BGM_ASSET_BASE}/18-stock-fighter-ending.mp3`,
+    volume: 0.18,
   },
-};
+} satisfies Record<AudioFileTrack, AudioFileTrackSettings>;
 
 const sfxPatterns: Record<StockFighterSfx, readonly SfxStep[]> = {
   uiTap: [{ at: 0, frequency: 620, duration: 0.045, type: "square", gain: 0.055 }],
@@ -111,7 +105,11 @@ const sfxPatterns: Record<StockFighterSfx, readonly SfxStep[]> = {
     { at: 0.06, frequency: 392, duration: 0.09, type: "sawtooth", gain: 0.052 },
     { at: 0.13, frequency: 784, duration: 0.12, type: "sawtooth", gain: 0.06 },
   ],
-  shuffleTick: [{ at: 0, frequency: 980, duration: 0.035, type: "square", gain: 0.042 }],
+  shuffleTick: [
+    { at: 0, frequency: 420, duration: 0.08, type: "square", gain: 0.058, end: 620 },
+    { at: 0.04, frequency: 760, duration: 0.075, type: "triangle", gain: 0.052, end: 540 },
+    { at: 0.09, frequency: 980, duration: 0.065, type: "square", gain: 0.044, end: 740 },
+  ],
   cardReveal: [
     { at: 0, frequency: 440, duration: 0.07, type: "triangle", gain: 0.052 },
     { at: 0.07, frequency: 659.25, duration: 0.08, type: "triangle", gain: 0.056 },
@@ -138,6 +136,7 @@ function playTone(
   const envelope = context.createGain();
   const startAt = startedAt + step.at;
   const endAt = startAt + step.duration;
+  const peakGain = Math.min(SFX_GAIN_CEILING, step.gain * SFX_GAIN_SCALE);
 
   oscillator.type = step.type;
   oscillator.frequency.setValueAtTime(step.frequency, startAt);
@@ -145,28 +144,12 @@ function playTone(
     oscillator.frequency.exponentialRampToValueAtTime(Math.max(20, step.end), endAt);
   }
   envelope.gain.setValueAtTime(0.0001, startAt);
-  envelope.gain.exponentialRampToValueAtTime(step.gain, startAt + 0.012);
+  envelope.gain.exponentialRampToValueAtTime(peakGain, startAt + 0.012);
   envelope.gain.exponentialRampToValueAtTime(0.0001, endAt);
   oscillator.connect(envelope);
   envelope.connect(output);
   oscillator.start(startAt);
   oscillator.stop(endAt + 0.025);
-}
-
-function playMusicTone(
-  context: AudioContext,
-  output: AudioNode,
-  frequency: number,
-  type: OscillatorType,
-  gain: number,
-  duration: number,
-): void {
-  playTone(
-    context,
-    output,
-    { at: 0, frequency, duration, type, gain },
-    context.currentTime,
-  );
 }
 
 function playUnlockPulse(context: AudioContext, output: AudioNode | null): void {
@@ -185,12 +168,38 @@ function playUnlockPulse(context: AudioContext, output: AudioNode | null): void 
   }
 }
 
+function isAudioFileTrack(track: StockFighterTrack): track is AudioFileTrack {
+  return (
+    track === "home" ||
+    track === "intro" ||
+    track === "quiz" ||
+    track === "chase" ||
+    track === "ending"
+  );
+}
+
+function handleAudioPlayError(error: unknown): void {
+  if (
+    error instanceof DOMException &&
+    (error.name === "AbortError" || error.name === "NotAllowedError")
+  ) {
+    return;
+  }
+
+  throw error;
+}
+
 export function stockFighterTrackForScreen(
   screen: StockFighterAudioScreen,
   miniGame: StockFighterAudioMiniGame,
+  scene: StockFighterAudioScene = { isEndingDraw: false },
 ): StockFighterTrack {
   if (screen === "chase") {
     return miniGame?.ended ? "quiz" : "chase";
+  }
+
+  if (screen === "ending" && scene.isEndingDraw) {
+    return "none";
   }
 
   if (screen === "home" || screen === "collection") {
@@ -211,19 +220,45 @@ export function stockFighterTrackForScreen(
 export function createStockFighterAudio() {
   let context: AudioContext | null = null;
   let masterGain: GainNode | null = null;
-  let musicTimer: number | null = null;
-  let beatIndex = 0;
+  let musicElement: HTMLAudioElement | null = null;
+  let musicElementTrack: AudioFileTrack | null = null;
+  let musicDuckTimer: number | null = null;
   let currentTrack: StockFighterTrack = "none";
   let isUnlocked = false;
   let isVisible = true;
 
-  const stopLoop = () => {
-    if (musicTimer == null) {
+  const clearMusicDuckTimer = () => {
+    if (musicDuckTimer == null || typeof window === "undefined") {
       return;
     }
 
-    window.clearInterval(musicTimer);
-    musicTimer = null;
+    window.clearTimeout(musicDuckTimer);
+    musicDuckTimer = null;
+  };
+
+  const restoreAudioFileTrackVolume = () => {
+    if (musicElement == null || musicElementTrack == null) {
+      return;
+    }
+
+    musicElement.volume = audioFileTracks[musicElementTrack].volume;
+  };
+
+  const stopAudioFileTrack = (resetPosition: boolean) => {
+    if (resetPosition) {
+      clearMusicDuckTimer();
+    }
+
+    if (musicElement == null) {
+      return;
+    }
+
+    musicElement.pause();
+    if (resetPosition) {
+      musicElement.currentTime = 0;
+      musicElement = null;
+      musicElementTrack = null;
+    }
   };
 
   const ensureContext = () => {
@@ -247,35 +282,78 @@ export function createStockFighterAudio() {
     return context;
   };
 
-  const playBeat = () => {
-    if (!isUnlocked || !isVisible || currentTrack === "none") {
+  const startAudioFileTrack = (track: AudioFileTrack) => {
+    const settings = audioFileTracks[track];
+    if (typeof Audio === "undefined") {
       return;
     }
 
-    const activeContext = ensureContext();
-    if (activeContext == null || masterGain == null || activeContext.state !== "running") {
+    if (musicElement == null || musicElementTrack !== track) {
+      stopAudioFileTrack(true);
+      musicElement = new Audio(settings.src);
+      musicElement.loop = true;
+      musicElement.preload = "auto";
+      musicElementTrack = track;
+    }
+
+    musicElement.volume =
+      musicDuckTimer == null ? settings.volume : settings.volume * BGM_DUCK_VOLUME_SCALE;
+    if (musicElement.paused) {
+      void musicElement.play().catch(handleAudioPlayError);
+    }
+  };
+
+  const duckAudioFileTrack = () => {
+    if (musicElement == null || musicElementTrack == null) {
       return;
     }
 
-    const pattern = trackPatterns[currentTrack];
-    const lead = pattern.notes[beatIndex % pattern.notes.length];
-    const bass = pattern.bass[Math.floor(beatIndex / 2) % pattern.bass.length];
-
-    playMusicTone(activeContext, masterGain, lead, pattern.wave, pattern.volume, 0.105);
-    if (beatIndex % 2 === 0) {
-      playMusicTone(activeContext, masterGain, bass, "triangle", pattern.volume * 0.78, 0.16);
-    }
-    beatIndex += 1;
+    clearMusicDuckTimer();
+    const settings = audioFileTracks[musicElementTrack];
+    musicElement.volume = settings.volume * BGM_DUCK_VOLUME_SCALE;
+    musicDuckTimer = window.setTimeout(() => {
+      musicDuckTimer = null;
+      restoreAudioFileTrackVolume();
+    }, BGM_DUCK_MS);
   };
 
   const startLoop = () => {
-    stopLoop();
-    if (!isUnlocked || !isVisible || currentTrack === "none") {
+    if (!isUnlocked || currentTrack === "none") {
+      stopAudioFileTrack(true);
       return;
     }
 
-    playBeat();
-    musicTimer = window.setInterval(playBeat, trackPatterns[currentTrack].tempoMs);
+    if (!isVisible) {
+      stopAudioFileTrack(false);
+      return;
+    }
+
+    if (isAudioFileTrack(currentTrack)) {
+      startAudioFileTrack(currentTrack);
+    }
+  };
+
+  const handleResumeError = (error: unknown) => {
+    isUnlocked = false;
+    stopAudioFileTrack(true);
+
+    if (error instanceof DOMException && error.name === "InvalidStateError") {
+      return;
+    }
+
+    throw error;
+  };
+
+  const playSfxPattern = (
+    activeContext: AudioContext,
+    output: AudioNode,
+    kind: StockFighterSfx,
+  ) => {
+    duckAudioFileTrack();
+    const startedAt = activeContext.currentTime;
+    for (const step of sfxPatterns[kind]) {
+      playTone(activeContext, output, step, startedAt);
+    }
   };
 
   return {
@@ -289,10 +367,7 @@ export function createStockFighterAudio() {
       isUnlocked = true;
 
       if (activeContext.state === "suspended") {
-        void activeContext.resume().then(startLoop).catch(() => {
-          isUnlocked = false;
-          stopLoop();
-        });
+        void activeContext.resume().then(startLoop).catch(handleResumeError);
         return true;
       }
 
@@ -300,24 +375,30 @@ export function createStockFighterAudio() {
       return true;
     },
     setTrack(track: StockFighterTrack) {
+      if (currentTrack === track) {
+        return;
+      }
+
       currentTrack = track;
-      beatIndex = 0;
       startLoop();
     },
     setVisible(visible: boolean) {
       isVisible = visible;
       if (context == null) {
+        if (!visible) {
+          stopAudioFileTrack(false);
+        }
         return;
       }
 
       if (!visible) {
-        stopLoop();
+        stopAudioFileTrack(false);
         void context.suspend();
         return;
       }
 
       if (isUnlocked) {
-        void context.resume().then(startLoop);
+        void context.resume().then(startLoop).catch(handleResumeError);
       }
     },
     playSfx(kind: StockFighterSfx) {
@@ -326,17 +407,30 @@ export function createStockFighterAudio() {
       }
 
       const activeContext = ensureContext();
-      if (activeContext == null || masterGain == null || activeContext.state !== "running") {
+      if (activeContext == null || masterGain == null) {
         return;
       }
 
-      const startedAt = activeContext.currentTime;
-      for (const step of sfxPatterns[kind]) {
-        playTone(activeContext, masterGain, step, startedAt);
+      if (activeContext.state === "suspended") {
+        void activeContext.resume().then(() => {
+          if (masterGain == null || activeContext.state !== "running") {
+            return;
+          }
+
+          startLoop();
+          playSfxPattern(activeContext, masterGain, kind);
+        }).catch(handleResumeError);
+        return;
       }
+
+      if (activeContext.state !== "running") {
+        return;
+      }
+
+      playSfxPattern(activeContext, masterGain, kind);
     },
     dispose() {
-      stopLoop();
+      stopAudioFileTrack(true);
       void context?.close();
       context = null;
       masterGain = null;
