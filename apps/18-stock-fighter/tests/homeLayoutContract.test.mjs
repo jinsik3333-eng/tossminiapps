@@ -14,6 +14,24 @@ function homeRosterMarkup() {
   return match[0];
 }
 
+function fighterPreviewMarkup() {
+  const match = appSource.match(
+    /const renderFighterPreview = \(\) => \{[\s\S]*?const renderResetConfirm = \(\) =>/,
+  );
+
+  assert.ok(match, "fighter preview modal markup should be present");
+  return match[0];
+}
+
+function collectionMarkup() {
+  const match = appSource.match(
+    /const renderCollection = \(\) => \([\s\S]*?const renderResult = \(\) => \(/,
+  );
+
+  assert.ok(match, "collection screen markup should be present");
+  return match[0];
+}
+
 describe("home layout contract", () => {
   it("uses one main fighter profile followed by hidden fighters in the home grid", () => {
     const roster = homeRosterMarkup();
@@ -28,6 +46,23 @@ describe("home layout contract", () => {
   it("uses an ant-fighter-only home background without baked-in roster slots", () => {
     assert.match(cssSource, /home-bg-ant-v3\.png/);
     assert.doesNotMatch(cssSource, /home-screen-v2\.png/);
+  });
+
+  it("only highlights the ant card when the ant is the selected fighter", () => {
+    const roster = homeRosterMarkup();
+    const mainFighterRule = cssSource.match(/\.home-main-fighter\s*{[\s\S]*?\n}/)?.[0] ?? "";
+
+    assert.match(
+      roster,
+      /appState\.selectedFighterId === mainFighter\.id \? "is-selected" : ""/,
+    );
+    assert.match(
+      cssSource,
+      /\.home-main-fighter\.is-selected\s*{[\s\S]*?border-color:\s*#ffd641;/,
+    );
+    assert.doesNotMatch(mainFighterRule, /border-color:\s*#ffd641/);
+    assert.doesNotMatch(mainFighterRule, /0 0 14px rgba\(255,\s*214,\s*65/);
+    assert.doesNotMatch(mainFighterRule, /inset 0 0 0 2px #e53935/);
   });
 
   it("uses the compact revised home copy and tighter title spacing", () => {
@@ -86,6 +121,17 @@ describe("home layout contract", () => {
     );
   });
 
+  it("fills the empty roster slot beside the final hidden fighter with an audio sticker tile", () => {
+    const roster = homeRosterMarkup();
+
+    assert.match(roster, /hiddenFighters\.map\(\(fighter\) => \{[\s\S]*?home-audio-tile/);
+    assert.match(roster, /aria-label=\{audioEnabled \? "사운드 끄기" : "사운드 켜기"\}/);
+    assert.match(roster, /onClick=\{handleAudioStickerClick\}/);
+    assert.match(roster, /<span className="audio-sticker" aria-hidden="true">/);
+    assert.match(cssSource, /\.home-audio-tile\s*{[\s\S]*?aspect-ratio:\s*1 \/ 1;/);
+    assert.match(cssSource, /\.home-audio-tile\.is-audio-on\s*{[\s\S]*?border-color:\s*#7df9ff;/);
+  });
+
   it("keeps collection access in the hero section header and the dock weighted toward quiz start", () => {
     assert.match(
       cssSource,
@@ -96,6 +142,61 @@ describe("home layout contract", () => {
     assert.match(
       cssSource,
       /\.home-dock\s*{[\s\S]*?grid-template-columns:\s*minmax\(0,\s*3fr\)\s*minmax\(0,\s*1fr\);/,
+    );
+  });
+
+  it("opens hidden fighter details without auto-selecting the fighter card", () => {
+    const roster = homeRosterMarkup();
+
+    assert.match(
+      roster,
+      /hiddenFighters\.map\(\(fighter\) => \{[\s\S]*?onClick=\{\(\) => \{\s*setPreviewFighterId\(fighter\.id\);\s*\}\}/,
+    );
+    assert.doesNotMatch(
+      roster,
+      /hiddenFighters\.map\(\(fighter\) => \{[\s\S]*?handleSelectFighter\(fighter\);[\s\S]*?setPreviewFighterId\(fighter\.id\)/,
+    );
+  });
+
+  it("opens the ant fighter details without auto-selecting the fighter card", () => {
+    const roster = homeRosterMarkup();
+
+    assert.match(
+      roster,
+      /mainFighter && \([\s\S]*?onClick=\{\(\) => \{\s*setPreviewFighterId\(mainFighter\.id\);\s*\}\}/,
+    );
+    assert.doesNotMatch(
+      roster,
+      /mainFighter && \([\s\S]*?handleSelectFighter\(mainFighter\);[\s\S]*?setPreviewFighterId\(mainFighter\.id\)/,
+    );
+    assert.doesNotMatch(
+      appSource,
+      /fighter\.unlockedDefault && unlocked[\s\S]*?handleSelectFighter\(fighter\)/,
+    );
+  });
+
+  it("does not show the global reward panel below the hidden fighter collection", () => {
+    const collection = collectionMarkup();
+
+    assert.doesNotMatch(collection, /<RewardPanel/);
+    assert.doesNotMatch(collection, /rewardStatus/);
+    assert.doesNotMatch(collection, /isRewardReady/);
+  });
+
+  it("adds a yellow rewarded-ad unlock action under the locked hidden fighter waiting button", () => {
+    const preview = fighterPreviewMarkup();
+
+    assert.match(preview, /랜덤 오픈 대기/);
+    assert.match(preview, /광고 보고 오픈하기/);
+    assert.match(preview, /onClick=\{\(\) => handleReward\("fighter-unlock"\)\}/);
+    assert.match(
+      preview,
+      /disabled=\{!isRewardReady \|\| !canUnlockFighter\(appState\)\}/,
+    );
+    assert.match(cssSource, /\.primary-button\.is-reward-unlock/);
+    assert.match(
+      cssSource,
+      /\.primary-button\.is-reward-unlock\.is-disabled[\s\S]*?background:\s*#7a6420;/,
     );
   });
 });

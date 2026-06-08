@@ -2,16 +2,17 @@ export const MINI_GAME_SECONDS = 15;
 export const MAX_HINTS = 3;
 export const MINI_GAME_TRIGGER_CHARGE = 10;
 export const QUIZ_CHARGE_MISS_PENALTY = 1;
-export const INVINCIBLE_MS = 1000;
-export const DASH_MS = 1000;
+export const INVINCIBLE_MS = 1500;
+export const DASH_MS = 1500;
 export const COMBO_BURST_INTERVAL = 10;
 export const MISS_LIMIT = 5;
-export const MINI_GAME_BASE_INPUT_WINDOW_MS = 680;
-export const MINI_GAME_MIN_INPUT_WINDOW_MS = 520;
+export const MINI_GAME_BASE_INPUT_WINDOW_MS = 600;
+export const MINI_GAME_OPENING_INPUT_WINDOW_MS = 1000;
 export const CHASE_RUNNER_TARGET_GAP = 1;
 export const CHASE_CHASER_EXTRA_GAP = 1;
 export const QUIZ_SET_COUNT = 3;
 export const QUESTIONS_PER_SET = 100;
+const CANDLE_SEED_MAX = 0x7fffffff;
 export const QUIZ_BATTLE_CRY_LINES = [
   "단, 한 주도 뺏기지 마라!",
   "개미의 힘을 보여줘!",
@@ -29,7 +30,7 @@ export const FIGHTERS = [
     name: "개미 파이터",
     unlockedDefault: true,
     signature: "월급날 생존왕",
-    effect: "김밥 반 줄로 버티며 차트 노트만큼은 풀컬러로 쓴다.",
+    effect: "서울 자가를 꿈꾸며 오늘도 김밥으로 버틴다",
     assist: "cosmetic",
     accent: "#f04438",
   },
@@ -37,8 +38,8 @@ export const FIGHTERS = [
     id: "gold-tariff-king",
     name: "금발 관세왕",
     unlockedDefault: false,
-    signature: "협상의 금발 폭풍",
-    effect: "모든 대화를 큰 숫자로 시작하고 더 큰 손짓으로 끝낸다.",
+    signature: "금발 협상 천재",
+    effect: "절대 손해보지 않는 관세 협상의 달인.",
     assist: "cosmetic",
     accent: "#f6c343",
   },
@@ -56,7 +57,7 @@ export const FIGHTERS = [
     name: "로켓 괴짜 CEO",
     unlockedDefault: false,
     signature: "화성행 야근러",
-    effect: "회의보다 발사가 빠르고 잠은 주가 알림보다 짧다.",
+    effect: "회의 대신 발사를, 잠은 죽어서 자기로 결심했다.",
     assist: "cosmetic",
     accent: "#ff6b3d",
   },
@@ -65,7 +66,7 @@ export const FIGHTERS = [
     name: "우주 택배왕",
     unlockedDefault: false,
     signature: "새벽배송 우주신사",
-    effect: "택배 상자처럼 꿈도 크게 포장하지만 반품은 싫어한다.",
+    effect: "택배 상자처럼 꿈 큰 야망가, 단 반품은 싫어한다.",
     assist: "cosmetic",
     accent: "#7a5cff",
   },
@@ -73,8 +74,8 @@ export const FIGHTERS = [
     id: "meme-coin-dog",
     name: "밈 코인 강아지",
     unlockedDefault: false,
-    signature: "밈장 앞발 대장",
-    effect: "근거는 약해도 표정만큼은 언제나 상한가다.",
+    signature: "밈의 대가",
+    effect: "이유는 모르겠지만 표정 만큼은 언제나 상한가다.",
     assist: "cosmetic",
     accent: "#f7a928",
   },
@@ -82,8 +83,8 @@ export const FIGHTERS = [
     id: "ai-leather-boss",
     name: "AI 가죽재킷 보스",
     unlockedDefault: false,
-    signature: "가죽재킷 연산왕",
-    effect: "숫자를 보면 웃고 전기요금 고지서를 보면 잠깐 운다.",
+    signature: "가죽재킷 마스터",
+    effect: "ai와 가죽재킷 싸이클은 함께간다고 주장한다.",
     assist: "cosmetic",
     accent: "#50d890",
   },
@@ -92,7 +93,7 @@ export const FIGHTERS = [
     name: "메모리 재벌",
     unlockedDefault: false,
     signature: "RAM 많은 재벌 2세",
-    effect: "어제 한 말은 못 외우지만 재고 사이클은 기가 막히게 기억한다.",
+    effect: "더 이상 싸이클 산업이 아니라고 주장한다.",
     assist: "cosmetic",
     accent: "#38bdf8",
   },
@@ -109,8 +110,8 @@ export const FIGHTERS = [
     id: "ev-artisan",
     name: "전기차 장인",
     unlockedDefault: false,
-    signature: "충전소 낭만파",
-    effect: "주차는 삐뚤어도 미래 얘기만큼은 직진으로 한다.",
+    signature: "자율주행 혁명가",
+    effect: "주차는 못해도 자율주행 전기차 덕분에 달린다.",
     assist: "cosmetic",
     accent: "#22d3ee",
   },
@@ -119,7 +120,7 @@ export const FIGHTERS = [
     name: "검색창 현자",
     unlockedDefault: false,
     signature: "검색창 철학자",
-    effect: "모르는 척 검색하다가 결국 자기 이름도 검색한다.",
+    effect: "주가는 기본, 매일 자기 이름도 검색한다.",
     assist: "cosmetic",
     accent: "#ffffff",
   },
@@ -128,7 +129,7 @@ export const FIGHTERS = [
     name: "사과폰 수도승",
     unlockedDefault: false,
     signature: "무음모드 수도승",
-    effect: "말은 적고 충전기는 늘 정품만 찾는다.",
+    effect: "말은 적은데 손과 머리회전은 빠르다.",
     assist: "cosmetic",
     accent: "#e5e7eb",
   },
@@ -136,7 +137,7 @@ export const FIGHTERS = [
     id: "dividend-aristo-cat",
     name: "배당 귀족냥",
     unlockedDefault: false,
-    signature: "배당 캔 통조림파",
+    signature: "배당 캔 마니아",
     effect: "느긋하게 앉아 있다가 입금 알림에만 귀가 번쩍 뜬다.",
     assist: "cosmetic",
     accent: "#fbbf24",
@@ -155,7 +156,7 @@ export const FIGHTERS = [
     name: "차트 도사",
     unlockedDefault: false,
     signature: "선 긋는 은둔고수",
-    effect: "차트에 선을 긋다 보니 방바닥에도 추세선이 보인다.",
+    effect: "차트에 선을 긋다 보니 인생의 추세선까지 깨달았다.",
     assist: "cosmetic",
     accent: "#34d399",
   },
@@ -164,7 +165,7 @@ export const FIGHTERS = [
     name: "호가 사냥꾼",
     unlockedDefault: false,
     signature: "호가창 매의눈",
-    effect: "밥 메뉴보다 매수벽 두께를 더 오래 고민한다.",
+    effect: "삽겹살 두께보다 매수벽 두께에 더 민감하다.",
     assist: "cosmetic",
     accent: "#60a5fa",
   },
@@ -173,7 +174,7 @@ export const FIGHTERS = [
     name: "상한가 요정",
     unlockedDefault: false,
     signature: "빨간봉 축제요정",
-    effect: "좋은 날엔 종소리보다 캡처 소리가 먼저 난다.",
+    effect: "아주 운 좋은 날만 만난다는 전설의 요정.",
     assist: "cosmetic",
     accent: "#fb7185",
   },
@@ -182,7 +183,7 @@ export const FIGHTERS = [
     name: "하한가 유령",
     unlockedDefault: false,
     signature: "파란봉 야근령",
-    effect: "계좌가 조용할수록 존재감이 더 선명해진다.",
+    effect: "잡주에서 자주 출몰한다는 흔한 요정.",
     assist: "cosmetic",
     accent: "#38bdf8",
   },
@@ -200,7 +201,7 @@ export const FIGHTERS = [
     name: "손절 검객",
     unlockedDefault: false,
     signature: "미련 절단 검사",
-    effect: "미련을 자르는 척하지만 영수증은 끝까지 보관한다.",
+    effect: "'손절큰 칼 같이 익절은 느긋하게'가 좌우명이다",
     assist: "cosmetic",
     accent: "#c084fc",
   },
@@ -370,17 +371,14 @@ const quizSetVariants = [
   {
     label: "1세트",
     promptPrefix: "",
-    hintSuffix: "",
   },
   {
     label: "2세트 실전 복습",
     promptPrefix: "실전 복습 2세트. ",
-    hintSuffix: " 2세트 포인트: 비슷한 보기끼리 끝 단어를 비교해 봐.",
   },
   {
     label: "3세트 고수 점검",
     promptPrefix: "고수 점검 3세트. ",
-    hintSuffix: " 3세트 포인트: 너무 단정적인 보기는 한 번 더 의심해 봐.",
   },
 ];
 
@@ -415,10 +413,7 @@ function makeQuestionForSet(question, setIndex) {
       setIndex === 0
         ? question.prompt
         : `${variant.promptPrefix}${question.prompt}`,
-    hint:
-      setIndex === 0
-        ? question.hint
-        : `${question.hint}${variant.hintSuffix}`,
+    hint: question.hint,
   };
 }
 
@@ -723,17 +718,18 @@ function shieldChargesFor() {
 }
 
 export function getMiniGameInputWindowMs(game = {}) {
-  return Math.max(
-    MINI_GAME_MIN_INPUT_WINDOW_MS,
-    MINI_GAME_BASE_INPUT_WINDOW_MS -
-      (game.effectBursts ?? 0) * 90 -
-      Math.floor((game.score ?? 0) / 120) * 25,
-  );
+  return (game.combo ?? 0) > 0 ||
+    (game.mistakes ?? 0) > 0 ||
+    (game.lateStrikes ?? 0) > 0 ||
+    (game.score ?? 0) > 0
+    ? MINI_GAME_BASE_INPUT_WINDOW_MS
+    : MINI_GAME_OPENING_INPUT_WINDOW_MS;
 }
 
 export function createMiniGameState(fighterId = "ant-fighter") {
   return {
     fighterId,
+    candleSeed: Math.floor(Math.random() * CANDLE_SEED_MAX) + 1,
     remainingMs: MINI_GAME_SECONDS * 1000,
     combo: 0,
     bestCombo: 0,
@@ -752,10 +748,20 @@ export function createMiniGameState(fighterId = "ant-fighter") {
   };
 }
 
-export function createCandle(step = 0) {
-  const direction = (step * 7 + 3) % 5 < 3 ? "up" : "down";
-  const body = 34 + ((step * 11) % 42);
-  const wick = 12 + ((step * 5) % 18);
+function candleNoise(step, seed, salt = 0) {
+  let value = (Math.imul(step + 0x9e3779b9, 0x85ebca6b) ^ Math.imul(seed + salt, 0xc2b2ae35)) >>> 0;
+  value ^= value >>> 16;
+  value = Math.imul(value, 0x7feb352d) >>> 0;
+  value ^= value >>> 15;
+  value = Math.imul(value, 0x846ca68b) >>> 0;
+  value ^= value >>> 16;
+  return value >>> 0;
+}
+
+export function createCandle(step = 0, seed = 0) {
+  const direction = candleNoise(step, seed) % 100 < 52 ? "up" : "down";
+  const body = 30 + (candleNoise(step, seed, 17) % 48);
+  const wick = 10 + (candleNoise(step, seed, 41) % 22);
 
   return {
     id: `candle-${step}`,

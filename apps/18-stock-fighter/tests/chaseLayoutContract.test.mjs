@@ -53,18 +53,22 @@ describe("chart chase layout contract", () => {
   it("uses the same source candle for visible current candle and input judgement", () => {
     assert.match(
       appSource,
-      /setCurrentCandle\(createCandle\(CHASE_SOURCE_OFFSET\) as Candle\)/,
+      /setCurrentCandle\(\s*createCandle\(CHASE_SOURCE_OFFSET, initialGame\.candleSeed\) as Candle,\s*\)/,
     );
     assert.match(
       appSource,
-      /setCurrentCandle\(createCandle\(CHASE_SOURCE_OFFSET \+ nextStep\) as Candle\)/,
+      /const candleSeed = miniGame\?\.candleSeed \?\? 0;[\s\S]*?createCandle\(CHASE_SOURCE_OFFSET \+ nextStep, candleSeed\) as Candle/,
+    );
+    assert.match(
+      appSource,
+      /buildChaseCandles\(candleStep, miniGame\.candleSeed\)/,
     );
   });
 
   it("moves the chart in candle-sized steps instead of a smooth slide", () => {
     const chase = chaseMarkup();
 
-    assert.match(appSource, /const CHASE_STEP_SECONDS = 0\.68;/);
+    assert.match(appSource, /const CHASE_STEP_SECONDS = 0\.6;/);
     assert.match(chase, /"--chart-steps":\s*1/);
     assert.match(chase, /"--chart-step-seconds":\s*CHASE_STEP_SECONDS/);
     assert.match(chase, /"--chart-duration":\s*`\$\{chartDuration\}s`/);
@@ -122,5 +126,31 @@ describe("chart chase layout contract", () => {
     assert.match(cssSource, /\.game-shell\.is-invincible\s+\.runner\.fighter-runner::before/);
     assert.match(cssSource, /animation:\s*fighterFlame/);
     assert.match(cssSource, /@keyframes fighterFlame/);
+  });
+
+  it("turns the visible candle stream purple while combo invincibility is active", () => {
+    const chase = chaseMarkup();
+
+    assert.match(chase, /const isComboInvincible = miniGame\.invincibleMs > 0;/);
+    assert.match(chase, /isComboInvincible \? "is-invincible-candle" : ""/);
+    assert.match(
+      cssSource,
+      /\.chart-candle\.is-invincible-candle\s*{[\s\S]*?color:\s*#8f2ee8;/,
+    );
+    assert.match(
+      cssSource,
+      /\.volume-bar\.is-invincible-candle\s*{[\s\S]*?fill:\s*rgba\(143,\s*46,\s*232,\s*\.46\);/,
+    );
+  });
+
+  it("sizes hidden fighter runners large enough for the chart chase", () => {
+    assert.match(
+      cssSource,
+      /\.runner\.fighter-runner:not\(\[data-fighter-id="ant-fighter"\]\)\s*{[\s\S]*?--sprite-scale:\s*\.9;/,
+    );
+    assert.match(
+      cssSource,
+      /\.runner\.fighter-runner:not\(\[data-fighter-id="ant-fighter"\]\)\s*{[\s\S]*?width:\s*78px;[\s\S]*?height:\s*82px;/,
+    );
   });
 });

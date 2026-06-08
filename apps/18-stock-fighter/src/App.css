@@ -100,8 +100,7 @@ button {
 .home-title-plate,
 .home-status-bar,
 .home-roster,
-.home-dock,
-.home-screen .reward-panel {
+.home-dock {
   position: relative;
   z-index: 1;
 }
@@ -281,6 +280,12 @@ button {
 }
 
 .home-main-fighter {
+  background:
+    linear-gradient(135deg, rgba(255, 214, 65, .1), rgba(229, 57, 53, .08)),
+    rgba(13, 17, 24, .74);
+}
+
+.home-main-fighter.is-selected {
   border-color: #ffd641;
   background:
     linear-gradient(135deg, rgba(255, 214, 65, .22), rgba(229, 57, 53, .18)),
@@ -289,6 +294,33 @@ button {
     inset 0 0 0 2px #e53935,
     0 0 14px rgba(255, 214, 65, .72),
     3px 3px 0 #000;
+}
+
+.home-audio-tile {
+  aspect-ratio: 1 / 1;
+  border-color: #fff0c7;
+  background:
+    radial-gradient(circle at 50% 34%, rgba(125, 249, 255, .28), transparent 38%),
+    linear-gradient(135deg, rgba(255, 214, 65, .2), rgba(229, 57, 53, .14)),
+    rgba(13, 17, 24, .86);
+}
+
+.home-audio-tile.is-audio-on {
+  border-color: #7df9ff;
+  box-shadow:
+    inset 0 0 0 2px rgba(125, 249, 255, .42),
+    0 0 12px rgba(125, 249, 255, .6),
+    3px 3px 0 #000;
+}
+
+.audio-sticker {
+  position: absolute;
+  inset: 4px 4px 20px;
+  display: grid;
+  place-items: center;
+  font-size: 31px;
+  line-height: 1;
+  filter: drop-shadow(2px 2px 0 #000);
 }
 
 .tile-portrait {
@@ -400,28 +432,6 @@ button {
     2px 2px 0 #000;
 }
 
-.home-screen .reward-panel {
-  display: none;
-}
-
-.home-screen .reward-panel .section-heading,
-.home-screen .reward-status {
-  display: none;
-}
-
-.home-screen .reward-buttons {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 0;
-  gap: 6px;
-}
-
-.home-screen .reward-button {
-  min-height: 34px;
-  padding: 0 6px;
-  font-size: 9px;
-  line-height: 1.2;
-}
-
 .brand-stack h1,
 .result-hero h1 {
   margin: 4px 0 8px;
@@ -470,7 +480,6 @@ button {
 .combo-meter span,
 .fighter-copy span,
 .speaker span,
-.reward-status,
 .ad-strip span {
   color: #c8b89f;
   font-family: "Pretendard", system-ui, sans-serif;
@@ -821,8 +830,13 @@ button {
 }
 
 .modal-actions {
-  display: flex;
+  display: grid;
+  gap: 10px;
   margin-top: 14px;
+}
+
+.reset-confirm-modal .modal-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .primary-button,
@@ -830,7 +844,6 @@ button {
 .mini-button,
 .icon-button,
 .option-button,
-.reward-button,
 .up-button,
 .down-button {
   border: 2px solid #fff0c7;
@@ -845,6 +858,12 @@ button {
   background: #e53935;
 }
 
+.primary-button.is-reward-unlock {
+  background: #ffd641;
+  color: #17110b;
+  text-shadow: none;
+}
+
 .primary-button.is-disabled {
   background: #3a332d;
   color: #9a8f81;
@@ -857,6 +876,14 @@ button {
   color: #9a8f81;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+.primary-button.is-reward-unlock.is-disabled,
+.primary-button.is-reward-unlock:disabled {
+  background: #7a6420;
+  color: #ffe38a;
+  cursor: not-allowed;
+  box-shadow: 4px 4px 0 #000;
 }
 
 .ghost-button,
@@ -888,45 +915,6 @@ button {
 .reward-zone .ghost-button,
 .reward-zone .primary-button {
   min-width: 0;
-}
-
-.reward-panel {
-  margin-top: 2px;
-}
-
-.reward-buttons {
-  display: grid;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.reward-button {
-  width: 100%;
-  background: #0d47a1;
-  padding: 0 10px;
-  font-size: 13px;
-}
-
-.reward-button.is-disabled {
-  background: #2b2b2b;
-  color: #9a8f81;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.reward-status {
-  margin: 10px 0 0;
-}
-
-.ready-dot {
-  width: 12px;
-  height: 12px;
-  border: 2px solid #fff0c7;
-  background: #4a3829;
-}
-
-.ready-dot.on {
-  background: #50d890;
 }
 
 .topbar {
@@ -964,6 +952,13 @@ button {
   background:
     linear-gradient(180deg, rgba(4, 6, 18, .02), rgba(4, 6, 18, .18) 54%, rgba(4, 6, 18, .66)),
     url("/assets/stock-fighter/quiz-frame-v1.png") center top / cover no-repeat,
+    #05070d;
+}
+
+.quiz-screen:not([data-fighter-id="ant-fighter"]) {
+  background:
+    linear-gradient(180deg, rgba(4, 6, 18, .02), rgba(4, 6, 18, .18) 54%, rgba(4, 6, 18, .66)),
+    url("/assets/stock-fighter/fighters/quiz-bg-base/quiz-frame-hidden-base-v1.png") center top / cover no-repeat,
     #05070d;
 }
 
@@ -1094,23 +1089,19 @@ button {
 }
 
 .quiz-fighter-stand:not([data-fighter-id="ant-fighter"]) {
-  position: absolute;
-  left: 5.2%;
-  top: 27.8%;
-  z-index: 2;
   display: block;
-  width: min(158px, 38vw);
-  height: min(250px, 58vw);
-  background-color: transparent;
-  background-image: var(--fighter-quiz-image);
-  background-size: contain;
-  background-position: center bottom;
-  background-repeat: no-repeat;
-  filter:
-    drop-shadow(5px 6px 0 rgba(0, 0, 0, .32))
-    drop-shadow(0 0 14px color-mix(in srgb, var(--fighter-accent) 66%, transparent));
+  position: absolute;
+  left: -26.6%;
+  top: 12.1%;
+  width: 108.8%;
+  aspect-ratio: 1;
   pointer-events: none;
-  image-rendering: auto;
+  background: var(--fighter-quiz-character-image) center / contain no-repeat;
+  z-index: 0;
+}
+
+.quiz-fighter-stand:not([data-fighter-id="ant-fighter"]):not([data-fighter-id="gold-tariff-king"]):not([data-fighter-id="loss-cut-swordsman"]):not([data-fighter-id="upper-limit-fairy"]):not([data-fighter-id="lower-limit-ghost"]):not([data-fighter-id="diversified-shield"]):not([data-fighter-id="meme-coin-dog"]) {
+  left: calc(-26.6% - 15px);
 }
 
 .dialogue-panel {
@@ -1136,6 +1127,10 @@ button {
   color: #fff7d6;
   text-shadow: 2px 2px 0 #02040a;
   word-break: keep-all;
+}
+
+.quiz-screen:not([data-fighter-id="ant-fighter"]) .ant-cry-panel {
+  padding-left: 33px;
 }
 
 .quiz-screen .ant-cry-panel span {
@@ -1561,6 +1556,10 @@ button {
   fill: #1768df;
 }
 
+.volume-bar.is-invincible-candle {
+  fill: rgba(143, 46, 232, .46);
+}
+
 .chart-candle {
   color: #e53935;
   filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, .18));
@@ -1568,6 +1567,13 @@ button {
 
 .chart-candle.down {
   color: #1768df;
+}
+
+.chart-candle.is-invincible-candle {
+  color: #8f2ee8;
+  filter:
+    drop-shadow(0 0 4px rgba(207, 151, 255, .9))
+    drop-shadow(2px 2px 0 rgba(0, 0, 0, .18));
 }
 
 .chart-candle-wick {
@@ -1762,9 +1768,9 @@ button {
 }
 
 .runner.fighter-runner:not([data-fighter-id="ant-fighter"]) {
-  --sprite-scale: .8;
-  width: 66px;
-  height: 70px;
+  --sprite-scale: .9;
+  width: 78px;
+  height: 82px;
   background-image: var(--fighter-runner-image);
   background-size: contain;
   background-position: center bottom;
@@ -1921,6 +1927,38 @@ button {
   padding: 0 10px;
   box-shadow: 4px 4px 0 #000;
   cursor: pointer;
+}
+
+.cutscene-shell > .skip-button {
+  right: 62px;
+}
+
+.cutscene-audio-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 9;
+  width: 38px;
+  min-height: 34px;
+  padding: 0;
+  border: 2px solid #fff0c7;
+  background: #111827;
+  color: #fff0c7;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 4px 4px 0 #000;
+  cursor: pointer;
+}
+
+.cutscene-audio-button.is-audio-on {
+  border-color: #7df9ff;
+  color: #7df9ff;
+  box-shadow:
+    inset 0 0 0 2px rgba(125, 249, 255, .28),
+    0 0 12px rgba(125, 249, 255, .46),
+    4px 4px 0 #000;
 }
 
 .cutscene-count {
@@ -2098,12 +2136,10 @@ button {
 .ending-prize-card {
   max-width: 260px;
   margin: 0 auto;
-  border: 3px solid var(--fighter-accent, #fff0c7);
-  background: #090d18;
-  padding: 12px;
-  box-shadow:
-    inset 0 0 0 2px #fff0c7,
-    5px 5px 0 #000;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 .ending-prize-card.is-revealed {

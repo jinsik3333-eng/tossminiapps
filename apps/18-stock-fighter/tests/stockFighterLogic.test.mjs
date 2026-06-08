@@ -13,6 +13,7 @@ import {
   claimEndingRandomFighterReward,
   completeRewardedAd,
   createAppState,
+  createCandle,
   createMiniGameState,
   finishMiniGame,
   getChaseActorIndexes,
@@ -59,6 +60,57 @@ describe("stock fighter content rules", () => {
       ),
       ["개미 파이터"],
     );
+  });
+
+  it("uses the approved main fighter collection copy", () => {
+    // Given
+    const mainFighter = FIGHTERS.find((fighter) => fighter.unlockedDefault);
+
+    // When
+    const profile = [
+      mainFighter.name,
+      mainFighter.signature,
+      mainFighter.effect,
+    ];
+
+    // Then
+    assert.deepEqual(profile, [
+      "개미 파이터",
+      "월급날 생존왕",
+      "서울 자가를 꿈꾸며 오늘도 김밥으로 버틴다",
+    ]);
+  });
+
+  it("uses the approved hidden fighter collection copy", () => {
+    const hiddenFighterProfiles = FIGHTERS.filter(
+      (fighter) => !fighter.unlockedDefault,
+    ).map((fighter) => [
+      fighter.name,
+      fighter.signature,
+      fighter.effect,
+    ]);
+
+    assert.deepEqual(hiddenFighterProfiles, [
+      ["금발 관세왕", "금발 협상 천재", "절대 손해보지 않는 관세 협상의 달인."],
+      ["후디 소셜왕", "타임라인 과몰입러", "좋아요는 잘 누르지만 손절 버튼은 늘 못 찾는다."],
+      ["로켓 괴짜 CEO", "화성행 야근러", "회의 대신 발사를, 잠은 죽어서 자기로 결심했다."],
+      ["우주 택배왕", "새벽배송 우주신사", "택배 상자처럼 꿈 큰 야망가, 단 반품은 싫어한다."],
+      ["밈 코인 강아지", "밈의 대가", "이유는 모르겠지만 표정 만큼은 언제나 상한가다."],
+      ["AI 가죽재킷 보스", "가죽재킷 마스터", "ai와 가죽재킷 싸이클은 함께간다고 주장한다."],
+      ["메모리 재벌", "RAM 많은 재벌 2세", "더 이상 싸이클 산업이 아니라고 주장한다."],
+      ["반도체 회장님", "웨이퍼 회장님", "말은 느린데 결재 도장은 나노 단위로 찍힌다."],
+      ["전기차 장인", "자율주행 혁명가", "주차는 못해도 자율주행 전기차 덕분에 달린다."],
+      ["검색창 현자", "검색창 철학자", "주가는 기본, 매일 자기 이름도 검색한다."],
+      ["사과폰 수도승", "무음모드 수도승", "말은 적은데 손과 머리회전은 빠르다."],
+      ["배당 귀족냥", "배당 캔 마니아", "느긋하게 앉아 있다가 입금 알림에만 귀가 번쩍 뜬다."],
+      ["공시 닌자", "공시 새벽반", "모두 잠든 새벽에도 정정공시 냄새는 놓치지 않는다."],
+      ["차트 도사", "선 긋는 은둔고수", "차트에 선을 긋다 보니 인생의 추세선까지 깨달았다."],
+      ["호가 사냥꾼", "호가창 매의눈", "삽겹살 두께보다 매수벽 두께에 더 민감하다."],
+      ["상한가 요정", "빨간봉 축제요정", "아주 운 좋은 날만 만난다는 전설의 요정."],
+      ["하한가 유령", "파란봉 야근령", "잡주에서 자주 출몰한다는 흔한 요정."],
+      ["분산투자 방패병", "바구니 분산러", "계란도 자산도 한 곳에 몰아두면 밤잠을 못 잔다."],
+      ["손절 검객", "미련 절단 검사", "'손절큰 칼 같이 익절은 느긋하게'가 좌우명이다"],
+    ]);
   });
 
   it("does not put forbidden public-figure or franchise strings in shipped data", () => {
@@ -275,11 +327,37 @@ describe("chart chase rules", () => {
     assert.equal(game.remainingMs, 15000);
   });
 
-  it("gives each candle about 0.68 seconds before a late miss", () => {
+  it("gives the opening candle 1 second and later candles 0.6 seconds", () => {
     const game = createMiniGameState("ant-fighter");
 
-    assert.equal(MINI_GAME_BASE_INPUT_WINDOW_MS, 680);
-    assert.equal(game.inputDueMs, 680);
+    assert.equal(MINI_GAME_BASE_INPUT_WINDOW_MS, 600);
+    assert.equal(game.inputDueMs, 1000);
+    assert.equal(
+      resolveCandleInput(game, { direction: "up" }, "up").inputDueMs,
+      600,
+    );
+  });
+
+  it("does not repeat a readable five-candle direction pattern", () => {
+    const directions = Array.from({ length: 25 }, (_, index) =>
+      createCandle(index, 20260606).direction,
+    );
+    const fiveCandleSets = Array.from({ length: 5 }, (_, index) =>
+      directions.slice(index * 5, index * 5 + 5).join(""),
+    );
+
+    assert.ok(new Set(fiveCandleSets).size >= 4);
+  });
+
+  it("uses the mini-game candle seed to vary each chase run", () => {
+    const firstSeedDirections = Array.from({ length: 20 }, (_, index) =>
+      createCandle(index, 101).direction,
+    ).join("");
+    const secondSeedDirections = Array.from({ length: 20 }, (_, index) =>
+      createCandle(index, 909).direction,
+    ).join("");
+
+    assert.notEqual(firstSeedDirections, secondSeedDirections);
   });
 
   it("uses five misses before the chaser catches the runner", () => {
@@ -324,7 +402,7 @@ describe("chart chase rules", () => {
     assert.equal(game.mistakes, 5);
   });
 
-  it("turns on a one-second flame invincible effect and hint reward at 10 combo", () => {
+  it("turns on a 1.5-second flame invincible effect and hint reward at 10 combo", () => {
     let game = createMiniGameState("ant-fighter");
 
     for (let count = 0; count < 10; count += 1) {
@@ -332,8 +410,8 @@ describe("chart chase rules", () => {
     }
 
     assert.equal(game.combo, 10);
-    assert.equal(game.invincibleMs, 1000);
-    assert.equal(game.dashMs, 1000);
+    assert.equal(game.invincibleMs, 1500);
+    assert.equal(game.dashMs, 1500);
     assert.equal(game.hintEarned, true);
     assert.equal(game.effectBursts, 1);
     assert.ok(game.score >= 100);

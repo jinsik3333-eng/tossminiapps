@@ -1,5 +1,9 @@
+import {
+  loadFullScreenAd,
+  showFullScreenAd,
+} from "@apps-in-toss/web-framework";
 import type { CSSProperties } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   FIGHTERS,
@@ -28,9 +32,14 @@ import {
   tickMiniGame,
   useHint as spendHint,
 } from "./lib/stockFighterLogic.mjs";
+import {
+  createStockFighterAudio,
+  stockFighterTrackForScreen,
+} from "./audio/stockFighterAudio";
 import "./App.css";
 
 type Screen = "home" | "intro" | "quiz" | "chase" | "collection" | "ending" | "result";
+type LocalPreviewMode = "ending" | "quiz" | "chase" | null;
 type RewardKind = "fighter-unlock" | "revive";
 type Direction = "up" | "down" | "late";
 type ChaseOverlay = "guide-heat" | "guide-controls" | "3" | "2" | "1" | "GO" | null;
@@ -88,6 +97,7 @@ type AppState = {
 
 type MiniGameState = {
   fighterId: string;
+  candleSeed: number;
   remainingMs: number;
   combo: number;
   bestCombo: number;
@@ -132,18 +142,23 @@ type RewardBridge = {
   ) => Promise<{ userEarnedReward: boolean }>;
 };
 
+type RewardedAdResult = {
+  userEarnedReward: boolean;
+};
+
 const fighters = FIGHTERS as Fighter[];
 const mainFighter = fighters.find((fighter) => fighter.unlockedDefault) ?? fighters[0];
 const hiddenFighters = fighters.filter((fighter) => !fighter.unlockedDefault);
 const STORAGE_KEY = "stock-fighter-state-v1";
 const ASSET_BASE = "/assets/stock-fighter";
+const REWARDED_AD_GROUP_ID = import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 const CHASE_VIEWBOX_WIDTH = 390;
 const CHASE_VIEWBOX_HEIGHT = 330;
 const CHASE_CANDLE_COUNT = 64;
 const CHASE_TARGET_INDEX = 12;
 const CHASE_CANDLE_SPACING = 16.5;
 const CHASE_STEP_WIDTH = CHASE_CANDLE_SPACING;
-const CHASE_STEP_SECONDS = 0.68;
+const CHASE_STEP_SECONDS = 0.6;
 const CHASE_TICK_MS = CHASE_STEP_SECONDS * 1000;
 const CHASE_SOURCE_OFFSET = 630;
 const CHASE_PLOT_TOP = 34;
@@ -173,10 +188,10 @@ function makeAveragePath(candles: VisualCandle[], key: "maFastY" | "maSlowY", of
     .join(" ");
 }
 
-function buildChaseCandles(step: number) {
+function buildChaseCandles(step: number, candleSeed: number) {
   const raw = Array.from({ length: CHASE_CANDLE_COUNT }, (_, index) => {
     const sourceStep = CHASE_SOURCE_OFFSET + step + index - CHASE_TARGET_INDEX;
-    const candle = createCandle(sourceStep) as Candle;
+    const candle = createCandle(sourceStep, candleSeed) as Candle;
     const center = chartPriceAt(sourceStep);
     const bodySize = 0.8 + candle.body / 18;
     const wickSize = 0.5 + candle.wick / 16;
@@ -243,8 +258,8 @@ function fighterPortraitStyle(fighter: Fighter, index: number) {
     "--fighter-accent": fighter.accent,
     "--portrait-x": `${column * 25}%`,
     "--portrait-y": `${row * (100 / 3)}%`,
-    "--fighter-quiz-image":
-      hiddenAssetBase == null ? "none" : `url("${hiddenAssetBase}/quiz-full/${fighter.id}.png")`,
+    "--fighter-quiz-character-image":
+      hiddenAssetBase == null ? "none" : `url("${hiddenAssetBase}/quiz-character/${fighter.id}.png")`,
     "--fighter-runner-image":
       hiddenAssetBase == null ? "none" : `url("${hiddenAssetBase}/runner/${fighter.id}.png")`,
   } as CSSProperties;
@@ -331,7 +346,11 @@ const topicLabel: Record<string, string> = {
 };
 
 function formatQuestionHint(question: Question) {
-  return `힌트: ${question.hint}`;
+  return `퀴즈힌트: ${question.hint}`;
+}
+
+function stripQuizSetPrefix(prompt: string) {
+  return prompt.replace(/^(실전 복습\s*2세트|고수 점검\s*3세트)\.\s*/, "");
 }
 
 function formatTopicLabel(topic: string) {
@@ -355,9 +374,9 @@ function readStoredState(): AppState {
   }
 }
 
-function isLocalPreviewMode(previewName: string) {
+function getLocalPreviewMode(): LocalPreviewMode {
   if (typeof window === "undefined") {
-    return false;
+    return null;
   }
 
   const { hostname, search } = window.location;
@@ -366,14 +385,42 @@ function isLocalPreviewMode(previewName: string) {
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
     hostname === "::1";
+  const preview = searchParams.get("preview");
 
-  return isLocalHost && searchParams.get("preview") === previewName;
+  if (!isLocalHost || (preview !== "ending" && preview !== "quiz" && preview !== "chase")) {
+    return null;
+  }
+
+  return preview;
 }
 
-function readInitialState(isEndingPreview: boolean): AppState {
-  const state = isEndingPreview ? (createAppState() as AppState) : readStoredState();
+function getLocalPreviewFighterId() {
+  if (typeof window === "undefined") {
+    return null;
+  }
 
-  if (!isEndingPreview) {
+  const fighterId = new URLSearchParams(window.location.search).get("fighter");
+  const fighter = fighterId == null ? hiddenFighters[0] : getFighterById(fighterId);
+
+  return fighter.unlockedDefault ? hiddenFighters[0]?.id ?? mainFighter.id : fighter.id;
+}
+
+function readInitialState(localPreviewMode: LocalPreviewMode): AppState {
+  const state = localPreviewMode === "ending" ? (createAppState() as AppState) : readStoredState();
+
+  if (localPreviewMode === "quiz" || localPreviewMode === "chase") {
+    const fighterId = getLocalPreviewFighterId() ?? mainFighter.id;
+
+    return createAppState({
+      ...state,
+      selectedFighterId: fighterId,
+      unlockedFighterIds: [fighterId],
+      quizCursor: 13,
+      hasSeenIntro: true,
+    }) as AppState;
+  }
+
+  if (localPreviewMode !== "ending") {
     return state;
   }
 
@@ -389,6 +436,14 @@ function readInitialState(isEndingPreview: boolean): AppState {
     hasSeenIntro: true,
     endingRewardClaimed: false,
   }) as AppState;
+}
+
+function shouldSkipAntEndingPanels(state: AppState) {
+  return (
+    state.completed &&
+    !state.endingRewardClaimed &&
+    state.selectedFighterId !== "ant-fighter"
+  );
 }
 
 function getRewardBridge(): RewardBridge | undefined {
@@ -410,9 +465,13 @@ function nextQuestionFrom(state: AppState): Question {
 }
 
 function App() {
-  const isEndingPreview = isLocalPreviewMode("ending");
-  const [screen, setScreen] = useState<Screen>(isEndingPreview ? "ending" : "home");
-  const [appState, setAppState] = useState<AppState>(() => readInitialState(isEndingPreview));
+  const localPreviewMode = getLocalPreviewMode();
+  const isEndingPreview = localPreviewMode === "ending";
+  const isQuizPreview = localPreviewMode === "quiz";
+  const isChasePreview = localPreviewMode === "chase";
+  const initialScreen: Screen = isEndingPreview ? "ending" : isQuizPreview ? "quiz" : isChasePreview ? "chase" : "home";
+  const [screen, setScreen] = useState<Screen>(initialScreen);
+  const [appState, setAppState] = useState<AppState>(() => readInitialState(localPreviewMode));
   const [activeHint, setActiveHint] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [answerFx, setAnswerFx] = useState<AnswerFx>(null);
@@ -422,19 +481,25 @@ function App() {
   const [endingIndex, setEndingIndex] = useState(0);
   const [endingPrizeId, setEndingPrizeId] = useState<string | null>(null);
   const [endingDrawPhase, setEndingDrawPhase] = useState<EndingDrawPhase>("ready");
-  const [miniGame, setMiniGame] = useState<MiniGameState | null>(null);
+  const [miniGame, setMiniGame] = useState<MiniGameState | null>(() => (
+    isChasePreview ? createMiniGameState(readInitialState(localPreviewMode).selectedFighterId) as MiniGameState : null
+  ));
   const [chaseOverlay, setChaseOverlay] = useState<ChaseOverlay>(null);
   const [isChasePaused, setIsChasePaused] = useState(false);
   const [candleStep, setCandleStep] = useState(0);
   const [jumpTick, setJumpTick] = useState(0);
   const [comboPop, setComboPop] = useState<string | null>(null);
   const [currentCandle, setCurrentCandle] = useState<Candle>(
-    () => createCandle(CHASE_SOURCE_OFFSET) as Candle,
+    () => createCandle(CHASE_SOURCE_OFFSET, miniGame?.candleSeed ?? 0) as Candle,
   );
   const [battleMessage, setBattleMessage] = useState("상승은 오른쪽, 하락은 왼쪽!");
-  const [rewardStatus, setRewardStatus] = useState("보상형 광고 대기 중");
+  const [, setRewardStatus] = useState("보상형 광고 대기 중");
   const [isRewardReady, setIsRewardReady] = useState(false);
+  const [isRewardSupported, setIsRewardSupported] = useState(false);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  const unregisterRewardAdRef = useRef<(() => void) | null>(null);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const audio = useMemo(() => createStockFighterAudio(), []);
 
   const unlockedIds = useMemo(
     () => new Set(getUnlockedFighterIds(appState) as string[]),
@@ -456,6 +521,12 @@ function App() {
     () => getQuestionChoices(currentQuestion) as QuestionChoice[],
     [currentQuestion],
   );
+  const selectedFighterIndex = Math.max(
+    0,
+    fighters.findIndex((fighter) => fighter.id === selectedFighter.id),
+  );
+  const selectedFighterSceneStyle = fighterPortraitStyle(selectedFighter, selectedFighterIndex);
+  const quizPromptText = stripQuizSetPrefix(currentQuestion.prompt);
   const quizBattleCry = getQuizBattleCry(appState.answeredCount);
   const progressPercent = Math.round(
     (appState.answeredCount / questions.length) * 100,
@@ -469,17 +540,186 @@ function App() {
     appState.answeredCount === 0
       ? 0
       : Math.round((appState.correctCount / appState.answeredCount) * 100);
+  const candleSeed = miniGame?.candleSeed ?? 0;
+  const advanceCandleBy = useCallback((amount = 1) => {
+    setCandleStep((step) => {
+      const nextStep = step + amount;
+      setCurrentCandle(
+        createCandle(CHASE_SOURCE_OFFSET + nextStep, candleSeed) as Candle,
+      );
+      return nextStep;
+    });
+  }, [candleSeed]);
+
+  const loadRewardedAd = useCallback(() => {
+    const bridge = getRewardBridge();
+
+    if (bridge != null) {
+      setIsRewardSupported(true);
+      setIsRewardReady(true);
+      setRewardStatus("광고 보상 준비 완료");
+      return;
+    }
+
+    setIsRewardReady(false);
+
+    if (REWARDED_AD_GROUP_ID.trim() === "") {
+      setIsRewardSupported(false);
+      setRewardStatus("광고 ID가 설정되지 않았다.");
+      return;
+    }
+
+    let supported = false;
+
+    try {
+      supported = loadFullScreenAd.isSupported();
+    } catch {
+      supported = false;
+    }
+
+    setIsRewardSupported(supported);
+
+    if (!supported) {
+      setRewardStatus("토스 앱에서 광고를 사용할 수 있다.");
+      return;
+    }
+
+    try {
+      unregisterRewardAdRef.current?.();
+      unregisterRewardAdRef.current = loadFullScreenAd({
+        options: { adGroupId: REWARDED_AD_GROUP_ID },
+        onEvent: (event) => {
+          if (event.type === "loaded") {
+            setIsRewardReady(true);
+            setRewardStatus("광고 보상 준비 완료");
+          }
+        },
+        onError: () => {
+          setIsRewardReady(false);
+          setRewardStatus("광고를 불러오지 못했다.");
+        },
+      });
+    } catch {
+      setIsRewardReady(false);
+      setRewardStatus("광고를 불러오지 못했다.");
+    }
+  }, []);
+
+  const showRewardedAd = useCallback(
+    async (rewardKind: RewardKind): Promise<RewardedAdResult> => {
+      const bridge = getRewardBridge();
+
+      if (bridge != null) {
+        return bridge.showRewardedAd(rewardKind);
+      }
+
+      if (REWARDED_AD_GROUP_ID.trim() === "") {
+        setRewardStatus("광고 ID가 설정되지 않았다.");
+        return { userEarnedReward: false };
+      }
+
+      if (!isRewardSupported) {
+        setRewardStatus("토스 앱에서 광고를 사용할 수 있다.");
+        return { userEarnedReward: false };
+      }
+
+      if (!isRewardReady) {
+        setRewardStatus("광고 보상 준비 중");
+        loadRewardedAd();
+        return { userEarnedReward: false };
+      }
+
+      setIsRewardReady(false);
+      setRewardStatus("광고 재생 중");
+
+      return new Promise((resolve) => {
+        let settled = false;
+        let earnedReward = false;
+        const settle = (userEarnedReward: boolean) => {
+          if (settled) {
+            return;
+          }
+
+          settled = true;
+          resolve({ userEarnedReward });
+        };
+
+        try {
+          showFullScreenAd({
+            options: { adGroupId: REWARDED_AD_GROUP_ID },
+            onEvent: (event) => {
+              switch (event.type) {
+                case "userEarnedReward":
+                  earnedReward = true;
+                  settle(true);
+                  break;
+                case "dismissed":
+                  loadRewardedAd();
+                  if (!earnedReward) {
+                    settle(false);
+                  }
+                  break;
+                case "failedToShow":
+                  setRewardStatus("광고 표시가 실패했다.");
+                  loadRewardedAd();
+                  settle(false);
+                  break;
+              }
+            },
+            onError: () => {
+              setRewardStatus("광고를 불러오지 못했다.");
+              loadRewardedAd();
+              settle(false);
+            },
+          });
+        } catch {
+          setRewardStatus("광고를 불러오지 못했다.");
+          loadRewardedAd();
+          settle(false);
+        }
+      });
+    },
+    [isRewardReady, isRewardSupported, loadRewardedAd],
+  );
+
   useEffect(() => {
-    if (isEndingPreview) {
+    if (localPreviewMode != null) {
       return;
     }
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-  }, [appState, isEndingPreview]);
+  }, [appState, localPreviewMode]);
 
   useEffect(() => {
-    setIsRewardReady(Boolean(getRewardBridge()));
-  }, []);
+    loadRewardedAd();
+
+    return () => {
+      unregisterRewardAdRef.current?.();
+      unregisterRewardAdRef.current = null;
+    };
+  }, [loadRewardedAd]);
+
+  useEffect(() => () => audio.dispose(), [audio]);
+
+  useEffect(() => {
+    if (!audioEnabled) {
+      audio.setTrack("none");
+      return;
+    }
+
+    audio.setTrack(stockFighterTrackForScreen(screen, miniGame));
+  }, [audio, audioEnabled, miniGame, screen]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      audio.setVisible(!document.hidden);
+    };
+
+    handleVisibilityChange();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [audio]);
 
   useEffect(() => {
     if (screen !== "quiz") {
@@ -488,7 +728,7 @@ function App() {
 
     setTypedPrompt("");
     setActiveHint(null);
-    const text = currentQuestion.prompt;
+    const text = quizPromptText;
     let cursor = 0;
     const timer = window.setInterval(() => {
       cursor += 1;
@@ -500,7 +740,7 @@ function App() {
     }, 22);
 
     return () => window.clearInterval(timer);
-  }, [currentQuestion.id, currentQuestion.prompt, screen]);
+  }, [currentQuestion.id, quizPromptText, screen]);
 
   useEffect(() => {
     if (
@@ -542,7 +782,7 @@ function App() {
     }, elapsedMs);
 
     return () => window.clearInterval(timer);
-  }, [chaseOverlay, isChasePaused, miniGame, screen]);
+  }, [advanceCandleBy, chaseOverlay, isChasePaused, miniGame, screen]);
 
   useEffect(() => {
     if (
@@ -568,14 +808,6 @@ function App() {
     return () => window.clearTimeout(timer);
   }, [chaseOverlay]);
 
-  const advanceCandleBy = (amount = 1) => {
-    setCandleStep((step) => {
-      const nextStep = step + amount;
-      setCurrentCandle(createCandle(CHASE_SOURCE_OFFSET + nextStep) as Candle);
-      return nextStep;
-    });
-  };
-
   const advanceCandle = () => {
     advanceCandleBy(1);
   };
@@ -586,8 +818,46 @@ function App() {
 
   const completionDestination = (state: AppState): Screen =>
     state.completed && !state.endingRewardClaimed ? "ending" : "result";
+  const completionEndingIndex = (state: AppState) =>
+    shouldSkipAntEndingPanels(state) ? endingPanels.length : 0;
+
+  const handleAudioStickerClick = () => {
+    const nextEnabled = !audioEnabled;
+    setAudioEnabled(nextEnabled);
+
+    if (!nextEnabled) {
+      audio.setTrack("none");
+      return;
+    }
+
+    void audio.unlock().then((unlocked) => {
+      if (!unlocked) {
+        setAudioEnabled(false);
+        return;
+      }
+
+      audio.playSfx("uiTap");
+      audio.setTrack(stockFighterTrackForScreen(screen, miniGame));
+    });
+  };
+
+  const renderCutsceneAudioButton = () => (
+    <button
+      aria-label={audioEnabled ? "사운드 끄기" : "사운드 켜기"}
+      aria-pressed={audioEnabled}
+      className={`cutscene-audio-button ${audioEnabled ? "is-audio-on" : ""}`}
+      onClick={(event) => {
+        event.stopPropagation();
+        handleAudioStickerClick();
+      }}
+      type="button"
+    >
+      <span aria-hidden="true">{audioEnabled ? "🔊" : "🔇"}</span>
+    </button>
+  );
 
   const resetGame = () => {
+    audio.playSfx("uiTap");
     const fresh = resetQuizProgress(appState) as AppState;
     persistState(fresh);
     setMiniGame(null);
@@ -604,19 +874,21 @@ function App() {
   };
 
   const enterQuiz = (state = appState) => {
+    audio.playSfx("uiTap");
     persistState({ ...state, hasSeenIntro: true });
     setIntroIndex(0);
-    setEndingIndex(0);
+    setEndingIndex(state.completed ? completionEndingIndex(state) : 0);
     setEndingPrizeId(null);
     setEndingDrawPhase("ready");
     setScreen(state.completed ? completionDestination(state) : "quiz");
   };
 
   const startQuiz = () => {
+    audio.playSfx("uiTap");
     setFeedback(null);
 
     if (appState.completed) {
-      setEndingIndex(0);
+      setEndingIndex(completionEndingIndex(appState));
       setEndingPrizeId(null);
       setEndingDrawPhase("ready");
       setScreen(completionDestination(appState));
@@ -633,6 +905,7 @@ function App() {
   };
 
   const advanceIntro = () => {
+    audio.playSfx("uiTap");
     if (introIndex >= introPanels.length - 1) {
       enterQuiz();
       return;
@@ -642,6 +915,7 @@ function App() {
   };
 
   const advanceEnding = () => {
+    audio.playSfx("uiTap");
     if (endingIndex < endingPanels.length - 1) {
       setEndingIndex((index) => index + 1);
       return;
@@ -662,6 +936,7 @@ function App() {
       return;
     }
 
+    audio.playSfx("shuffleTick");
     setEndingPrizeId(null);
     setEndingDrawPhase("rolling");
 
@@ -676,6 +951,7 @@ function App() {
       persistState(reward.state);
       setEndingPrizeId(reward.fighter?.id ?? null);
       setEndingDrawPhase("revealed");
+      audio.playSfx("cardReveal");
     }, 1250);
   };
 
@@ -685,6 +961,7 @@ function App() {
   };
 
   const startMiniGame = (state: AppState) => {
+    audio.playSfx("miniStart");
     const initialGame = createMiniGameState(
       state.selectedFighterId,
     ) as MiniGameState;
@@ -694,7 +971,9 @@ function App() {
     setComboPop(null);
     setCandleStep(0);
     setJumpTick(0);
-    setCurrentCandle(createCandle(CHASE_SOURCE_OFFSET) as Candle);
+    setCurrentCandle(
+      createCandle(CHASE_SOURCE_OFFSET, initialGame.candleSeed) as Candle,
+    );
     setBattleMessage(`${selectedFighter.name}, 차트 추격전 돌입!`);
     setScreen("chase");
   };
@@ -713,6 +992,7 @@ function App() {
       currentQuestion,
       optionIndex,
     ) as { isCorrect: boolean; shouldLaunchMiniGame: boolean; state: AppState };
+    audio.playSfx(result.isCorrect ? "correct" : "wrong");
     setFeedback(result.isCorrect ? "correct" : "wrong");
 
     window.setTimeout(() => {
@@ -721,13 +1001,14 @@ function App() {
       persistState(result.state);
 
       if (result.state.completed) {
-        setEndingIndex(0);
+        setEndingIndex(completionEndingIndex(result.state));
         setEndingPrizeId(null);
         setScreen(completionDestination(result.state));
         return;
       }
 
       if (result.shouldLaunchMiniGame) {
+        audio.playSfx("chargeReady");
         startMiniGame(result.state);
         return;
       }
@@ -740,19 +1021,23 @@ function App() {
     const result = spendHint(appState) as { used: boolean; state: AppState };
 
     if (!result.used) {
+      audio.playSfx("wrong");
       setActiveHint("힌트가 없다. 차트 추격전 10콤보로 벌어오자.");
       return;
     }
 
+    audio.playSfx("hint");
     persistState(result.state);
     setActiveHint(formatQuestionHint(currentQuestion));
   };
 
   const handleSelectFighter = (fighter: Fighter) => {
     if (!unlockedIds.has(fighter.id)) {
+      audio.playSfx("wrong");
       return;
     }
 
+    audio.playSfx("uiTap");
     persistState(selectFighter(appState, fighter.id) as AppState);
   };
 
@@ -765,15 +1050,8 @@ function App() {
   };
 
   const handleReward = async (rewardKind: RewardKind) => {
-    const bridge = getRewardBridge();
-
-    if (bridge == null) {
-      setRewardStatus("광고 보상 준비 중");
-      return;
-    }
-
     try {
-      const event = await bridge.showRewardedAd(rewardKind);
+      const event = await showRewardedAd(rewardKind);
 
       if (event.userEarnedReward) {
         const beforeUnlocked = new Set(getUnlockedFighterIds(appState) as string[]);
@@ -784,7 +1062,26 @@ function App() {
             nextState.unlockedFighterIds.includes(fighter.id),
         );
 
+        if (rewardKind === "revive" && miniGame?.ended && miniGame.result === "ko") {
+          const reviveResult = reviveMiniGame(nextState, miniGame) as {
+            revived: boolean;
+            state: AppState;
+            game: MiniGameState;
+          };
+
+          if (reviveResult.revived) {
+            audio.playSfx("chargeReady");
+            persistState(reviveResult.state);
+            setMiniGame(reviveResult.game);
+            setIsChasePaused(false);
+            setRewardStatus("광고 부활 완료!");
+            startCountdown();
+            return;
+          }
+        }
+
         persistState(nextState);
+        audio.playSfx(rewardKind === "fighter-unlock" ? "cardReveal" : "chargeReady");
         setRewardStatus(
           rewardKind === "fighter-unlock"
             ? newlyOpened
@@ -793,9 +1090,11 @@ function App() {
             : "차트 추격전 부활권 +1",
         );
       } else {
+        audio.playSfx("wrong");
         setRewardStatus("완료 보상이 확인되지 않았다.");
       }
     } catch {
+      audio.playSfx("wrong");
       setRewardStatus("광고를 불러오지 못했다.");
     }
   };
@@ -812,9 +1111,13 @@ function App() {
     ) as MiniGameState;
     setMiniGame(nextGame);
 
-    if (input === "late") {
+    if (nextGame.ended) {
+      audio.playSfx(nextGame.result === "survived" ? "miniSuccess" : "miniFail");
+    } else if (input === "late") {
+      audio.playSfx("wrong");
       setBattleMessage("느렸다! 뒤에서 발소리가 커진다.");
     } else if (nextGame.combo > miniGame.combo) {
+      audio.playSfx("correct");
       setJumpTick((tick) => tick + 1);
       setComboPop(
         nextGame.effectBursts > miniGame.effectBursts ? "FEVER!" : "COMBO!",
@@ -822,10 +1125,11 @@ function App() {
       window.setTimeout(() => setComboPop(null), 420);
       setBattleMessage(
         nextGame.effectBursts > miniGame.effectBursts
-          ? `${selectedFighter.signature}! 불꽃 무적 1초!`
+          ? `${selectedFighter.signature}! 보라 캔들 무적 1.5초!`
           : "캔들 판정 성공!",
       );
     } else {
+      audio.playSfx("wrong");
       setBattleMessage("삐끗! 추격자가 가까워진다.");
     }
 
@@ -840,6 +1144,9 @@ function App() {
     }
 
     const nextState = finishMiniGame(appState, miniGame) as AppState;
+    if (miniGame.ended) {
+      audio.playSfx(miniGame.result === "survived" ? "miniSuccess" : "miniFail");
+    }
     persistState(nextState);
     setBattleMessage(
       miniGame.hintEarned ? "힌트 +1 획득!" : "투지를 다시 채워 재도전!",
@@ -848,7 +1155,7 @@ function App() {
     setChaseOverlay(null);
     setIsChasePaused(false);
     if (nextState.completed) {
-      setEndingIndex(0);
+      setEndingIndex(completionEndingIndex(nextState));
       setEndingPrizeId(null);
     }
     setScreen(nextState.completed ? completionDestination(nextState) : "quiz");
@@ -866,10 +1173,12 @@ function App() {
     };
 
     if (!result.revived) {
+      audio.playSfx("wrong");
       setBattleMessage("부활권이 없다.");
       return;
     }
 
+    audio.playSfx("chargeReady");
     persistState(result.state);
     setMiniGame(result.game);
     setIsChasePaused(false);
@@ -892,10 +1201,6 @@ function App() {
         <button
           className="fighter-avatar"
           onClick={() => {
-            if (unlocked) {
-              handleSelectFighter(fighter);
-            }
-
             setPreviewFighterId(fighter.id);
           }}
           type="button"
@@ -972,13 +1277,27 @@ function App() {
                 {selected ? "선택 완료" : "이 파이터 선택"}
               </button>
             ) : (
-              <button
-                className="primary-button is-disabled"
-                disabled
-                type="button"
-              >
-                랜덤 오픈 대기
-              </button>
+              <>
+                <button
+                  className="primary-button is-disabled"
+                  disabled
+                  type="button"
+                >
+                  랜덤 오픈 대기
+                </button>
+                <button
+                  className={
+                    isRewardReady && canUnlockFighter(appState)
+                      ? "primary-button is-reward-unlock"
+                      : "primary-button is-reward-unlock is-disabled"
+                  }
+                  disabled={!isRewardReady || !canUnlockFighter(appState)}
+                  onClick={() => handleReward("fighter-unlock")}
+                  type="button"
+                >
+                  광고 보고 오픈하기
+                </button>
+              </>
             )}
           </div>
         </section>
@@ -1036,6 +1355,7 @@ function App() {
 
     return (
       <main className="cutscene-shell">
+        {renderCutsceneAudioButton()}
         <button className="skip-button" onClick={() => enterQuiz()} type="button">
           SKIP
         </button>
@@ -1065,6 +1385,7 @@ function App() {
 
       return (
         <main className="cutscene-shell ending-draw-shell">
+          {renderCutsceneAudioButton()}
           <section className={`ending-draw-card is-${endingDrawPhase}`}>
             <span className="kicker">RANDOM FIGHTER</span>
             <h1>{isRevealed ? endingPrizeFighter ? "히든 파이터 등장!" : "전원 합류 완료!" : "히든 파이터 뽑기"}</h1>
@@ -1095,7 +1416,7 @@ function App() {
                   <span>셔플!</span>
                 </strong>
                 <p className="ending-draw-copy">
-                  100문항을 버틴 개미에게는 숨은 파이터를 보상한다
+                  100문항을 버틴 파이터에게는 숨은 파이터를 보상한다
                 </p>
                 <button
                   className="primary-button ending-draw-button"
@@ -1151,6 +1472,7 @@ function App() {
 
     return (
       <main className="cutscene-shell ending-shell">
+        {renderCutsceneAudioButton()}
         <button className="cutscene-frame" onClick={advanceEnding} type="button">
           <img src={panel.image} alt={panel.title} />
           <span className="cutscene-count">
@@ -1234,7 +1556,7 @@ function App() {
           <strong>{progressPercent}%</strong>
         </div>
         <div>
-          <span>힌트</span>
+          <span>퀴즈힌트</span>
           <strong>
             {appState.hints}/{MAX_HINTS}
           </strong>
@@ -1256,7 +1578,6 @@ function App() {
                 appState.selectedFighterId === mainFighter.id ? "is-selected" : ""
               }`}
               onClick={() => {
-                handleSelectFighter(mainFighter);
                 setPreviewFighterId(mainFighter.id);
               }}
               style={fighterPortraitStyle(
@@ -1282,10 +1603,6 @@ function App() {
                 }`}
                 key={fighter.id}
                 onClick={() => {
-                  if (unlocked) {
-                    handleSelectFighter(fighter);
-                  }
-
                   setPreviewFighterId(fighter.id);
                 }}
                 style={fighterPortraitStyle(fighter, fighterIndex)}
@@ -1296,6 +1613,19 @@ function App() {
               </button>
             );
           })}
+          <button
+            aria-label={audioEnabled ? "사운드 끄기" : "사운드 켜기"}
+            className={`home-fighter-tile home-audio-tile ${
+              audioEnabled ? "is-audio-on" : ""
+            }`}
+            onClick={handleAudioStickerClick}
+            type="button"
+          >
+            <span className="audio-sticker" aria-hidden="true">
+              {audioEnabled ? "🔊" : "🔇"}
+            </span>
+            <strong>{audioEnabled ? "사운드 ON" : "사운드"}</strong>
+          </button>
         </div>
       </section>
 
@@ -1317,7 +1647,11 @@ function App() {
   );
 
   const renderQuiz = () => (
-    <main className="app-shell quiz-screen">
+    <main
+      className="app-shell quiz-screen"
+      data-fighter-id={selectedFighter.id}
+      style={selectedFighterSceneStyle}
+    >
       <header className="topbar">
         <button className="icon-button" onClick={() => setScreen("home")} type="button">
           ←
@@ -1329,7 +1663,7 @@ function App() {
           </strong>
         </div>
         <button className="hint-pill hint-button" onClick={handleHint} type="button">
-          힌트 {appState.hints}
+          퀴즈힌트 {appState.hints}
         </button>
       </header>
 
@@ -1355,10 +1689,7 @@ function App() {
         aria-hidden="true"
         className="quiz-fighter-stand"
         data-fighter-id={selectedFighter.id}
-        style={fighterPortraitStyle(
-          selectedFighter,
-          Math.max(0, fighters.findIndex((fighter) => fighter.id === selectedFighter.id)),
-        )}
+        style={selectedFighterSceneStyle}
       />
 
       <section
@@ -1369,7 +1700,7 @@ function App() {
           <span className="question-topic-icon" aria-hidden="true" />
           <span>{formatTopicLabel(currentQuestion.topic)}</span>
         </div>
-        <p className="typewriter">{typedPrompt || currentQuestion.prompt.slice(0, 1)}</p>
+        <p className="typewriter">{typedPrompt || quizPromptText.slice(0, 1)}</p>
         {activeHint && <p className="hint-box">{activeHint}</p>}
       </section>
 
@@ -1408,7 +1739,7 @@ function App() {
           <strong>{isKo ? "털렸다..." : "15초 생존 성공!"}</strong>
           <p>
             {isKo
-              ? "깡패가 개미 주머니를 탈탈 털었다. 부활권이 있으면 한 번 더 뛴다."
+              ? "깡패가 개미 주머니를 탈탈 털었다. 광고를 보면 한 번 더 뛸 수 있다."
               : game.hintEarned
                 ? "개미가 돈다발을 쥐고 환호한다. 10콤보 힌트 +1!"
                 : "다음 판에는 10콤보 힌트까지 노려보자!"}
@@ -1426,7 +1757,7 @@ function App() {
                 onClick={() => handleReward("revive")}
                 type="button"
               >
-                {isRewardReady ? "광고 보고 1회 부활" : "부활 광고 준비 중"}
+                광고보고 부활하기
               </button>
             )}
             <button className="ghost-button" onClick={completeMiniGame} type="button">
@@ -1448,7 +1779,7 @@ function App() {
     }
 
     const seconds = Math.ceil(miniGame.remainingMs / 1000);
-    const chaseCandles = buildChaseCandles(candleStep);
+    const chaseCandles = buildChaseCandles(candleStep, miniGame.candleSeed);
     const actorIndexes = getChaseActorIndexes({
       targetIndex: CHASE_TARGET_INDEX,
       distance: miniGame.distance,
@@ -1458,6 +1789,7 @@ function App() {
     const chaserVisual = chaseCandles[actorIndexes.chaserIndex];
     const chartTrackOffsets = [0];
     const chartDuration = CHASE_STEP_SECONDS;
+    const isComboInvincible = miniGame.invincibleMs > 0;
     const motionStyle = {
       "--chart-track-width": `${CHASE_STEP_WIDTH}px`,
       "--chart-duration": `${chartDuration}s`,
@@ -1467,7 +1799,7 @@ function App() {
 
     return (
       <main
-        className={`game-shell ${miniGame.invincibleMs > 0 ? "is-invincible" : ""} ${
+        className={`game-shell ${isComboInvincible ? "is-invincible" : ""} ${
           isChasePaused ? "is-paused" : ""
         }`}
       >
@@ -1519,7 +1851,7 @@ function App() {
                     <g className="volume-layer">
                       {chaseCandles.map((candle) => (
                         <rect
-                          className={`volume-bar ${candle.direction}`}
+                          className={`volume-bar ${candle.direction} ${isComboInvincible ? "is-invincible-candle" : ""}`}
                           height={candle.volumeHeight * 0.55}
                           key={`v-${offset}-${candle.id}`}
                           width="6"
@@ -1531,7 +1863,7 @@ function App() {
                     <g className="candle-layer">
                       {chaseCandles.map((candle) => (
                         <g
-                          className={`chart-candle ${candle.direction} ${offset === 0 && candle.isCurrent ? "is-current" : ""}`}
+                          className={`chart-candle ${candle.direction} ${offset === 0 && candle.isCurrent ? "is-current" : ""} ${isComboInvincible ? "is-invincible-candle" : ""}`}
                           key={`c-${offset}-${candle.id}`}
                           transform={`translate(${candle.x + offset} 0)`}
                         >
@@ -1678,12 +2010,6 @@ function App() {
       <div className="fighter-grid full">
         {fighters.map((fighter, index) => renderFighterCard(fighter, false, index))}
       </div>
-      <RewardPanel
-        canUnlock={canUnlockFighter(appState) as boolean}
-        isReady={isRewardReady}
-        onReward={handleReward}
-        status={rewardStatus}
-      />
       {renderFighterPreview()}
     </main>
   );
@@ -1748,59 +2074,6 @@ function App() {
   }
 
   return renderHome();
-}
-
-function RewardPanel({
-  canUnlock,
-  isReady,
-  onReward,
-  status,
-}: {
-  canUnlock: boolean;
-  isReady: boolean;
-  onReward: (rewardKind: RewardKind) => void;
-  status: string;
-}) {
-  const randomFighterStatus = canUnlock
-    ? "광고 완료 시 잠긴 히든파이터 1명이 랜덤으로 열린다."
-    : status === "보상형 광고 대기 중"
-      ? "모든 히든파이터가 열렸다."
-      : status;
-
-  return (
-    <section className="panel reward-panel">
-      <div className="section-heading">
-        <div>
-          <span className="kicker">REWARD</span>
-          <h2>보상</h2>
-        </div>
-        <span className={isReady ? "ready-dot on" : "ready-dot"} />
-      </div>
-      <div className="reward-buttons">
-        <button
-          className={isReady && canUnlock ? "reward-button" : "reward-button is-disabled"}
-          disabled={!isReady || !canUnlock}
-          onClick={() => onReward("fighter-unlock")}
-          type="button"
-        >
-          {!canUnlock
-            ? "모든 파이터 오픈"
-            : isReady
-              ? "광고 보고 랜덤 파이터 열기"
-              : "랜덤 파이터 준비 중"}
-        </button>
-        <button
-          className={isReady ? "reward-button" : "reward-button is-disabled"}
-          disabled={!isReady}
-          onClick={() => onReward("revive")}
-          type="button"
-        >
-          {isReady ? "광고 보고 차트 추격전 1회 부활" : "부활 보상 준비 중"}
-        </button>
-      </div>
-      <p className="reward-status">{randomFighterStatus}</p>
-    </section>
-  );
 }
 
 export default App;
