@@ -5,7 +5,7 @@ export default defineConfig({
   brand: {
     displayName: "몽글 매치 퍼즐",
     primaryColor: "#7C4DFF",
-    icon: "",
+    icon: "https://mongle-match-puzzle.apps.tossmini.com/app-icon.png",
   },
   web: {
     host: "localhost",

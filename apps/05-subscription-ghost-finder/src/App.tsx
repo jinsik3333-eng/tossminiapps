@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import ghostSceneSource from "./assets/ghost-scene-source.jpg";
 import { TossBannerAd } from "./components/TossBannerAd";
-import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
+import { RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
 import { openContactsViralReward } from "./hooks/useContactsViralReward";
 
@@ -391,7 +391,6 @@ function App() {
   const [answers, setAnswers] = useState<Answers>({});
   const [history, setHistory] = useState<string[]>(() => loadHistory());
   const [routineOpen, setRoutineOpen] = useState(false);
-  const [isRewardNotifyOpen, setIsRewardNotifyOpen] = useState(false);
   const [homeClueCount, setHomeClueCount] = useState(0);
   const answerLockedRef = useRef(false);
   const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(
@@ -665,14 +664,8 @@ function App() {
           questTotal={3}
           links={REWARD_APP_LINKS.filter((link) => link.href !== "intoss://subscription-ghost-finder")}
           onPrimaryReward={openRoutine}
-          onOpenNotification={() => setIsRewardNotifyOpen(true)}
         />
         <StickyRewardCTA label="광고 보고 구독 정리 루틴 받기" onClick={openRoutine} />
-        <NotificationRewardSheet
-          open={isRewardNotifyOpen}
-          appLabel="구독료 유령 찾기"
-          onClose={() => setIsRewardNotifyOpen(false)}
-        />
         <ResultActionMenu
           items={[
             { label: "AD 정리 보상", onClick: openRoutine },
@@ -697,12 +690,6 @@ function App() {
             안 쓰는데 매달 빠지는 돈, 60초 점검
           </Top.SubtitleParagraph>
         }
-      />
-
-      <UtilityNudge
-        appLabel="구독료 유령 찾기"
-        notifyCopy="알림을 켜면 내일 유령 단서 미션을 놓치지 않아요."
-        loginCopy="로그인하면 7일 점검 기록을 더 안전하게 이어볼 수 있어요."
       />
 
       <section className="hero-card">
@@ -762,30 +749,6 @@ function App() {
         </div>
       </section>
     </main>
-  );
-}
-
-function UtilityNudge({
-  appLabel,
-  notifyCopy,
-  loginCopy,
-}: {
-  appLabel: string;
-  notifyCopy: string;
-  loginCopy: string;
-}) {
-  return (
-    <section
-      className="utility-nudge"
-      aria-label={`${appLabel} 알림과 로그인 안내`}
-    >
-      <div>
-        <span className="utility-bell" aria-hidden="true" />
-        <strong>내일도 이어보기</strong>
-      </div>
-      <p>{notifyCopy}</p>
-      <p>{loginCopy}</p>
-    </section>
   );
 }
 

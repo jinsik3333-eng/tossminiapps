@@ -5,7 +5,7 @@ export default defineConfig({
   brand: {
     displayName: "몽글 디펜스",
     primaryColor: "#6A7CFF",
-    icon: "",
+    icon: "https://mongle-defense.apps.tossmini.com/app-icon.png",
   },
   web: {
     host: "localhost",

@@ -39,7 +39,7 @@ import {
 import "./App.css";
 
 type Screen = "home" | "intro" | "quiz" | "chase" | "collection" | "ending";
-type LocalPreviewMode = "ending" | "quiz" | "chase" | null;
+type LocalPreviewMode = "intro" | "ending" | "quiz" | "chase" | null;
 type RewardKind = "fighter-unlock" | "revive";
 type Direction = "up" | "down" | "late";
 type ChaseOverlay = "guide-heat" | "guide-controls" | "3" | "2" | "1" | "GO" | null;
@@ -390,7 +390,10 @@ function getLocalPreviewMode(): LocalPreviewMode {
     hostname === "::1";
   const preview = searchParams.get("preview");
 
-  if (!isLocalHost || (preview !== "ending" && preview !== "quiz" && preview !== "chase")) {
+  if (
+    !isLocalHost ||
+    (preview !== "intro" && preview !== "ending" && preview !== "quiz" && preview !== "chase")
+  ) {
     return null;
   }
 
@@ -469,10 +472,19 @@ function nextQuestionFrom(state: AppState): Question {
 
 function App() {
   const localPreviewMode = getLocalPreviewMode();
+  const isIntroPreview = localPreviewMode === "intro";
   const isEndingPreview = localPreviewMode === "ending";
   const isQuizPreview = localPreviewMode === "quiz";
   const isChasePreview = localPreviewMode === "chase";
-  const initialScreen: Screen = isEndingPreview ? "ending" : isQuizPreview ? "quiz" : isChasePreview ? "chase" : "home";
+  const initialScreen: Screen = isIntroPreview
+    ? "intro"
+    : isEndingPreview
+      ? "ending"
+      : isQuizPreview
+        ? "quiz"
+        : isChasePreview
+          ? "chase"
+          : "home";
   const [screen, setScreen] = useState<Screen>(initialScreen);
   const [appState, setAppState] = useState<AppState>(() => readInitialState(localPreviewMode));
   const [activeHint, setActiveHint] = useState<string | null>(null);

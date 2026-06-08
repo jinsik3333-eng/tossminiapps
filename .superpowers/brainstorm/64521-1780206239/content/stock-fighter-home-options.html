@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>주식 파이터 홈 / 히어로 선택 방향</title>
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #f4f7fb;
+    color: #14213a;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 28px;
+  }
+
+  .subtitle {
+    margin: 0 0 22px;
+    color: #2d3a52;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .sf-board {
+    background: #101014;
+    border: 4px solid #f8d05d;
+    box-shadow: 0 0 0 5px #2a1c49, 12px 12px 0 #000;
+    color: #fff3c4;
+    padding: 18px;
+  }
+
+  .sf-title {
+    color: #ffe84c;
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 48px;
+    line-height: 0.95;
+    margin: 0;
+    text-shadow: 3px 3px 0 #e9453f, 6px 6px 0 #1565c0;
+  }
+
+  .sf-subtitle {
+    color: #63f0ff;
+    margin: 8px 0 16px;
+    font-size: 15px;
+  }
+
+  .sf-preview {
+    width: 100%;
+    border: 3px solid #fff3c4;
+    image-rendering: pixelated;
+    box-shadow: 7px 7px 0 #000;
+  }
+
+  .sf-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .sf-option {
+    cursor: pointer;
+    border: 3px solid #fff3c4;
+    background: linear-gradient(180deg, #273c75, #15162b 55%, #3f1c4f);
+    box-shadow: 8px 8px 0 #000;
+    min-height: 520px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sf-option[data-choice="b"] {
+    background: linear-gradient(180deg, #e9f7ff, #ffffff 46%, #ffefad);
+    color: #1b2035;
+  }
+
+  .sf-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ffef4d;
+    font: 20px Impact, "Arial Black", sans-serif;
+    text-shadow: 2px 2px 0 #e9453f;
+  }
+
+  .sf-health {
+    height: 18px;
+    flex: 1;
+    margin: 0 10px;
+    background: linear-gradient(90deg, #e22 0 28%, #fff72c 28% 76%, #1fe34f 76%);
+    border: 3px solid #222;
+  }
+
+  .sf-stage {
+    min-height: 192px;
+    margin-top: 12px;
+    border: 3px solid #07182d;
+    background:
+      linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px),
+      linear-gradient(180deg, #74d7ff 0 40%, #a45a3d 40% 64%, #34324a 64%);
+    background-size: 28px 28px, 28px 28px, 100% 100%;
+    position: relative;
+  }
+
+  .sf-option[data-choice="b"] .sf-stage {
+    background:
+      linear-gradient(rgba(47, 88, 134, .17) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 88, 134, .15) 1px, transparent 1px),
+      #fff;
+    background-size: 24px 24px;
+  }
+
+  .sf-big-fighter,
+  .sf-rival {
+    position: absolute;
+    bottom: 12px;
+    width: 88px;
+    height: 132px;
+  }
+
+  .sf-big-fighter {
+    left: 24px;
+  }
+
+  .sf-rival {
+    right: 22px;
+    filter: grayscale(.4) contrast(1.1);
+  }
+
+  .sf-head,
+  .sf-torso,
+  .sf-leg,
+  .sf-arm,
+  .sf-hair,
+  .sf-glove {
+    position: absolute;
+    image-rendering: pixelated;
+  }
+
+  .sf-head {
+    width: 32px;
+    height: 30px;
+    left: 28px;
+    top: 10px;
+    background: #f0b173;
+    box-shadow: 7px 0 #ffd7a2, 0 7px #8b4d2e;
+  }
+
+  .sf-hair {
+    width: 42px;
+    height: 14px;
+    left: 22px;
+    top: 2px;
+    background: #1c1514;
+    box-shadow: 8px 8px #1c1514;
+  }
+
+  .sf-torso {
+    width: 46px;
+    height: 48px;
+    left: 22px;
+    top: 42px;
+    background: #ffe8c2;
+    box-shadow: 8px 0 #e9453f, -8px 12px #1559d1;
+  }
+
+  .sf-leg {
+    width: 22px;
+    height: 42px;
+    top: 90px;
+    background: #f6f0d8;
+  }
+
+  .sf-leg.one { left: 22px; transform: skewX(-12deg); }
+  .sf-leg.two { left: 50px; transform: skewX(12deg); }
+
+  .sf-arm {
+    width: 18px;
+    height: 46px;
+    top: 50px;
+    background: #f0b173;
+  }
+
+  .sf-arm.one { left: 4px; transform: rotate(42deg); }
+  .sf-arm.two { right: 4px; transform: rotate(-42deg); }
+
+  .sf-glove {
+    width: 24px;
+    height: 20px;
+    background: #e92f34;
+    top: 72px;
+    box-shadow: 4px 4px #5f1014;
+  }
+
+  .sf-glove.one { left: 0; }
+  .sf-glove.two { right: 0; }
+
+  .sf-rival .sf-torso {
+    background: #e3b17c;
+    box-shadow: 8px 0 #893ed9, -8px 14px #a35f2a;
+  }
+
+  .sf-roster {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .sf-slot {
+    min-height: 74px;
+    border: 2px solid #f9d466;
+    background: #171724;
+    position: relative;
+    box-shadow: inset 0 -8px rgba(0,0,0,.34);
+    overflow: hidden;
+  }
+
+  .sf-option[data-choice="b"] .sf-slot {
+    background: #f4f6ff;
+    border-color: #284f90;
+  }
+
+  .sf-face {
+    width: 36px;
+    height: 42px;
+    margin: 6px auto 2px;
+    background: var(--c, #d0d0d0);
+    clip-path: polygon(28% 0, 78% 0, 100% 34%, 80% 100%, 22% 100%, 0 34%);
+    box-shadow: inset -8px -8px rgba(0,0,0,.28), 5px 5px #000;
+  }
+
+  .sf-locked .sf-face {
+    background: #b7b7b7;
+    filter: grayscale(1);
+  }
+
+  .sf-slot small {
+    display: block;
+    padding: 0 2px 5px;
+    color: #fff3c4;
+    font-size: 9px;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  .sf-option[data-choice="b"] .sf-slot small {
+    color: #1e315a;
+  }
+
+  .sf-chip {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 8px;
+    background: #e9453f;
+    border: 2px solid #fff3c4;
+    color: white;
+    box-shadow: 4px 4px #000;
+    font-size: 12px;
+  }
+
+  .sf-caption {
+    margin: 14px 0 0;
+    color: #fff3c4;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .sf-option[data-choice="b"] .sf-caption {
+    color: #1b2035;
+  }
+
+  @media (max-width: 900px) {
+    .sf-split {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h2>주식 파이터 홈/히어로 선택 방향</h2>
+<p class="subtitle">아래 목업은 구현 전 방향성 확인용입니다. 이미지는 실제 번들에 바로 넣는 것이 아니라, 색감/밀도/캐릭터 실루엣 기준을 잡기 위한 레퍼런스입니다.</p>
+
+<div class="sf-board">
+  <p class="sf-subtitle">AI 무드보드: 격투 아케이드 셀렉트 화면 밀도</p>
+  <img class="sf-preview" src="stock-fighter-home-reference.png" alt="주식 파이터 홈 화면 무드보드" />
+</div>
+
+<div class="sf-split">
+  <section class="sf-option option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="sf-topbar">
+      <span>1P 030700</span>
+      <div class="sf-health"></div>
+      <span>PUSH START</span>
+    </div>
+    <h3 class="sf-title">주식 파이터</h3>
+    <div class="sf-stage">
+      <div class="sf-big-fighter">
+        <i class="sf-hair"></i><i class="sf-head"></i><i class="sf-torso"></i>
+        <i class="sf-arm one"></i><i class="sf-arm two"></i>
+        <i class="sf-glove one"></i><i class="sf-glove two"></i>
+        <i class="sf-leg one"></i><i class="sf-leg two"></i>
+      </div>
+      <div class="sf-rival">
+        <i class="sf-hair"></i><i class="sf-head"></i><i class="sf-torso"></i>
+        <i class="sf-arm one"></i><i class="sf-arm two"></i>
+        <i class="sf-glove one"></i><i class="sf-glove two"></i>
+        <i class="sf-leg one"></i><i class="sf-leg two"></i>
+      </div>
+    </div>
+    <div class="sf-roster">
+      <div class="sf-slot"><div class="sf-face" style="--c:#e9453f"></div><small>개미 파이터</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>금발 관세왕</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>후디 소셜왕</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>로켓 괴짜</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>우주 택배왕</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>밈 코인 강아지</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>AI 보스</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>메모리 재벌</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>반도체 회장님</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>전기차 장인</small></div>
+    </div>
+    <span class="sf-chip">추천: 홈은 격투게임 셀렉트처럼 강하게</span>
+    <p class="sf-caption">장점: 요청한 레퍼런스와 가장 가깝고 B급 아케이드 쾌감이 큼. 단점: 퀴즈 앱 치고 시각 밀도가 높아 UI 정리가 필요.</p>
+  </section>
+
+  <section class="sf-option option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="sf-topbar" style="color:#19448a;text-shadow:2px 2px 0 #ffcf47">
+      <span>QUIZ 000</span>
+      <div class="sf-health"></div>
+      <span>CHART READY</span>
+    </div>
+    <h3 class="sf-title" style="font-size:42px">주식 파이터</h3>
+    <div class="sf-stage">
+      <svg viewBox="0 0 360 150" style="position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px)">
+        <polyline points="0,110 30,92 58,100 82,66 112,78 142,44 166,70 196,54 224,88 252,40 286,55 320,24 356,48" fill="none" stroke="#1d62d1" stroke-width="5"/>
+        <g fill="#e93434"><rect x="34" y="74" width="14" height="44"/><rect x="116" y="54" width="14" height="54"/><rect x="252" y="58" width="14" height="64"/></g>
+        <g fill="#1d62d1"><rect x="72" y="62" width="14" height="58"/><rect x="178" y="70" width="14" height="42"/><rect x="306" y="46" width="14" height="74"/></g>
+      </svg>
+      <div class="sf-big-fighter">
+        <i class="sf-hair"></i><i class="sf-head"></i><i class="sf-torso"></i>
+        <i class="sf-arm one"></i><i class="sf-arm two"></i>
+        <i class="sf-glove one"></i><i class="sf-glove two"></i>
+        <i class="sf-leg one"></i><i class="sf-leg two"></i>
+      </div>
+    </div>
+    <div class="sf-roster">
+      <div class="sf-slot"><div class="sf-face" style="--c:#e9453f"></div><small>개미 파이터</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>금발 관세왕</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>후디 소셜왕</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>로켓 괴짜</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>우주 택배왕</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>AI 보스</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>차트 도사</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>손절 검객</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>공시 닌자</small></div>
+      <div class="sf-slot sf-locked"><div class="sf-face"></div><small>호가 사냥꾼</small></div>
+    </div>
+    <span class="sf-chip" style="background:#1d62d1">대안: 주식 차트 정체성을 더 전면에</span>
+    <p class="sf-caption">장점: 금융 교육 앱이라는 정체성이 분명하고 미니게임의 흰 차트 배경과 이어짐. 단점: 격투게임 감성은 A보다 약함.</p>
+  </section>
+</div>
+</body>
+</html>

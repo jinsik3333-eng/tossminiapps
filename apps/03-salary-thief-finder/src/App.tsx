@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
-import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
+import { RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
 import { openContactsViralReward } from "./hooks/useContactsViralReward";
 import salaryThiefHero from "./assets/salary-thief-hero.jpg";
@@ -303,7 +303,6 @@ export default function App() {
   const [evidenceCount, setEvidenceCount] = useState(0);
   const [stamps, setStamps] = useState(getStoredStamps);
   const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(null);
-  const [isRewardNotifyOpen, setIsRewardNotifyOpen] = useState(false);
   const ads = useInAppAds(REWARDED_AD_GROUP_ID);
   const todayCase = useMemo(getTodayCase, []);
   const todayMission = useMemo(getTodayMission, []);
@@ -498,14 +497,8 @@ export default function App() {
             questTotal={result.evidence.length}
             links={REWARD_APP_LINKS.filter((link) => link.href !== "intoss://salary-thief-finder")}
             onPrimaryReward={openRewardRoutine}
-            onOpenNotification={() => setIsRewardNotifyOpen(true)}
           />
           <StickyRewardCTA label="광고 보고 방어 루틴 받기" onClick={openRewardRoutine} />
-          <NotificationRewardSheet
-            open={isRewardNotifyOpen}
-            appLabel="월급 도둑 찾기"
-            onClose={() => setIsRewardNotifyOpen(false)}
-          />
           <ResultActionMenu
             items={[
               { label: "AD 방어 보상", onClick: openRewardRoutine },
@@ -522,12 +515,6 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <UtilityNudge
-        appLabel="월급 도둑 찾기"
-        notifyCopy="알림을 켜면 내일 수사 미션을 놓치지 않아요."
-        loginCopy="로그인하면 7일 수사 기록을 더 안전하게 이어볼 수 있어요."
-      />
-
       <section className="home-card">
         <p className="eyebrow">오늘의 사건 · {todayCase}</p>
         <h1>이번 달 내 월급을 훔쳐간 범인은?</h1>
@@ -566,30 +553,6 @@ export default function App() {
       </section>
       <BannerAd label="월급 도둑 찾기 홈 광고" />
     </main>
-  );
-}
-
-function UtilityNudge({
-  appLabel,
-  notifyCopy,
-  loginCopy,
-}: {
-  appLabel: string;
-  notifyCopy: string;
-  loginCopy: string;
-}) {
-  return (
-    <section
-      className="utility-nudge"
-      aria-label={`${appLabel} 알림과 로그인 안내`}
-    >
-      <div>
-        <span className="utility-bell" aria-hidden="true" />
-        <strong>내일도 이어보기</strong>
-      </div>
-      <p>{notifyCopy}</p>
-      <p>{loginCopy}</p>
-    </section>
   );
 }
 

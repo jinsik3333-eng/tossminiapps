@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>주식 파이터 미니게임 실행 화면 v2</title>
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #f4f7fb;
+    color: #14213a;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 28px;
+  }
+
+  .subtitle {
+    margin: 0 0 22px;
+    color: #2d3a52;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .single-screen {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .screen-card {
+    border: 4px solid #f7d35d;
+    background: #101827;
+    box-shadow: 10px 10px 0 #000;
+    padding: 14px;
+  }
+
+  .screen-card img {
+    display: block;
+    width: 100%;
+    border: 2px solid #ffffff;
+    image-rendering: pixelated;
+    box-shadow: 6px 6px 0 #000;
+  }
+
+  .spec {
+    display: grid;
+    gap: 10px;
+  }
+
+  .spec h3 {
+    margin: 0 0 8px;
+    color: #ffe75a;
+    font-family: Impact, "Arial Black", sans-serif;
+    font-size: 32px;
+    text-shadow: 2px 2px 0 #d3382f, 4px 4px 0 #1d5ed1;
+  }
+
+  .spec-card {
+    border: 2px solid #2c4d83;
+    background: #f7fbff;
+    color: #14213a;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .spec-card strong {
+    display: block;
+    color: #d3382f;
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 980px) {
+    .single-screen {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h2>미니게임 실행 화면 v2</h2>
+<p class="subtitle">캐릭터를 홈/도감 초상화보다 단순한 게임 스프라이트로 낮추고, 크기를 약간 줄인 버전입니다.</p>
+
+<div class="single-screen">
+  <section class="screen-card">
+    <img src="stock-fighter-minigame-screen-v2.png" alt="주식 파이터 미니게임 실행 화면 v2" />
+  </section>
+
+  <section class="spec">
+    <h3>구현 기준</h3>
+    <div class="spec-card">
+      <strong>캐릭터 스케일</strong>
+      플레이 중 캐릭터는 홈 초상화보다 단순하고 작게. 차트 영역 높이의 약 12~15%, 캔들 2개 폭 정도.
+    </div>
+    <div class="spec-card">
+      <strong>점프 이동</strong>
+      정답 버튼을 누르면 현재 캔들에서 다음 캔들로 포물선 이동. 추격자도 2캔들 뒤에서 같은 타이밍으로 점프.
+    </div>
+    <div class="spec-card">
+      <strong>차트 구현</strong>
+      배경 PNG에 고정하지 않고 코드로 20개 이상 캔들을 생성해 오른쪽에서 왼쪽으로 한 틱씩 흐르게 구현.
+    </div>
+    <div class="spec-card">
+      <strong>콤보 연출</strong>
+      중앙 COMBO는 캐릭터를 완전히 가리지 않게 짧게 확대/페이드. 20콤보 때만 블랙 배경 전환 + 파이터별 이펙트.
+    </div>
+  </section>
+</div>
+</body>
+</html>

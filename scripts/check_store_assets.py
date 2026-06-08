@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""Validate Apps in Toss store image assets for apps 1~6.
+"""Validate Apps in Toss store image assets.
 
 Checks the assets that caused Toss review rejection:
 - icons/logos/thumbnails must be exact size, full-square, and have no transparent pixels
 - console upload copies under assets/app-store must match the same rule
 - optional app-store zip bundles must contain the corrected images
+
+By default this checks apps 1~6. Pass app directory glob patterns to check another
+batch, for example:
+
+    python3 scripts/check_store_assets.py '0[7-9]-*' '1[0-2]-*'
 """
 from __future__ import annotations
 
@@ -16,7 +21,7 @@ import zipfile
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-APP_GLOB = "0[1-6]-*"
+DEFAULT_APP_GLOBS = ["0[1-6]-*"]
 
 PUBLIC_EXPECTED = {
     "public/app-icon.png": (600, 600),
@@ -117,9 +122,16 @@ def check_zip(zip_path: Path) -> list[str]:
 
 def main() -> int:
     errors: list[str] = []
-    apps = sorted((ROOT / "apps").glob(APP_GLOB))
+    app_globs = sys.argv[1:] or DEFAULT_APP_GLOBS
+    apps = []
+    seen: set[Path] = set()
+    for app_glob in app_globs:
+        for app in sorted((ROOT / "apps").glob(app_glob)):
+            if app not in seen:
+                apps.append(app)
+                seen.add(app)
     if not apps:
-        print("No apps/0[1-6]-* directories found.", file=sys.stderr)
+        print(f"No apps found for patterns: {', '.join(app_globs)}", file=sys.stderr)
         return 2
 
     for app in apps:

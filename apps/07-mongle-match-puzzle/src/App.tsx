@@ -1,15 +1,33 @@
+import { generateHapticFeedback, type HapticFeedbackType } from "@apps-in-toss/web-framework";
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 
 import "./App.css";
+import { TossBannerAd } from "./components/TossBannerAd";
+import { useRewardedAd } from "./hooks/useRewardedAd";
 import {
   BOARD_SIZE,
+  type BoardFloatPosition,
   type Position,
+  type PowerUpReward,
+  type PowerUpType,
   type Tile,
-  type TileType,
-  TILE_TYPES,
   createBoard,
+  getMatchedAreaCenter,
   resolveMove,
+  resolvePowerUp,
+  resolveStalemate,
 } from "./lib/gameLogic";
+import {
+  DIFFICULTY_STAGES,
+  calculateStageCoinReward,
+  calculateStageStars,
+  clampStageLevel,
+  getNextStageLevel,
+  getStage,
+  mergeStageResult,
+  type DifficultyStage,
+  type StageResults,
+} from "./lib/progression";
 import {
   type GameProfile,
   getGameProfileOrFallback,
@@ -19,6 +37,8 @@ import {
 
 type GameStatus = "home" | "playing" | "won" | "lost";
 type Rarity = "common" | "rare" | "epic" | "unique";
+type ActivePanel = "menu" | "stage" | "tournament" | "ranking" | "shop" | "sound" | "controls" | null;
+type PowerUpInventory = Record<PowerUpType, number>;
 
 type CollectibleMongle = {
   id: string;
@@ -38,51 +58,32 @@ type SwapAnimation = {
   invalid: boolean;
 } | null;
 type FallDistances = Record<string, number>;
-type DifficultyStage = {
-  level: number;
+type ImpactBurst = {
+  id: number;
+  kind: "basic" | "line4" | "line5" | "bingo" | "cascade" | "square" | "item";
   label: string;
-  targetScore: number;
-  moves: number;
-  tileTypes: TileType[];
-  note: string;
+  score: number;
+  hammerDelta: number;
+  position: BoardFloatPosition;
+  rewards?: PowerUpReward[];
+} | null;
+type BgmController = {
+  context: AudioContext;
+  masterGain: GainNode;
+  intervalId: number;
+  step: number;
+};
+type LastStageReward = {
+  stars: number;
+  coinReward: number;
 };
 
-const DIFFICULTY_STAGES: DifficultyStage[] = [
-  {
-    level: 1,
-    label: "연습 숲",
-    targetScore: 420,
-    moves: 24,
-    tileTypes: ["berry", "leaf", "star", "drop"],
-    note: "4종 타일로 감 잡기",
-  },
-  {
-    level: 2,
-    label: "말랑 언덕",
-    targetScore: 540,
-    moves: 22,
-    tileTypes: TILE_TYPES,
-    note: "5종 타일로 진짜 매치 시작",
-  },
-  {
-    level: 3,
-    label: "반짝 협곡",
-    targetScore: 660,
-    moves: 20,
-    tileTypes: TILE_TYPES,
-    note: "목표 점수가 올라가요",
-  },
-  {
-    level: 4,
-    label: "유니크 문",
-    targetScore: 780,
-    moves: 18,
-    tileTypes: TILE_TYPES,
-    note: "이동 수가 줄어드는 챌린지",
-  },
-];
 const COLLECTION_STORAGE_KEY = "mongle-match-collection-v1";
 const STAGE_STORAGE_KEY = "mongle-match-stage-v1";
+const UNLOCKED_STAGE_STORAGE_KEY = "mongle-match-unlocked-stage-v1";
+const STAGE_RESULTS_STORAGE_KEY = "mongle-match-stage-results-v1";
+const BANNER_AD_GROUP_ID = import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
+const REWARDED_AD_GROUP_ID = import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 const PREMIUM_ASSETS_READY = true;
 
 const RARITY_META: Record<Rarity, { label: string; shortLabel: string; className: string }> = {
@@ -1085,12 +1086,51 @@ const MONGLE_POOL: CollectibleMongle[] = MONGLE_ITEMS.map((mongle) => ({
 }));
 
 
-const TILE_META: Record<Tile["type"], { label: string; emoji: string }> = {
-  berry: { label: "베리", emoji: "🫐" },
-  leaf: { label: "잎", emoji: "🌿" },
-  star: { label: "별", emoji: "⭐" },
-  drop: { label: "물방울", emoji: "💧" },
-  moon: { label: "달", emoji: "🌙" },
+const TILE_META: Record<Tile["type"], { label: string; imageSrc: string }> = {
+  berry: { label: "딸기 케이크몽", imageSrc: "/game-assets/match/tile-strawberry-cake.png" },
+  leaf: { label: "레몬 타르트몽", imageSrc: "/game-assets/match/tile-lemon-tart.png" },
+  star: { label: "멜론 젤리몽", imageSrc: "/game-assets/match/tile-melon-jelly.png" },
+  drop: { label: "블루베리 소다몽", imageSrc: "/game-assets/match/tile-blueberry-soda.png" },
+  moon: { label: "포도 수정몽", imageSrc: "/game-assets/match/tile-grape-crystal.png" },
+};
+
+const POWER_UP_ORDER: PowerUpType[] = ["hammer", "rowClear", "colClear", "bomb", "colorClear", "shuffle"];
+
+const POWER_UP_META: Record<PowerUpType, { imageSrc: string; label: string; shortLabel: string; shopLabel: string; effect: string; cost: number }> = {
+  hammer: { imageSrc: "/game-assets/match/power-hammer.png", label: "토이 해머", shortLabel: "망치", shopLabel: "토이 해머", effect: "원하는 블록 1개 삭제", cost: 180 },
+  rowClear: { imageSrc: "/game-assets/match/power-row-rocket.png", label: "가로 로켓", shortLabel: "가로", shopLabel: "가로 로켓", effect: "선택한 가로줄 삭제", cost: 260 },
+  colClear: { imageSrc: "/game-assets/match/power-col-rocket.png", label: "세로 로켓", shortLabel: "세로", shopLabel: "세로 로켓", effect: "선택한 세로줄 삭제", cost: 260 },
+  bomb: { imageSrc: "/game-assets/match/power-bomb-candy.png", label: "캔디 폭탄", shortLabel: "폭탄", shopLabel: "캔디 폭탄", effect: "주변 3x3 칸 폭발", cost: 360 },
+  colorClear: { imageSrc: "/game-assets/match/power-rainbow-pop.png", label: "레인보우 팝", shortLabel: "전체", shopLabel: "레인보우 팝", effect: "같은 블록 전부 삭제", cost: 520 },
+  shuffle: { imageSrc: "/game-assets/match/power-shuffle-dice.png", label: "매직 셔플", shortLabel: "믹스", shopLabel: "매직 셔플", effect: "보드를 바로 섞기", cost: 140 },
+};
+
+const COIN_IMAGE_SRC = "/game-assets/match/coin-jelly.png";
+const MENU_ASSET_SRC = {
+  titlePlaque: "/game-assets/match/menu-title-plaque.png",
+  close: "/game-assets/match/menu-close.png",
+  decorLeft: "/game-assets/match/menu-decor-left.png",
+  decorRight: "/game-assets/match/menu-decor-right.png",
+  sparkleCoins: "/game-assets/match/menu-sparkle-coins.png",
+  icons: {
+    home: "/game-assets/match/menu-icon-home.png",
+    restart: "/game-assets/match/menu-icon-restart.png",
+    stage: "/game-assets/match/menu-icon-stage.png",
+    tournament: "/game-assets/match/menu-icon-tournament.png",
+    ranking: "/game-assets/match/menu-icon-ranking.png",
+    shop: "/game-assets/match/menu-icon-shop.png",
+    sound: "/game-assets/match/menu-icon-sound.png",
+    controls: "/game-assets/match/menu-icon-controls.png",
+  },
+} as const;
+
+const INITIAL_POWER_UPS: PowerUpInventory = {
+  hammer: 0,
+  rowClear: 0,
+  colClear: 0,
+  bomb: 0,
+  colorClear: 0,
+  shuffle: 1,
 };
 
 function App() {
@@ -1109,9 +1149,24 @@ function App() {
   const [fallDistances, setFallDistances] = useState<FallDistances>({});
   const [isSettlingBoard, setIsSettlingBoard] = useState(false);
   const [isAnimatingMove, setIsAnimatingMove] = useState(false);
+  const [powerUps, setPowerUps] = useState<PowerUpInventory>(INITIAL_POWER_UPS);
+  const [activePowerUp, setActivePowerUp] = useState<PowerUpType | null>(null);
+  const [coins, setCoins] = useState(320);
+  const [activePanel, setActivePanel] = useState<ActivePanel>(null);
+  const [soundOn, setSoundOn] = useState(true);
+  const [musicOn, setMusicOn] = useState(true);
+  const [hapticOn, setHapticOn] = useState(true);
+  const [impactBurst, setImpactBurst] = useState<ImpactBurst>(null);
   const [todayMongle, setTodayMongle] = useState<CollectibleMongle>(() => drawMongle());
+  const [bonusMongle, setBonusMongle] = useState<CollectibleMongle | null>(null);
   const [collection, setCollection] = useState<CollectionState>(() => loadCollection());
   const [stageLevel, setStageLevel] = useState(() => loadStageLevel());
+  const [unlockedStageLevel, setUnlockedStageLevel] = useState(() => loadUnlockedStageLevel());
+  const [stageResults, setStageResults] = useState<StageResults>(() => loadStageResults());
+  const [lastFinishedStage, setLastFinishedStage] = useState<DifficultyStage | null>(null);
+  const [lastStageReward, setLastStageReward] = useState<LastStageReward | null>(null);
+  const bgmRef = useRef<BgmController | null>(null);
+  const rewardedAd = useRewardedAd(REWARDED_AD_GROUP_ID);
 
   const stage = useMemo(() => getStage(stageLevel), [stageLevel]);
   const leaderboardScore = useMemo(
@@ -1134,6 +1189,14 @@ function App() {
   }, []);
 
   useEffect(() => {
+    return () => stopBgm();
+  }, []);
+
+  useEffect(() => {
+    if (!musicOn) stopBgm();
+  }, [musicOn]);
+
+  useEffect(() => {
     if ((status === "won" || status === "lost") && leaderboardScore > 0) {
       submitScoreOnce(leaderboardScore, playId).then((result) => {
         const labelByStatus = {
@@ -1150,7 +1213,11 @@ function App() {
 
   function startGame() {
     const nextMongle = drawMongle();
+    if (musicOn) startBgm();
     setTodayMongle(nextMongle);
+    setBonusMongle(null);
+    setLastFinishedStage(null);
+    setLastStageReward(null);
     setBoard(createBoard({ tileTypes: stage.tileTypes }));
     setSelected(null);
     setScore(0);
@@ -1164,16 +1231,193 @@ function App() {
     setFallDistances({});
     setIsSettlingBoard(false);
     setIsAnimatingMove(false);
+    setActivePowerUp(null);
+    setImpactBurst(null);
+    setActivePanel(null);
     setStatus("playing");
   }
 
-  function finishGame(nextStatus: "won" | "lost") {
+  function finishGame(nextStatus: "won" | "lost", finalScore = score) {
+    const finishedStage = stage;
+    const stars = calculateStageStars(finalScore, finishedStage.targetScore);
+    const coinReward = calculateStageCoinReward(finalScore, stars);
+    const nextStageLevel = getNextStageLevel(finishedStage.level);
     setStatus(nextStatus);
-    setMessage(nextStatus === "won" ? "몽글 조각 획득!" : "아쉽지만 몽글 조각은 찾았어요");
+    setLastFinishedStage(finishedStage);
+    setLastStageReward({ stars, coinReward });
+    setCoins((current) => current + coinReward);
+    setMessage(nextStatus === "won" ? `몽글 조각 획득! 젤리코인 +${coinReward}` : `아쉽지만 조각과 젤리코인 +${coinReward}`);
+    setActivePowerUp(null);
     setCollection((current) => saveCollectedMongle(current, todayMongle.id));
+    setStageResults((current) => saveStageResults(mergeStageResult(current, finishedStage.level, finalScore, coinReward, stars)));
     if (nextStatus === "won") {
-      setStageLevel((current) => saveStageLevel(Math.min(current + 1, DIFFICULTY_STAGES.length)));
+      setStageLevel(saveStageLevel(nextStageLevel));
+      setUnlockedStageLevel((current) => saveUnlockedStageLevel(Math.max(current, nextStageLevel)));
     }
+  }
+
+  function triggerImpact(nextImpact: NonNullable<ImpactBurst>) {
+    setImpactBurst(nextImpact);
+    playFeedbackTone(nextImpact.kind);
+    window.setTimeout(() => {
+      setImpactBurst((current) => (current?.id === nextImpact.id ? null : current));
+    }, 900);
+  }
+
+  function startBgm() {
+    if (bgmRef.current) return;
+
+    try {
+      const AudioContextClass = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return;
+      const context = new AudioContextClass();
+      void context.resume?.();
+      const masterGain = context.createGain();
+      masterGain.gain.setValueAtTime(0.001, context.currentTime);
+      masterGain.gain.exponentialRampToValueAtTime(0.045, context.currentTime + 0.22);
+      masterGain.connect(context.destination);
+
+      const controller: BgmController = {
+        context,
+        masterGain,
+        intervalId: 0,
+        step: 0,
+      };
+
+      const playStep = () => {
+        playBgmStep(controller);
+        controller.step += 1;
+      };
+
+      playStep();
+      controller.intervalId = window.setInterval(playStep, 420);
+      bgmRef.current = controller;
+    } catch {
+      // 자동 재생 제한 환경에서는 다음 사용자 터치 때 다시 시도한다.
+    }
+  }
+
+  function stopBgm() {
+    const controller = bgmRef.current;
+    if (!controller) return;
+
+    window.clearInterval(controller.intervalId);
+    bgmRef.current = null;
+
+    try {
+      controller.masterGain.gain.setTargetAtTime(0.001, controller.context.currentTime, 0.05);
+      window.setTimeout(() => void controller.context.close(), 180);
+    } catch {
+      // 이미 닫힌 오디오 컨텍스트는 무시한다.
+    }
+  }
+
+  function playBgmStep(controller: BgmController) {
+    const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880, 698.46];
+    const bass = [261.63, 0, 329.63, 0, 293.66, 0, 349.23, 0];
+    const index = controller.step % melody.length;
+    playBgmNote(controller, melody[index], 0.18, "triangle", 0.018);
+    if (bass[index] > 0) playBgmNote(controller, bass[index], 0.22, "sine", 0.012);
+  }
+
+  function playBgmNote(
+    controller: BgmController,
+    frequency: number,
+    duration: number,
+    oscillatorType: OscillatorType,
+    volume: number,
+  ) {
+    const oscillator = controller.context.createOscillator();
+    const gain = controller.context.createGain();
+    const startTime = controller.context.currentTime;
+    oscillator.frequency.setValueAtTime(frequency, startTime);
+    oscillator.type = oscillatorType;
+    gain.gain.setValueAtTime(0.001, startTime);
+    gain.gain.exponentialRampToValueAtTime(volume, startTime + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+    oscillator.connect(gain);
+    gain.connect(controller.masterGain);
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration + 0.02);
+  }
+
+  function handleMusicChange(next: boolean) {
+    setMusicOn(next);
+    if (next) {
+      startBgm();
+      return;
+    }
+
+    stopBgm();
+  }
+
+  function handleHapticChange(next: boolean) {
+    setHapticOn(next);
+    if (next) runHaptic("tap", [14, 28, 14]);
+  }
+
+  function playFeedbackTone(kind: NonNullable<ImpactBurst>["kind"]) {
+    if (!soundOn) return;
+
+    try {
+      const AudioContextClass = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) return;
+      const context = new AudioContextClass();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const frequencyByKind: Record<NonNullable<ImpactBurst>["kind"], number> = {
+        basic: 420,
+        line4: 560,
+        line5: 720,
+        bingo: 820,
+        cascade: 680,
+        square: 610,
+        item: 500,
+      };
+      oscillator.frequency.value = frequencyByKind[kind];
+      oscillator.type = kind === "line5" || kind === "bingo" ? "triangle" : "sine";
+      gain.gain.setValueAtTime(0.001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.08, context.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.16);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.18);
+      window.setTimeout(() => void context.close(), 240);
+    } catch {
+      // 사운드 API가 막힌 환경에서는 조용히 지나간다.
+    }
+  }
+
+  function runHaptic(type: HapticFeedbackType, fallbackPattern: VibratePattern = 12) {
+    try {
+      void generateHapticFeedback({ type });
+      return;
+    } catch {
+      window.navigator.vibrate?.(fallbackPattern);
+    }
+  }
+
+  function pulseHaptic(strength = 12, type: HapticFeedbackType = "tickWeak") {
+    if (!hapticOn) return;
+    runHaptic(type, strength);
+  }
+
+  function addPowerUpRewards(rewards: PowerUpReward[]) {
+    if (rewards.length === 0) return;
+
+    setPowerUps((current) => {
+      const next = { ...current };
+      rewards.forEach((reward) => {
+        next[reward.type] += reward.count;
+      });
+      return next;
+    });
+  }
+
+  function formatPowerUpRewards(rewards: PowerUpReward[]) {
+    if (rewards.length === 0) return "";
+    return rewards.map((reward) => `${POWER_UP_META[reward.type].shortLabel}+${reward.count}`).join(" ");
   }
 
   function playMove(from: Position, to: Position) {
@@ -1181,6 +1425,7 @@ function App() {
 
     const result = resolveMove(board, from, to, stage.tileTypes);
     setSelected(null);
+    setActivePowerUp(null);
 
     if (!result.swappedBoard) {
       setMessage("옆 칸으로 밀어서 바꿔보세요");
@@ -1201,23 +1446,91 @@ function App() {
 
     const nextScore = score + result.gainedScore;
     const nextMoves = moves - 1;
+    const rewardCopy = result.powerUps.length > 0 ? ` · ${formatPowerUpRewards(result.powerUps)}` : "";
+    const firstStep = result.cascadeSteps[0];
+    const stalemate = resolveStalemate(result.board, stage.tileTypes);
+    const shouldShuffleAfterMove = stalemate.didShuffle && nextScore < stage.targetScore && nextMoves > 0;
+
+    if (!firstStep) {
+      setIsAnimatingMove(false);
+      setMessage("매치 계산을 다시 해볼게요");
+      return;
+    }
 
     window.setTimeout(() => {
-      setBoard(result.swappedBoard ?? board);
+      setBoard(firstStep.boardBeforeClear);
       setSwapAnimation(null);
-      setClearingKeys(new Set(result.matchedKeys));
-      setMessage(`${result.matchedCount}개 매치! 몽글이 톡 터졌어요`);
+      setClearingKeys(new Set(firstStep.matchedKeys));
+      setMessage(`${firstStep.impact.label}! ${firstStep.matchedCount}개가 톡 터졌어요`);
+      pulseHaptic(firstStep.impact.kind === "basic" ? 14 : 28, firstStep.impact.kind === "basic" ? "tickWeak" : "confetti");
+      triggerImpact({
+        id: Date.now(),
+        kind: firstStep.impact.kind,
+        label: firstStep.impact.label,
+        score: firstStep.gainedScore,
+        hammerDelta: firstStep.hammerDelta,
+        position: getMatchedAreaCenter(firstStep.matchedKeys),
+        rewards: firstStep.powerUps,
+      });
     }, 150);
 
-    window.setTimeout(() => {
-      setBoard(result.board);
-      setFallDistances(getFallDistances(result.swappedBoard ?? board, result.board));
-      setClearingKeys(new Set());
-      setIsSettlingBoard(true);
-      setScore(nextScore);
-      setMoves(nextMoves);
-      setMessage(`${result.matchedCount}개 매치! 기본 +${result.gainedScore}점`);
-    }, 430);
+    let animationDelay = 430;
+    result.cascadeSteps.forEach((step, stepIndex) => {
+      const isLastStep = stepIndex === result.cascadeSteps.length - 1;
+      const nextStep = result.cascadeSteps[stepIndex + 1];
+
+      window.setTimeout(() => {
+        setBoard(step.boardAfterDrop);
+        setFallDistances(getFallDistances(step.boardBeforeClear, step.boardAfterDrop));
+        setClearingKeys(new Set());
+        setIsSettlingBoard(true);
+
+        if (isLastStep) {
+          setScore(nextScore);
+          setMoves(nextMoves);
+          addPowerUpRewards(result.powerUps);
+          setMessage(`${result.impact.label} +${result.gainedScore}점${rewardCopy}`);
+        } else {
+          setMessage("몽글이 떨어지며 또 맞았어요");
+        }
+      }, animationDelay);
+
+      animationDelay += 240;
+
+      if (nextStep) {
+        window.setTimeout(() => {
+          const cascadeNumber = stepIndex + 2;
+          const cascadeLabel = `연쇄 팡 x${cascadeNumber}`;
+          setIsSettlingBoard(false);
+          setFallDistances({});
+          setBoard(nextStep.boardBeforeClear);
+          setClearingKeys(new Set(nextStep.matchedKeys));
+          setMessage(`${cascadeLabel}! ${nextStep.matchedCount}개가 다시 터졌어요`);
+          triggerImpact({
+            id: Date.now() + cascadeNumber,
+            kind: "cascade",
+            label: cascadeLabel,
+            score: nextStep.gainedScore + 20,
+            hammerDelta: nextStep.hammerDelta,
+            position: getMatchedAreaCenter(nextStep.matchedKeys),
+            rewards: nextStep.powerUps,
+          });
+        }, animationDelay);
+
+        animationDelay += 300;
+      }
+    });
+
+    if (shouldShuffleAfterMove) {
+      window.setTimeout(() => {
+        setIsSettlingBoard(false);
+        setFallDistances({});
+        setBoard(stalemate.board);
+        setMessage("더 이상 맞출 수 없어 몽글을 섞었어요");
+      }, animationDelay);
+
+      animationDelay += 280;
+    }
 
     window.setTimeout(() => {
       setIsSettlingBoard(false);
@@ -1225,18 +1538,23 @@ function App() {
       setIsAnimatingMove(false);
 
       if (nextScore >= stage.targetScore) {
-        finishGame("won");
+        finishGame("won", nextScore);
         return;
       }
 
       if (nextMoves <= 0) {
-        finishGame("lost");
+        finishGame("lost", nextScore);
       }
-    }, 720);
+    }, animationDelay + 40);
   }
 
   function handleTilePress(position: Position) {
     if (status !== "playing") return;
+
+    if (activePowerUp) {
+      applyPowerUp(position);
+      return;
+    }
 
     if (!selected) {
       setSelected(position);
@@ -1254,27 +1572,195 @@ function App() {
   }
 
   function handleTileSwipe(from: Position, to: Position) {
-    if (status !== "playing") return;
+    if (status !== "playing" || activePowerUp) return;
     playMove(from, to);
   }
 
-  function addMovesByAdFallback() {
-    setMoves((current) => current + 3);
-    setStatus("playing");
-    setMessage("광고 보상 fallback으로 이동 +3을 열었어요");
+  function togglePowerUp(powerUp: PowerUpType) {
+    if (status !== "playing" || isAnimatingMove) return;
+
+    if (powerUps[powerUp] <= 0) {
+      setMessage(`${POWER_UP_META[powerUp].label}은 상점이나 특수 매치로 채울 수 있어요`);
+      return;
+    }
+
+    if (powerUp === "shuffle") {
+      applyPowerUp(undefined, "shuffle");
+      return;
+    }
+
+    setSelected(null);
+    setActivePowerUp((current) => {
+      const next = current === powerUp ? null : powerUp;
+      setMessage(next ? `${POWER_UP_META[powerUp].label}을 쓸 위치를 골라주세요` : "아이템을 내려놓았어요");
+      return next;
+    });
   }
 
-  function bonusDrawByAdFallback() {
-    const bonusMongle = drawMongle();
-    setCollection((current) => saveCollectedMongle(current, bonusMongle.id));
-    setMessage(`${bonusMongle.name} 보너스 조각을 찾았어요`);
+  function applyPowerUp(position?: Position, forcedPowerUp?: PowerUpType) {
+    const powerUp = forcedPowerUp ?? activePowerUp;
+    if (status !== "playing" || isAnimatingMove || !powerUp || powerUps[powerUp] <= 0) return;
+
+    const result = resolvePowerUp(board, powerUp, position, stage.tileTypes);
+    if (!result.didClear) {
+      setMessage(`${POWER_UP_META[powerUp].label}은 지금 쓸 수 없어요`);
+      setActivePowerUp(null);
+      return;
+    }
+
+    const nextScore = score + result.gainedScore;
+    const stalemate = resolveStalemate(result.board, stage.tileTypes);
+    const shouldShuffleAfterPowerUp = powerUp !== "shuffle" && stalemate.didShuffle && nextScore < stage.targetScore;
+    const finishDelay = shouldShuffleAfterPowerUp ? 840 : 560;
+    const feedbackPosition = position ?? getMatchedAreaCenter(result.clearedKeys);
+    setIsAnimatingMove(true);
+    setSelected(null);
+    setActivePowerUp(null);
+    setPowerUps((current) => ({ ...current, [powerUp]: Math.max(0, current[powerUp] - 1) }));
+    setClearingKeys(new Set(result.clearedKeys));
+    const scoreCopy = result.gainedScore > 0 ? ` +${result.gainedScore}점` : "";
+    setMessage(`${POWER_UP_META[powerUp].label}!${scoreCopy}`);
+    pulseHaptic(powerUp === "colorClear" || powerUp === "bomb" ? 34 : 18, powerUp === "colorClear" || powerUp === "bomb" ? "success" : "tap");
+    triggerImpact({
+      id: Date.now(),
+      kind: "item",
+      label: POWER_UP_META[powerUp].label,
+      score: result.gainedScore,
+      hammerDelta: -1,
+      position: feedbackPosition,
+    });
+
+    window.setTimeout(() => {
+      setBoard(result.board);
+      setFallDistances(getFallDistances(board, result.board));
+      setClearingKeys(new Set());
+      setIsSettlingBoard(true);
+      setScore(nextScore);
+    }, 260);
+
+    if (shouldShuffleAfterPowerUp) {
+      window.setTimeout(() => {
+        setIsSettlingBoard(false);
+        setFallDistances({});
+        setBoard(stalemate.board);
+        setMessage("더 이상 맞출 수 없어 몽글을 섞었어요");
+      }, 560);
+    }
+
+    window.setTimeout(() => {
+      setIsSettlingBoard(false);
+      setFallDistances({});
+      setIsAnimatingMove(false);
+
+      if (nextScore >= stage.targetScore) {
+        finishGame("won", nextScore);
+      }
+    }, finishDelay);
+  }
+
+  function grantBonusMoves() {
+    setMoves((current) => current + 3);
+    setStatus("playing");
+    setActivePowerUp(null);
+    setMessage("광고 보상으로 이동 +3을 열었어요");
+  }
+
+  function requestBonusMoves() {
+    if (!rewardedAd.isReady) {
+      setMessage("광고가 아직 준비되지 않았어요");
+      return;
+    }
+
+    const didShowAd = rewardedAd.showAd({
+      onReward: grantBonusMoves,
+      onUnavailable: () => setMessage("광고가 아직 준비되지 않았어요"),
+    });
+
+    if (didShowAd) {
+      setMessage("광고를 끝까지 보면 이동 +3이 열려요");
+    }
+  }
+
+  function grantBonusMongle() {
+    const nextBonusMongle = drawMongle();
+    setBonusMongle(nextBonusMongle);
+    setCollection((current) => saveCollectedMongle(current, nextBonusMongle.id));
+    setMessage(`광고 보상으로 ${nextBonusMongle.name} 조각을 찾았어요`);
+  }
+
+  function requestBonusMongle() {
+    if (!rewardedAd.isReady) {
+      setMessage("보너스 몽글 광고가 아직 준비되지 않았어요");
+      return;
+    }
+
+    const didShowAd = rewardedAd.showAd({
+      onReward: grantBonusMongle,
+      onUnavailable: () => setMessage("보너스 몽글 광고가 아직 준비되지 않았어요"),
+    });
+
+    if (didShowAd) {
+      setMessage("광고를 끝까지 보면 보너스 몽글이 열려요");
+    }
   }
 
   async function handleLeaderboard() {
+    setActivePanel("ranking");
     const result = await openLeaderboardSafe();
-    if (result.status === "fallback") {
-      setMessage("토스앱에서 리더보드를 확인할 수 있어요");
+    if (result.status !== "success") {
+      setMessage("토스 리더보드가 열리지 않으면 게임 안 순위판을 먼저 보여드려요");
     }
+  }
+
+  function openPanel(panel: Exclude<ActivePanel, null>) {
+    setActivePanel(panel);
+    setSelected(null);
+    setActivePowerUp(null);
+  }
+
+  function goHome() {
+    stopBgm();
+    setStatus("home");
+    setActivePanel(null);
+    setShowTutorial(false);
+    setSelected(null);
+    setActivePowerUp(null);
+    setImpactBurst(null);
+    setSwapAnimation(null);
+    setClearingKeys(new Set());
+    setFallDistances({});
+    setIsSettlingBoard(false);
+    setIsAnimatingMove(false);
+    setMessage("홈으로 돌아왔어요");
+  }
+
+  function chooseStage(level: number) {
+    const boundedLevel = Math.min(clampStageLevel(level), unlockedStageLevel);
+    const nextStage = getStage(boundedLevel);
+    if (musicOn) startBgm();
+    setStageLevel(saveStageLevel(boundedLevel));
+    setBoard(createBoard({ tileTypes: nextStage.tileTypes }));
+    setScore(0);
+    setMoves(nextStage.moves);
+    setBonusMongle(null);
+    setLastFinishedStage(null);
+    setLastStageReward(null);
+    setStatus("playing");
+    setShowTutorial(false);
+    setActivePanel(null);
+    setMessage(`${nextStage.label} 준비 완료`);
+  }
+
+  function buyPowerUp(powerUp: PowerUpType, count = 1) {
+    const cost = POWER_UP_META[powerUp].cost * count;
+    if (coins < cost) {
+      setMessage("젤리코인이 조금 모자라요");
+      return;
+    }
+
+    setCoins((current) => current - cost);
+    setPowerUps((current) => ({ ...current, [powerUp]: current[powerUp] + count }));
+    setMessage(`${POWER_UP_META[powerUp].label} x${count} 충전 완료`);
   }
 
   return (
@@ -1289,17 +1775,26 @@ function App() {
             stage={stage}
             onStart={startGame}
             onLeaderboard={handleLeaderboard}
+            onPanelOpen={openPanel}
           />
         ) : (
           <>
-            <Header score={score} moves={moves} progress={progress} leaderboardScore={leaderboardScore} stage={stage} />
+            <Header
+              score={score}
+              moves={moves}
+              progress={progress}
+              leaderboardScore={leaderboardScore}
+              stage={stage}
+              coins={coins}
+              onMenu={() => openPanel("menu")}
+            />
             <p className="status-message">{message}</p>
 
             {showTutorial && status === "playing" ? (
               <div className="tutorial-card">
                 <strong>오늘의 목표</strong>
                 <p>
-                  스와이프로 3개를 맞추면 터지고, 새 블록이 내려와요. 목표 점수를 넘기면 몽글 조각을 얻어요.
+                  4개는 스윕, 2x2는 팝밤, 5개는 레인보우로 이어져요. 떨어진 뒤 새로 맞으면 연쇄로 팡 터져요.
                 </p>
                 <button type="button" onClick={() => setShowTutorial(false)}>
                   몽글 찾으러 가기
@@ -1308,24 +1803,45 @@ function App() {
             ) : null}
 
             {status === "playing" && !showTutorial ? (
-              <Board
-                board={board}
-                selected={selected}
-                onTilePress={handleTilePress}
-                onTileSwipe={handleTileSwipe}
-                swapAnimation={swapAnimation}
-                clearingKeys={clearingKeys}
-                fallDistances={fallDistances}
-                isSettling={isSettlingBoard}
-                disabled={status !== "playing" || isAnimatingMove}
-              />
+              <div className={`board-wrap ${impactBurst ? `impact-${impactBurst.kind}` : ""}`}>
+                <Board
+                  board={board}
+                  selected={selected}
+                  onTilePress={handleTilePress}
+                  onTileSwipe={handleTileSwipe}
+                  swapAnimation={swapAnimation}
+                  clearingKeys={clearingKeys}
+                  fallDistances={fallDistances}
+                  isSettling={isSettlingBoard}
+                  disabled={status !== "playing" || isAnimatingMove}
+                  isHammerMode={activePowerUp !== null}
+                />
+                {impactBurst ? <ImpactBurstBadge impact={impactBurst} /> : null}
+              </div>
             ) : null}
 
             {status === "playing" && !showTutorial ? (
               <div className="booster-row">
-                <button type="button" onClick={() => setMessage("힌트는 다음 버전에서 열려요")}>힌트</button>
-                <button type="button" onClick={addMovesByAdFallback}>광고 보고 이동 +3</button>
-                <button type="button" onClick={handleLeaderboard}>랭킹</button>
+                <div className="powerup-dock" aria-label="아이템">
+                  {POWER_UP_ORDER.map((powerUp) => {
+                    const meta = POWER_UP_META[powerUp];
+                    return (
+                      <button
+                        className={activePowerUp === powerUp ? "active-tool" : ""}
+                        key={powerUp}
+                        type="button"
+                        aria-label={`${meta.label} ${powerUps[powerUp]}개`}
+                        title={meta.effect}
+                        onClick={() => togglePowerUp(powerUp)}
+                      >
+                        <img className="powerup-image" src={meta.imageSrc} alt="" />
+                        <small>x{powerUps[powerUp]}</small>
+                      </button>
+                    );
+                  })}
+                </div>
+                {rewardedAd.isReady ? <button type="button" onClick={requestBonusMoves}>광고 +3</button> : null}
+                <button type="button" onClick={() => openPanel("shop")}>상점</button>
               </div>
             ) : null}
 
@@ -1337,19 +1853,48 @@ function App() {
                 rarityBonus={rarityBonus}
                 scoreSubmitStatus={scoreSubmitStatus}
                 collectedMongle={todayMongle}
+                bonusMongle={bonusMongle}
+                finishedStage={lastFinishedStage ?? stage}
+                currentStage={stage}
+                stageReward={lastStageReward}
                 collectionCount={collection[todayMongle.id] ?? 0}
+                rewardedAdReady={rewardedAd.isReady}
                 onRestart={startGame}
                 onLeaderboard={handleLeaderboard}
-                onContinue={addMovesByAdFallback}
-                onBonusDraw={bonusDrawByAdFallback}
+                onContinue={requestBonusMoves}
+                onBonusDraw={requestBonusMongle}
               />
+            ) : null}
+            {status !== "playing" ? (
+              <TossBannerAd adGroupId={BANNER_AD_GROUP_ID} label="몽글 매치 퍼즐 결과 광고" />
             ) : null}
           </>
         )}
-
-        <div className={`ad-slot ${status === "playing" ? "compact" : ""}`} aria-label="광고 슬롯">
-          AD · 하단 배너 광고 영역
-        </div>
+        {activePanel ? (
+          <GamePanel
+            panel={activePanel}
+            status={status}
+            stageLevel={stageLevel}
+            unlockedStageLevel={unlockedStageLevel}
+            stageResults={stageResults}
+            coins={coins}
+            powerUps={powerUps}
+            soundOn={soundOn}
+            musicOn={musicOn}
+            hapticOn={hapticOn}
+            leaderboardScore={leaderboardScore}
+            onClose={() => setActivePanel(null)}
+            onHome={goHome}
+            onRestart={startGame}
+            onPanelOpen={openPanel}
+            onStageSelect={chooseStage}
+            onLeaderboard={handleLeaderboard}
+            onBuyPowerUp={buyPowerUp}
+            onSoundChange={setSoundOn}
+            onMusicChange={handleMusicChange}
+            onHapticChange={handleHapticChange}
+          />
+        ) : null}
       </section>
     </main>
   );
@@ -1363,6 +1908,7 @@ function HomeScreen({
   stage,
   onStart,
   onLeaderboard,
+  onPanelOpen,
 }: {
   profile: GameProfile | null;
   collection: CollectionState;
@@ -1371,36 +1917,62 @@ function HomeScreen({
   stage: DifficultyStage;
   onStart: () => void;
   onLeaderboard: () => void;
+  onPanelOpen: (panel: Exclude<ActivePanel, null>) => void;
 }) {
+  const previewTiles: Tile["type"][] = ["berry", "leaf", "star", "drop", "moon", "berry", "drop", "star", "leaf"];
+
   return (
     <div className="home-screen">
-      <div className="loading-pill">랜덤 몽글 출현 중</div>
-      <div className="brand-hero" aria-hidden="true">
-        <MongleArtwork className="mongle mongle-a" mongle={MONGLE_POOL[0]} />
-        <MongleArtwork className="mongle mongle-b" mongle={MONGLE_POOL[99]} />
-        <MongleArtwork className="mongle mongle-c" mongle={MONGLE_POOL[80]} />
+      <div className="lobby-shell">
+        <div className="lobby-topline">
+          <span>몽글 매치 퍼즐</span>
+          <strong>{stage.level}/{DIFFICULTY_STAGES.length}</strong>
+        </div>
+        <div className="lobby-hero">
+          <div className="lobby-board-preview" aria-hidden="true">
+            {previewTiles.map((tileType, index) => (
+              <span className={`preview-tile preview-tile-${tileType}`} key={`${tileType}-${index}`}>
+                <img src={TILE_META[tileType].imageSrc} alt="" />
+              </span>
+            ))}
+          </div>
+          <div className="lobby-prize-card">
+            <img src={COIN_IMAGE_SRC} alt="" />
+            <strong>{collectedKinds}종</strong>
+            <span>수집 중</span>
+          </div>
+        </div>
       </div>
       <p className="welcome-copy">반가워요, {profile?.nickname ?? "플레이어"}님</p>
-      <h1>랜덤 몽글 모으기</h1>
-      <p className="home-rule">100종 몽글 도감을 채우고, 1% 유니크 몽글로 리더보드 점수 2배!</p>
+      <h1>몽글 매치 퍼즐</h1>
+      <p className="home-rule">블록을 맞춰 스테이지를 넘고, 보상 몽글 조각과 젤리코인을 모아보세요.</p>
+      <div className="prestart-notice">
+        <strong>시작 전 안내</strong>
+        <span>광고 보상은 준비된 경우에만 선택해서 볼 수 있어요.</span>
+        <span>소리와 진동은 메뉴에서 언제든 끌 수 있어요.</span>
+      </div>
       <div className="stage-card">
-        <span>현재 단계</span>
-        <strong>{stage.level}. {stage.label}</strong>
+        <span>다음 판 단계</span>
+        <strong>{stage.level}/{DIFFICULTY_STAGES.length} · {stage.label}</strong>
         <small>목표 {stage.targetScore}점 · 이동 {stage.moves}번 · {stage.note}</small>
       </div>
       <div className="collection-summary">
         <strong>{collectedKinds}/{MONGLE_POOL.length}종 수집</strong>
         <span>총 {totalCollected}조각 · 레어 이상이면 리더보드 보너스</span>
       </div>
-      <MiniCollection collection={collection} />
       <button className="primary-cta" type="button" onClick={onStart}>
-        오늘 몽글 찾기
+        게임 시작
       </button>
       <div className="home-menu">
         <button type="button" onClick={onStart}>한 판 도전</button>
-        <button type="button" onClick={onLeaderboard}>랭킹</button>
-        <button type="button" onClick={() => window.alert("도감 상세는 다음 버전에서 열려요")}>도감</button>
+        <button type="button" onClick={() => onPanelOpen("stage")}>스테이지</button>
+        <button type="button" onClick={() => onPanelOpen("tournament")}>토너먼트</button>
+        <button type="button" onClick={() => onPanelOpen("ranking")}>랭킹</button>
+        <button type="button" onClick={() => onPanelOpen("shop")}>상점</button>
+        <button type="button" onClick={() => onPanelOpen("controls")}>조작법</button>
       </div>
+      <button className="subtle-link-button" type="button" onClick={onLeaderboard}>토스 랭킹 열기</button>
+      <MiniCollection collection={collection} />
       <p className="safe-note">포인트 보상이 아니라 게임 안 수집 조각이에요. 실제 랭킹은 토스앱에서 연결돼요.</p>
     </div>
   );
@@ -1412,18 +1984,22 @@ function Header({
   progress,
   leaderboardScore,
   stage,
+  coins,
+  onMenu,
 }: {
   score: number;
   moves: number;
   progress: number;
   leaderboardScore: number;
   stage: DifficultyStage;
+  coins: number;
+  onMenu: () => void;
 }) {
   return (
     <header className="play-header">
       <div className="stage-chip">
         <span>단계</span>
-        <strong>{stage.level}</strong>
+        <strong>{stage.level}/{DIFFICULTY_STAGES.length}</strong>
       </div>
       <div>
         <span>이동</span>
@@ -1437,10 +2013,15 @@ function Header({
         <span>랭킹</span>
         <strong>{leaderboardScore}</strong>
       </div>
+      <button className="header-menu-button" type="button" aria-label="메뉴 열기" onClick={onMenu}>
+        <span className="hamburger-lines" aria-hidden="true" />
+      </button>
       <div className="progress-track" aria-label={`목표 달성률 ${progress}%`}>
         <span style={{ width: `${progress}%` }} />
       </div>
-      <p className="stage-note">{stage.label} · 목표 {stage.targetScore}점</p>
+      <p className="stage-note">
+        {stage.label} · 목표 {stage.targetScore}점 · <img src={COIN_IMAGE_SRC} alt="" /> {coins}
+      </p>
     </header>
   );
 }
@@ -1455,6 +2036,7 @@ function Board({
   fallDistances,
   isSettling,
   disabled,
+  isHammerMode,
 }: {
   board: Tile[][];
   selected: Position | null;
@@ -1465,6 +2047,7 @@ function Board({
   fallDistances: FallDistances;
   isSettling: boolean;
   disabled: boolean;
+  isHammerMode: boolean;
 }) {
   const pointerStartRef = useRef<{ x: number; y: number; position: Position } | null>(null);
   const didSwipeRef = useRef(false);
@@ -1522,7 +2105,7 @@ function Board({
   }
 
   return (
-    <div className="board" style={{ gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)` }}>
+    <div className={`board ${isHammerMode ? "hammer-mode" : ""}`} style={{ gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)` }}>
       {board.map((row, rowIndex) =>
         row.map((tile, colIndex) => {
           const position = { row: rowIndex, col: colIndex };
@@ -1547,12 +2130,52 @@ function Board({
               onPointerDown={(event) => handlePointerDown(event, position)}
               onPointerUp={handlePointerUp}
             >
-              <span>{TILE_META[tile.type].emoji}</span>
+              <img className="tile-image" src={TILE_META[tile.type].imageSrc} alt="" draggable={false} />
             </button>
           );
         }),
       )}
     </div>
+  );
+}
+
+function ImpactBurstBadge({ impact }: { impact: NonNullable<ImpactBurst> }) {
+  const xPercent = Math.min(92, Math.max(8, ((impact.position.col + 0.5) / BOARD_SIZE) * 100));
+  const yPercent = Math.min(92, Math.max(8, ((impact.position.row + 0.5) / BOARD_SIZE) * 100));
+  const style = {
+    "--impact-x": `${xPercent}%`,
+    "--impact-y": `${yPercent}%`,
+  } as CSSProperties;
+
+  return (
+    <div className={`impact-burst impact-burst-${impact.kind}`} style={style} aria-live="polite">
+      <strong>{impact.score > 0 ? `+${impact.score}` : "발동"}</strong>
+      <span>{impact.label}</span>
+      {impact.rewards && impact.rewards.length > 0 ? (
+        <div className="impact-rewards">
+          {impact.rewards.map((reward) => (
+            <span className="impact-reward-chip" key={`${reward.type}-${reward.count}`}>
+              <img src={POWER_UP_META[reward.type].imageSrc} alt="" />
+              +{reward.count}
+            </span>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function StarMeter({ stars }: { stars: number }) {
+  const boundedStars = Math.min(Math.max(stars, 0), 3);
+
+  return (
+    <span className="star-meter" aria-label={`별 ${boundedStars}개`}>
+      {[0, 1, 2].map((index) => (
+        <span className={index < boundedStars ? "stage-star filled" : "stage-star"} key={index}>
+          ★
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -1563,7 +2186,12 @@ function ResultPanel({
   rarityBonus,
   scoreSubmitStatus,
   collectedMongle,
+  bonusMongle,
+  finishedStage,
+  currentStage,
+  stageReward,
   collectionCount,
+  rewardedAdReady,
   onRestart,
   onLeaderboard,
   onContinue,
@@ -1575,7 +2203,12 @@ function ResultPanel({
   rarityBonus: number;
   scoreSubmitStatus: string;
   collectedMongle: CollectibleMongle;
+  bonusMongle: CollectibleMongle | null;
+  finishedStage: DifficultyStage;
+  currentStage: DifficultyStage;
+  stageReward: LastStageReward | null;
   collectionCount: number;
+  rewardedAdReady: boolean;
   onRestart: () => void;
   onLeaderboard: () => void;
   onContinue: () => void;
@@ -1583,6 +2216,20 @@ function ResultPanel({
 }) {
   const isWon = status === "won";
   const rarity = RARITY_META[collectedMongle.rarity];
+  const stars = stageReward?.stars ?? calculateStageStars(score, finishedStage.targetScore);
+  const coinReward = stageReward?.coinReward ?? calculateStageCoinReward(score, stars);
+  const advancedStage = isWon && currentStage.level > finishedStage.level;
+  const stageResultLabel = isWon ? "스테이지 클리어" : "스테이지 재도전";
+  const stageResultCopy = isWon
+    ? advancedStage
+      ? `${finishedStage.level}단계 → ${currentStage.level}단계`
+      : `${finishedStage.level}단계 완료`
+    : `${finishedStage.level}단계 유지`;
+  const stageResultNote = isWon
+    ? advancedStage
+      ? `${currentStage.label} 해금`
+      : "마지막 단계 반복 도전"
+    : `${finishedStage.label}에서 다시 도전`;
 
   return (
     <div className="result-panel">
@@ -1594,6 +2241,17 @@ function ResultPanel({
         </div>
       </div>
       <p>{collectedMongle.description}</p>
+      <div className={`stage-result-card ${advancedStage ? "advanced" : ""}`} aria-live="polite">
+        <span>{stageResultLabel}</span>
+        <strong>{stageResultCopy}</strong>
+        <small>{stageResultNote}</small>
+        <div className="result-stage-reward">
+          <StarMeter stars={stars} />
+          <span className="result-coin-reward">
+            <img src={COIN_IMAGE_SRC} alt="" /> +{coinReward}
+          </span>
+        </div>
+      </div>
       <div className="score-breakdown">
         <div>
           <span>기본 점수</span>
@@ -1611,13 +2269,224 @@ function ResultPanel({
       <p className="submit-state">
         도감 {collectionCount}조각째 · 리더보드: {scoreSubmitStatus}
       </p>
+      {bonusMongle ? (
+        <div className={`bonus-mongle-card ${RARITY_META[bonusMongle.rarity].className}`} aria-live="polite">
+          <MongleArtwork className="bonus-mongle-image" mongle={bonusMongle} alt={`${bonusMongle.name} 보너스 이미지`} />
+          <div>
+            <span>보너스 조각 발견</span>
+            <strong>{bonusMongle.name}</strong>
+            <small>{RARITY_META[bonusMongle.rarity].label} · 도감에 바로 저장됨</small>
+          </div>
+        </div>
+      ) : null}
       <div className="result-actions">
         <button className="primary-cta" type="button" onClick={onRestart}>
           {isWon ? "다음 몽글 찾기" : "다시 도전"}
         </button>
-        {!isWon ? <button type="button" onClick={onContinue}>광고 보고 이동 +3</button> : null}
-        <button type="button" onClick={onBonusDraw}>광고 보고 보너스 몽글</button>
+        {!isWon && rewardedAdReady ? <button type="button" onClick={onContinue}>광고 보고 이동 +3</button> : null}
+        {rewardedAdReady ? <button type="button" onClick={onBonusDraw}>광고 보고 보너스 몽글</button> : null}
         <button type="button" onClick={onLeaderboard}>랭킹 보기</button>
+      </div>
+    </div>
+  );
+}
+
+function GamePanel({
+  panel,
+  status,
+  stageLevel,
+  unlockedStageLevel,
+  stageResults,
+  coins,
+  powerUps,
+  soundOn,
+  musicOn,
+  hapticOn,
+  leaderboardScore,
+  onClose,
+  onHome,
+  onRestart,
+  onPanelOpen,
+  onStageSelect,
+  onLeaderboard,
+  onBuyPowerUp,
+  onSoundChange,
+  onMusicChange,
+  onHapticChange,
+}: {
+  panel: Exclude<ActivePanel, null>;
+  status: GameStatus;
+  stageLevel: number;
+  unlockedStageLevel: number;
+  stageResults: StageResults;
+  coins: number;
+  powerUps: PowerUpInventory;
+  soundOn: boolean;
+  musicOn: boolean;
+  hapticOn: boolean;
+  leaderboardScore: number;
+  onClose: () => void;
+  onHome: () => void;
+  onRestart: () => void;
+  onPanelOpen: (panel: Exclude<ActivePanel, null>) => void;
+  onStageSelect: (level: number) => void;
+  onLeaderboard: () => void;
+  onBuyPowerUp: (powerUp: PowerUpType, count?: number) => void;
+  onSoundChange: (next: boolean) => void;
+  onMusicChange: (next: boolean) => void;
+  onHapticChange: (next: boolean) => void;
+}) {
+  const panelTitle: Record<Exclude<ActivePanel, null>, string> = {
+    menu: "메뉴",
+    stage: "스테이지",
+    tournament: "토너먼트",
+    ranking: "랭킹",
+    shop: "상점",
+    sound: "사운드",
+    controls: "조작법",
+  };
+  const rankingRows = [
+    { name: "YOU", score: leaderboardScore },
+    { name: "MONGLE-7", score: 648680 },
+    { name: "PopMaster", score: 593580 },
+    { name: "JellyRun", score: 564620 },
+  ].sort((a, b) => b.score - a.score);
+
+  return (
+    <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label={panelTitle[panel]}>
+      <div className={`modal-panel modal-panel-${panel}`}>
+        <button className="modal-close" type="button" aria-label="닫기" onClick={onClose}>
+          <img src={MENU_ASSET_SRC.close} alt="" aria-hidden="true" />
+        </button>
+        <h2 className="modal-title">
+          <img src={MENU_ASSET_SRC.titlePlaque} alt="" aria-hidden="true" />
+          <span>{panelTitle[panel]}</span>
+        </h2>
+
+        {panel === "menu" ? (
+          <>
+            <div className="modal-menu-grid">
+              <button type="button" onClick={onHome}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.home} alt="" aria-hidden="true" /><span>홈</span></button>
+              <button type="button" onClick={onRestart}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.restart} alt="" aria-hidden="true" /><span>다시하기</span></button>
+              <button type="button" onClick={() => onPanelOpen("stage")}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.stage} alt="" aria-hidden="true" /><span>스테이지</span></button>
+              <button type="button" onClick={() => onPanelOpen("tournament")}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.tournament} alt="" aria-hidden="true" /><span>토너먼트</span></button>
+              <button type="button" onClick={() => onPanelOpen("ranking")}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.ranking} alt="" aria-hidden="true" /><span>랭킹</span></button>
+              <button type="button" onClick={() => onPanelOpen("shop")}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.shop} alt="" aria-hidden="true" /><span>상점</span></button>
+              <button type="button" onClick={() => onPanelOpen("sound")}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.sound} alt="" aria-hidden="true" /><span>사운드</span></button>
+              <button type="button" onClick={() => onPanelOpen("controls")}><img className="menu-action-icon" src={MENU_ASSET_SRC.icons.controls} alt="" aria-hidden="true" /><span>조작법</span></button>
+            </div>
+            <p className="modal-footnote">{status === "playing" ? "진행 중인 판은 메뉴를 닫으면 이어집니다." : "새 판은 현재 스테이지 기준으로 시작합니다."}</p>
+          </>
+        ) : null}
+
+        {panel === "stage" ? (
+          <div className="stage-list">
+            {DIFFICULTY_STAGES.map((stage) => {
+              const result = stageResults[stage.level];
+              const stars = result?.stars ?? 0;
+              const isUnlocked = stage.level <= unlockedStageLevel;
+              return (
+                <button className={stage.level === stageLevel ? "selected-stage" : ""} disabled={!isUnlocked} key={stage.level} type="button" onClick={() => onStageSelect(stage.level)}>
+                  <span className="stage-index">{stage.level}</span>
+                  <div className="stage-list-copy">
+                    <strong>{stage.label}</strong>
+                    <small>목표 {stage.targetScore} · 이동 {stage.moves} · {isUnlocked ? stage.note : "이전 스테이지 클리어"}</small>
+                    <div className="stage-progress-line">
+                      <StarMeter stars={stars} />
+                      <span className="stage-coin-result">
+                        <img src={COIN_IMAGE_SRC} alt="" />
+                        {result ? `+${result.bestCoinReward}` : "-"}
+                      </span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+
+        {panel === "tournament" ? (
+          <div className="tournament-panel">
+            <div className="tournament-clock">21:47:59</div>
+            <div className="ranking-list">
+              {rankingRows.slice(0, 3).map((row, index) => (
+                <div className="ranking-row" key={row.name}>
+                  <span>{index + 1}</span>
+                  <strong>{row.name}</strong>
+                  <em>{row.score.toLocaleString()}</em>
+                </div>
+              ))}
+            </div>
+            <button className="primary-cta" type="button" onClick={onRestart}>시작하기</button>
+          </div>
+        ) : null}
+
+        {panel === "ranking" ? (
+          <div className="ranking-list">
+            {rankingRows.map((row, index) => (
+              <div className={row.name === "YOU" ? "ranking-row player-row" : "ranking-row"} key={`${row.name}-${index}`}>
+                <span>{index + 1}</span>
+                <strong>{row.name}</strong>
+                <em>{row.score.toLocaleString()}</em>
+              </div>
+            ))}
+            <button className="primary-cta" type="button" onClick={onLeaderboard}>토스 랭킹</button>
+          </div>
+        ) : null}
+
+        {panel === "shop" ? (
+          <div className="shop-panel">
+            <div className="coin-wallet"><img src={COIN_IMAGE_SRC} alt="" /><strong>{coins.toLocaleString()}</strong></div>
+            <div className="shop-list">
+              {POWER_UP_ORDER.map((powerUp) => {
+                const meta = POWER_UP_META[powerUp];
+                return (
+                  <div className="shop-row" key={powerUp}>
+                    <img className="shop-icon" src={meta.imageSrc} alt="" />
+                    <div className="shop-copy">
+                      <strong>{meta.shopLabel}</strong>
+                      <small>{meta.effect}</small>
+                      <small className="shop-owned-line">보유 {powerUps[powerUp]}</small>
+                    </div>
+                    <button type="button" onClick={() => onBuyPowerUp(powerUp)}>
+                      <img src={COIN_IMAGE_SRC} alt="" /> {meta.cost}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+
+        {panel === "sound" ? (
+          <div className="settings-panel">
+            <button className={musicOn ? "selected-setting" : ""} type="button" onClick={() => onMusicChange(!musicOn)}>
+              배경음악 {musicOn ? "ON" : "OFF"}
+            </button>
+            <p className="settings-note">게임 시작 또는 ON 터치 후 가벼운 루프 음악이 재생돼요.</p>
+            <button className={soundOn ? "selected-setting" : ""} type="button" onClick={() => onSoundChange(!soundOn)}>
+              효과음 {soundOn ? "ON" : "OFF"}
+            </button>
+            <button className={hapticOn ? "selected-setting" : ""} type="button" onClick={() => onHapticChange(!hapticOn)}>
+              진동 {hapticOn ? "ON" : "OFF"}
+            </button>
+            <p className="settings-note">토스 햅틱 API를 먼저 사용하고, 미지원 환경에서는 기기 브라우저 진동으로 보완해요.</p>
+          </div>
+        ) : null}
+
+        {panel === "controls" ? (
+          <div className="controls-panel">
+            <p>서로 붙은 블록을 밀어서 3개 이상 이어 붙입니다. 떨어진 뒤 새로 맞으면 자동으로 연쇄 폭발합니다.</p>
+            <div className="recipe-list">
+              <span><img src={POWER_UP_META.rowClear.imageSrc} alt="" />가로 4개</span>
+              <span><img src={POWER_UP_META.colClear.imageSrc} alt="" />세로 4개</span>
+              <span><img src={POWER_UP_META.bomb.imageSrc} alt="" />2x2 사각</span>
+              <span><img src={POWER_UP_META.colorClear.imageSrc} alt="" />5개 연결</span>
+              <span><img src={POWER_UP_META.hammer.imageSrc} alt="" />가로세로 교차</span>
+            </div>
+            <p>쓸 아이템을 누른 뒤 보드의 목표 칸을 고르면 바로 발동합니다.</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -1733,20 +2602,49 @@ function loadStageLevel(): number {
   try {
     const raw = window.localStorage.getItem(STAGE_STORAGE_KEY);
     const parsed = raw ? Number(raw) : 1;
-    if (!Number.isFinite(parsed)) return 1;
-    return Math.min(Math.max(Math.round(parsed), 1), DIFFICULTY_STAGES.length);
+    return clampStageLevel(parsed);
   } catch {
     return 1;
   }
 }
 
 function saveStageLevel(nextLevel: number): number {
-  window.localStorage.setItem(STAGE_STORAGE_KEY, String(nextLevel));
-  return nextLevel;
+  const boundedLevel = clampStageLevel(nextLevel);
+  window.localStorage.setItem(STAGE_STORAGE_KEY, String(boundedLevel));
+  return boundedLevel;
 }
 
-function getStage(level: number): DifficultyStage {
-  return DIFFICULTY_STAGES[Math.min(Math.max(level, 1), DIFFICULTY_STAGES.length) - 1] ?? DIFFICULTY_STAGES[0];
+function loadUnlockedStageLevel(): number {
+  try {
+    const raw = window.localStorage.getItem(UNLOCKED_STAGE_STORAGE_KEY) ?? window.localStorage.getItem(STAGE_STORAGE_KEY);
+    const parsed = raw ? Number(raw) : 1;
+    return clampStageLevel(parsed);
+  } catch {
+    return 1;
+  }
+}
+
+function saveUnlockedStageLevel(nextLevel: number): number {
+  const boundedLevel = clampStageLevel(nextLevel);
+  window.localStorage.setItem(UNLOCKED_STAGE_STORAGE_KEY, String(boundedLevel));
+  return boundedLevel;
+}
+
+function loadStageResults(): StageResults {
+  try {
+    const raw = window.localStorage.getItem(STAGE_RESULTS_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as StageResults;
+    if (!parsed || typeof parsed !== "object") return {};
+    return parsed;
+  } catch {
+    return {};
+  }
+}
+
+function saveStageResults(nextResults: StageResults): StageResults {
+  window.localStorage.setItem(STAGE_RESULTS_STORAGE_KEY, JSON.stringify(nextResults));
+  return nextResults;
 }
 
 function saveCollectedMongle(current: CollectionState, mongleId: string): CollectionState {
@@ -1759,4 +2657,3 @@ function saveCollectedMongle(current: CollectionState, mongleId: string): Collec
 }
 
 export default App;
-

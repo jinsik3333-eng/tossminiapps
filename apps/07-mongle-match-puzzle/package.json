@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "granite dev",
     "build": "ait build",
+    "test:logic": "node --experimental-strip-types --test src/lib/gameLogic.test.mjs",
     "deploy": "ait deploy",
     "lint": "eslint .",
     "format": "prettier --write ."

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
-import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
+import { RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
 import { openContactsViralReward } from "./hooks/useContactsViralReward";
 import rouletteHero from "./assets/roulette-hero.jpg";
@@ -146,7 +146,6 @@ export default function App() {
   const [routineOpen, setRoutineOpen] = useState(false);
   const [stamps, setStamps] = useState<string[]>(() => readStamps());
   const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(null);
-  const [isRewardNotifyOpen, setIsRewardNotifyOpen] = useState(false);
   const ads = useInAppAds(REWARDED_AD_GROUP_ID);
   const spinTimerRef = useRef<number | null>(null);
 
@@ -256,12 +255,6 @@ export default function App() {
     <main className="app-shell">
       {screen === "home" ? (
         <>
-          <UtilityNudge
-            appLabel="소비 방어 룰렛"
-            notifyCopy="알림을 켜면 내일 방어 룰렛을 놓치지 않아요."
-            loginCopy="로그인하면 30일 방어 기록을 더 안전하게 이어볼 수 있어요."
-          />
-
           <section className="hero-card">
             <p className="eyebrow">오늘의 룰렛 · {todayMission.label} 방어</p>
             <h1>오늘 막을 소비 함정을 룰렛으로 골라요</h1>
@@ -408,14 +401,8 @@ export default function App() {
             questTotal={3}
             links={REWARD_APP_LINKS.filter((link) => link.href !== "intoss://spending-defense-roulette")}
             onPrimaryReward={openRewardRoutine}
-            onOpenNotification={() => setIsRewardNotifyOpen(true)}
           />
           <StickyRewardCTA label="광고 보고 방어 카드 받기" onClick={openRewardRoutine} />
-          <NotificationRewardSheet
-            open={isRewardNotifyOpen}
-            appLabel="소비 방어 룰렛"
-            onClose={() => setIsRewardNotifyOpen(false)}
-          />
           <ResultActionMenu
             items={[
               { label: "AD 방어 보상", onClick: openRewardRoutine },
@@ -428,30 +415,6 @@ export default function App() {
         </section>
       ) : null}
     </main>
-  );
-}
-
-function UtilityNudge({
-  appLabel,
-  notifyCopy,
-  loginCopy,
-}: {
-  appLabel: string;
-  notifyCopy: string;
-  loginCopy: string;
-}) {
-  return (
-    <section
-      className="utility-nudge"
-      aria-label={`${appLabel} 알림과 로그인 안내`}
-    >
-      <div>
-        <span className="utility-bell" aria-hidden="true" />
-        <strong>내일도 이어보기</strong>
-      </div>
-      <p>{notifyCopy}</p>
-      <p>{loginCopy}</p>
-    </section>
   );
 }
 

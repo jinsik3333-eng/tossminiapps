@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="195" x2="195" y1="0" y2="844" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#195226"/>
+      <stop offset=".22" stop-color="#40b678"/>
+      <stop offset=".55" stop-color="#b9f58a"/>
+      <stop offset="1" stop-color="#ffe88b"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0" cy="0" r="1" gradientTransform="matrix(140 0 0 160 183 244)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff9dd"/>
+      <stop offset=".45" stop-color="#d8ffc3" stop-opacity=".82"/>
+      <stop offset="1" stop-color="#6fe2bc" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="leafA" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#2f7e35"/>
+      <stop offset="1" stop-color="#123e25"/>
+    </linearGradient>
+    <linearGradient id="leafB" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#79c956"/>
+      <stop offset="1" stop-color="#1d6c39"/>
+    </linearGradient>
+  </defs>
+  <rect width="390" height="844" fill="url(#sky)"/>
+  <ellipse cx="182" cy="250" rx="146" ry="168" fill="url(#sun)"/>
+  <path fill="#153b26" opacity=".4" d="M0 0h390v26c-72 6-146 8-211 0C105 18 44 14 0 26V0Z"/>
+  <path fill="#20452d" d="M289 0c-19 74-10 145 20 213 8 19 41 8 34-13-24-68-22-131 7-200h-61Z" opacity=".72"/>
+  <path fill="#264d31" d="M78 0c18 62 15 127-9 196-8 22 26 33 34 11 27-73 32-144 15-207H78Z" opacity=".62"/>
+  <g opacity=".9">
+    <path fill="url(#leafA)" d="M-26 32C35 10 83 6 124 23 78 72 35 103-18 96c-26-4-28-48-8-64Z"/>
+    <path fill="url(#leafB)" d="M74 0c53 4 94 22 124 53-63 34-111 42-146 21C32 62 45 10 74 0Z"/>
+    <path fill="url(#leafA)" d="M205 0c69 12 120 38 152 80-72 29-137 24-181-14C157 49 173 7 205 0Z"/>
+    <path fill="url(#leafB)" d="M304 10c54 8 90 29 112 63-49 23-95 22-137-5-21-14-8-51 25-58Z"/>
+  </g>
+  <path fill="none" stroke="#4aa235" stroke-linecap="round" stroke-width="8" d="M229 0c-10 40-3 67 21 81M312 0c-19 46-17 89 7 129"/>
+  <path fill="none" stroke="#5db943" stroke-linecap="round" stroke-width="8" d="M298 40c-17 36-15 72 8 108"/>
+  <g opacity=".2">
+    <circle cx="65" cy="229" r="3" fill="#fff"/>
+    <circle cx="92" cy="258" r="2" fill="#fff"/>
+    <circle cx="289" cy="214" r="2" fill="#fff"/>
+    <circle cx="320" cy="287" r="3" fill="#fff"/>
+    <circle cx="173" cy="331" r="2" fill="#fff"/>
+  </g>
+  <path fill="#e9ff9d" opacity=".48" d="M0 542c45-44 102-60 172-49 66 10 122 3 218-44v395H0V542Z"/>
+  <path fill="#74bd50" opacity=".38" d="M0 592c62-23 123-29 190-13 76 19 139 8 200-26v291H0V592Z"/>
+  <g>
+    <path fill="url(#leafA)" d="M-16 733c39-62 86-91 142-87-22 78-70 124-142 137v-50Z"/>
+    <path fill="url(#leafB)" d="M40 804c22-65 62-100 121-106-5 69-41 116-109 139l-12-33Z"/>
+    <path fill="url(#leafA)" d="M225 760c38-57 84-83 138-76-23 73-72 118-147 134l9-58Z"/>
+    <path fill="url(#leafB)" d="M305 793c30-57 67-84 111-82v133H279l26-51Z"/>
+  </g>
+  <path fill="#163f26" opacity=".5" d="M0 812c81-25 153-32 214-20 69 14 128 6 176-22v74H0v-32Z"/>
+</svg>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>몽글 매치 퍼즐 메뉴 UI 개선 리포트</title>
+    <style>
+      :root {
+        color: #432816;
+        background: #f6eddc;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 32px;
+      }
+
+      main {
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      h2 {
+        margin-top: 34px;
+        font-size: 20px;
+      }
+
+      p,
+      li {
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .note {
+        margin-top: 10px;
+        color: #7a5638;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        margin-top: 16px;
+      }
+
+      figure {
+        margin: 0;
+        padding: 12px;
+        border: 1px solid #d7b98c;
+        border-radius: 14px;
+        background: #fff7e8;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      figcaption {
+        margin-top: 8px;
+        color: #6b4323;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .checklist {
+        padding-left: 20px;
+      }
+
+      .pillars {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .pillar {
+        padding: 16px;
+        border-radius: 14px;
+        background: #fff7e8;
+        box-shadow: inset 0 0 0 1px #e5c89b;
+      }
+
+      .pillar strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>몽글 매치 퍼즐 메뉴 UI 개선 리포트</h1>
+      <p class="note">
+        Lazyweb MCP의 이미지 검색/비교 도구가 현재 도구 표면에 노출되지 않아, 현재 390x844 캡처와 사용자가 제공한 캐주얼 퍼즐 레퍼런스를 기준으로 Lazyweb식 개선 항목을 정리했다.
+      </p>
+
+      <h2>현재 화면</h2>
+      <div class="grid">
+        <figure>
+          <img src="references/current-menu-before.png" alt="현재 메뉴 캡처" />
+          <figcaption>현재 메뉴: CSS 도형 아이콘과 단순 패널 중심</figcaption>
+        </figure>
+        <figure>
+          <img src="references/user-reference-contact-sheet.jpg" alt="사용자 제공 레퍼런스 모음" />
+          <figcaption>사용자 제공 레퍼런스 요약</figcaption>
+        </figure>
+      </div>
+
+      <h2>진단</h2>
+      <ul class="checklist">
+        <li>현재 메뉴 아이콘은 CSS로 만든 도형이라 게임 에셋처럼 보이지 않고, 버튼 안에서 작은 표식처럼만 읽힌다.</li>
+        <li>타이틀/닫기 버튼/아이콘의 재질감이 모두 CSS 그라데이션에 의존해 화면 전체가 웹 UI 조합처럼 보인다.</li>
+        <li>버튼 자체를 PNG로 만들면 한글 길이와 반응형에서 깨질 가능성이 커진다. 텍스트는 live DOM으로 유지하고, 아이콘과 장식만 PNG로 분리하는 방식이 가장 안전하다.</li>
+        <li>레퍼런스의 강점은 큰 그림자와 유광 버튼보다도, 타이틀/닫기/기능 아이콘마다 독립적인 캐릭터성이 있다는 점이다.</li>
+      </ul>
+
+      <h2>적용 방향</h2>
+      <div class="grid">
+        <figure>
+          <img src="references/menu-assets-contact-sheet-final.jpg" alt="imagegen 메뉴 에셋 시트" />
+          <figcaption>imagegen 기반 메뉴 전용 PNG 에셋 세트</figcaption>
+        </figure>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <strong>PNG 에셋화</strong>
+          메뉴 타이틀 플라크, 닫기 버튼, 7개 메뉴 아이콘, 패널 코너 장식만 imagegen PNG로 만든다.
+        </div>
+        <div class="pillar">
+          <strong>CSS 버튼 유지</strong>
+          버튼의 폭, 높이, 한글 텍스트, 누름 상태, 반응형 레이아웃은 CSS가 관리한다.
+        </div>
+        <div class="pillar">
+          <strong>아이콘 밀도 강화</strong>
+          CSS glyph를 제거하고 젤리/토큰/리본 느낌의 작은 PNG 아이콘을 넣어 앱다운 질감을 만든다.
+        </div>
+        <div class="pillar">
+          <strong>클리핑 방지</strong>
+          닫기 버튼을 패널 안쪽으로 배치하고, 타이틀은 절대 위치지만 모바일 폭에서 좌우 안전 여백을 둔다.
+        </div>
+      </div>
+
+      <h2>구현 체크리스트</h2>
+      <ul class="checklist">
+        <li>`.menu-glyph-*` CSS 도형 제거 후 `img.menu-action-icon`으로 교체한다.</li>
+        <li>`.modal-title`은 PNG 플라크 배경 + live 텍스트 오버레이로 바꾼다.</li>
+        <li>`.modal-close`는 버튼 기능은 유지하되 내부 이미지만 PNG로 교체한다.</li>
+        <li>버튼 좌상단 광택 캡슐/동그라미 장식은 제거하고, 버튼 재질은 CSS gradient + shadow로만 유지한다.</li>
+        <li>390x844에서 `.modal-panel`, `.modal-title`, `.modal-close`, `.modal-menu-grid`의 bounding box가 viewport 안에 들어오는지 확인한다.</li>
+      </ul>
+    </main>
+  </body>
+</html>

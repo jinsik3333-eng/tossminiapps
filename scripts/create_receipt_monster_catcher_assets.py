@@ -74,10 +74,21 @@ def logo(path, dark=False):
     im = Image.new('RGB', (600,600), '#0B1220' if dark else BG)
     d = ImageDraw.Draw(im)
     rounded(d, (72,72,528,528), 130, '#17202C' if dark else '#FFFFFF')
-    d.ellipse((150,126,450,426), fill=PRIMARY)
-    d.text((300,278), '👾', anchor='mm', font=font(142), fill='white')
-    d.rounded_rectangle((194,400,406,444), radius=22, fill='#FFFFFF' if not dark else '#E7FFF4')
-    d.text((300,422), 'CHECK', anchor='mm', font=font(24, True), fill=INK)
+    d.ellipse((132,118,468,454), fill=PRIMARY)
+    # Draw the mascot directly instead of relying on color emoji glyphs, which
+    # can render as missing-character boxes in generated PNGs.
+    paper_fill = '#FFFFFF'
+    paper_outline = '#E0FFF4'
+    d.rounded_rectangle((224,146,376,356), radius=18, fill=paper_fill, outline=paper_outline, width=5)
+    d.polygon([(224,146),(248,168),(272,146),(296,168),(320,146),(344,168),(376,146)], fill=paper_fill)
+    for y in (206, 252, 296):
+        d.line((254, y, 346, y), fill='#BFEBDD', width=9)
+    d.ellipse((246,368,354,476), fill='#FFFFFF', outline=PRIMARY, width=8)
+    d.ellipse((270,400,288,418), fill=PRIMARY)
+    d.ellipse((312,400,330,418), fill=PRIMARY)
+    d.arc((274,416,326,450), 0, 180, fill=PRIMARY, width=7)
+    d.rounded_rectangle((194,438,406,482), radius=22, fill='#FFFFFF' if not dark else '#E7FFF4')
+    d.text((300,460), 'CHECK', anchor='mm', font=font(24, True), fill=INK)
     im.save(path)
 
 

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export type RewardHubLink = {
   label: string;
   description: string;
@@ -16,13 +14,6 @@ type RewardHubProps = {
   questTotal: number;
   links: RewardHubLink[];
   onPrimaryReward: () => void;
-  onOpenNotification: () => void;
-};
-
-type NotificationRewardSheetProps = {
-  open: boolean;
-  appLabel: string;
-  onClose: () => void;
 };
 
 type StickyRewardCTAProps = {
@@ -39,7 +30,6 @@ export function RewardHub({
   questTotal,
   links,
   onPrimaryReward,
-  onOpenNotification,
 }: RewardHubProps) {
   const safeTotal = Math.max(questTotal, 1);
   const percent = Math.min(100, Math.round((questProgress / safeTotal) * 100));
@@ -56,9 +46,6 @@ export function RewardHub({
           <h2>{pointsLabel}</h2>
           <span>보상과 다른 서비스를 한 화면에서 바로 실행해요</span>
         </div>
-        <button className="reward-hub__bell" type="button" onClick={onOpenNotification}>
-          🔔 알림
-        </button>
       </div>
 
       <button className="reward-hub__primary" type="button" onClick={onPrimaryReward}>
@@ -89,86 +76,6 @@ export function RewardHub({
         ))}
       </div>
     </section>
-  );
-}
-
-export function NotificationRewardSheet({
-  open,
-  appLabel,
-  onClose,
-}: NotificationRewardSheetProps) {
-  const [rewardAlertOn, setRewardAlertOn] = useState(true);
-  const [questAlertOn, setQuestAlertOn] = useState(true);
-  const [feedback, setFeedback] = useState("알림을 켜두면 보상 기회를 놓치지 않게 알려드릴게요.");
-
-  const toggleRewardAlert = () => {
-    setRewardAlertOn((current) => {
-      const next = !current;
-      setFeedback(next ? "보상 도착 알림을 켰어요." : "보상 도착 알림을 껐어요.");
-      return next;
-    });
-  };
-
-  const toggleQuestAlert = () => {
-    setQuestAlertOn((current) => {
-      const next = !current;
-      setFeedback(next ? "오늘 퀘스트 알림을 켰어요." : "오늘 퀘스트 알림을 껐어요.");
-      return next;
-    });
-  };
-
-  if (!open) {
-    return null;
-  }
-
-  return (
-    <div className="reward-notify-backdrop" role="presentation" onClick={onClose}>
-      <section
-        className="reward-notify-sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-label={`${appLabel} 알림 설정`}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="reward-notify-sheet__handle" />
-        <h2>알림 설정</h2>
-        <div className="reward-notify-sheet__icon" aria-hidden="true">
-          🔔
-        </div>
-        <button
-          className="reward-notify-row"
-          type="button"
-          role="switch"
-          aria-checked={rewardAlertOn}
-          onClick={toggleRewardAlert}
-        >
-          <div>
-            <strong>보상 도착 알림</strong>
-            <span>새로운 광고 보상이 열리면 알려드려요</span>
-          </div>
-          <span className={`reward-toggle ${rewardAlertOn ? "is-on" : ""}`} aria-hidden="true" />
-        </button>
-        <button
-          className="reward-notify-row"
-          type="button"
-          role="switch"
-          aria-checked={questAlertOn}
-          onClick={toggleQuestAlert}
-        >
-          <div>
-            <strong>오늘 퀘스트 알림</strong>
-            <span>다시 받을 수 있는 혜택을 놓치지 않게 알려드려요</span>
-          </div>
-          <span className={`reward-toggle ${questAlertOn ? "is-on" : ""}`} aria-hidden="true" />
-        </button>
-        <p className="reward-notify-feedback" aria-live="polite">
-          {feedback}
-        </p>
-        <button className="reward-notify-close" type="button" onClick={onClose}>
-          닫기
-        </button>
-      </section>
-    </div>
   );
 }
 

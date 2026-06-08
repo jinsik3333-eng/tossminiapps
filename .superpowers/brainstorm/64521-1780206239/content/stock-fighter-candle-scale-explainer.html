@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>주식 파이터 캔들 크기 / 점프 규칙</title>
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #f4f7fb;
+    color: #14213a;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 28px;
+  }
+
+  .subtitle {
+    margin: 0 0 22px;
+    color: #2d3a52;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .explain-board {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .chart-demo {
+    border: 4px solid #173b7a;
+    background:
+      linear-gradient(rgba(35, 86, 140, 0.16) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(35, 86, 140, 0.16) 1px, transparent 1px),
+      #fbfdff;
+    background-size: 34px 34px;
+    min-height: 520px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 10px 10px 0 #000;
+  }
+
+  .track {
+    position: absolute;
+    left: -20px;
+    right: -20px;
+    bottom: 92px;
+    height: 270px;
+  }
+
+  .candle {
+    --x: 0;
+    --h: 80;
+    --b: 130;
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    bottom: calc(var(--b) * 1px);
+    width: 18px;
+    height: calc(var(--h) * 1px);
+    background: #e93630;
+    box-shadow: 3px 3px 0 rgba(0,0,0,.22);
+  }
+
+  .candle.blue {
+    background: #1768df;
+  }
+
+  .candle::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: -18px;
+    width: 4px;
+    height: calc(100% + 36px);
+    background: inherit;
+  }
+
+  .candle.current {
+    outline: 4px solid #ffd641;
+    box-shadow:
+      0 0 0 7px rgba(255,214,65,.24),
+      0 0 18px rgba(255, 97, 35, .75),
+      3px 3px 0 rgba(0,0,0,.22);
+  }
+
+  .candle.next {
+    outline: 3px dashed #20d6ff;
+  }
+
+  .sprite {
+    position: absolute;
+    left: 45%;
+    bottom: 250px;
+    width: 64px;
+    height: 72px;
+    transform: translateX(-50%);
+  }
+
+  .sprite::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 0;
+    width: 26px;
+    height: 22px;
+    background: #a65a28;
+    box-shadow: 10px 0 0 #ffd08b, 0 10px 0 #5a2a15;
+  }
+
+  .sprite::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 28px;
+    width: 36px;
+    height: 34px;
+    background: #f7f0dc;
+    box-shadow: -12px 8px 0 #e43a33, 12px 8px 0 #e43a33;
+  }
+
+  .chaser {
+    left: 28%;
+    bottom: 190px;
+    filter: hue-rotate(210deg) brightness(.72);
+  }
+
+  .arc {
+    position: absolute;
+    left: 45%;
+    bottom: 245px;
+    width: 160px;
+    height: 82px;
+    border-top: 4px dashed rgba(235, 59, 46, .85);
+    border-radius: 80px 80px 0 0;
+    transform: translateX(-20%);
+  }
+
+  .label {
+    position: absolute;
+    background: #10294f;
+    color: #fff;
+    border: 2px solid #ffd641;
+    padding: 6px 8px;
+    font-weight: 800;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .label.current-label {
+    left: 39%;
+    bottom: 375px;
+  }
+
+  .label.next-label {
+    left: 64%;
+    bottom: 360px;
+    background: #0d74a5;
+  }
+
+  .label.chaser-label {
+    left: 17%;
+    bottom: 300px;
+    background: #461b44;
+  }
+
+  .rules {
+    display: grid;
+    gap: 10px;
+  }
+
+  .rule {
+    border: 2px solid #2c4d83;
+    background: #f7fbff;
+    color: #14213a;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .rule strong {
+    display: block;
+    color: #d3382f;
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 960px) {
+    .explain-board {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h2>캔들 크기 / 점프 규칙 정리</h2>
+<p class="subtitle">미니게임 실제 구현 기준입니다. v2 콘셉트 이미지처럼 특정 캔들이 과하게 커지는 방식은 피하는 게 맞습니다.</p>
+
+<div class="explain-board">
+  <section class="chart-demo">
+    <div class="track">
+      <i class="candle blue" style="--x:2;--h:72;--b:64"></i>
+      <i class="candle" style="--x:10;--h:54;--b:82"></i>
+      <i class="candle blue" style="--x:18;--h:86;--b:96"></i>
+      <i class="candle blue" style="--x:26;--h:68;--b:118"></i>
+      <i class="candle" style="--x:34;--h:92;--b:142"></i>
+      <i class="candle current" style="--x:44;--h:96;--b:160"></i>
+      <i class="candle blue next" style="--x:56;--h:76;--b:190"></i>
+      <i class="candle" style="--x:66;--h:88;--b:210"></i>
+      <i class="candle blue" style="--x:76;--h:70;--b:232"></i>
+      <i class="candle" style="--x:86;--h:96;--b:244"></i>
+      <i class="candle" style="--x:96;--h:118;--b:254"></i>
+    </div>
+    <i class="sprite chaser"></i>
+    <i class="sprite"></i>
+    <i class="arc"></i>
+    <span class="label chaser-label">추격자: 2캔들 뒤</span>
+    <span class="label current-label">현재 발판</span>
+    <span class="label next-label">다음 착지</span>
+  </section>
+
+  <section class="rules">
+    <div class="rule">
+      <strong>캔들 크기</strong>
+      전체 캔들은 실제 차트처럼 비슷한 폭으로 유지. 높이는 가격 변동폭처럼 다르지만, 현재 캔들만 갑자기 커지지는 않음.
+    </div>
+    <div class="rule">
+      <strong>현재 캔들 강조</strong>
+      밟고 있는 캔들은 노란 테두리, 착지 스파크, 미세한 빛으로만 강조. 크기는 최대 1.05배 정도만 허용.
+    </div>
+    <div class="rule">
+      <strong>점프 판정</strong>
+      정답 입력 시 주인공이 다음 캔들 상단 좌표로 포물선 이동. 오답/지연이면 제자리 착지 실패처럼 흔들리고 추격자가 1칸 접근.
+    </div>
+    <div class="rule">
+      <strong>추격자 위치</strong>
+      추격자는 기본 2캔들 뒤. 실수할 때마다 1캔들씩 가까워지고, 3번째 실수에서 KO 연출.
+    </div>
+  </section>
+</div>
+</body>
+</html>

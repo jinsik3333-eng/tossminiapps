@@ -40,6 +40,16 @@ describe("home layout contract", () => {
     assert.match(appSource, /차트 판독 훈련/);
   });
 
+  it("opens the intro cutscene from the local preview URL", () => {
+    assert.match(
+      appSource,
+      /type LocalPreviewMode = "intro" \| "ending" \| "quiz" \| "chase" \| null;/,
+    );
+    assert.match(appSource, /preview !== "intro"/);
+    assert.match(appSource, /const isIntroPreview = localPreviewMode === "intro";/);
+    assert.match(appSource, /isIntroPreview\s*\?\s*"intro"/);
+  });
+
   it("uses one main fighter profile followed by hidden fighters in the home grid", () => {
     const roster = homeRosterMarkup();
 

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>주식 파이터 미니게임 전환 / 결과 v1</title>
+<style>
+  :root {
+    --red: #e93630;
+    --blue: #1768df;
+    --gold: #ffd641;
+    --ink: #101827;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background:
+      linear-gradient(rgba(23, 104, 223, .08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(233, 54, 48, .08) 1px, transparent 1px),
+      #f4f7fb;
+    background-size: 28px 28px;
+    color: #14213a;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  main {
+    width: min(1220px, 100%);
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 30px;
+  }
+
+  .lead {
+    margin: 0 0 22px;
+    color: #2d3a52;
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .phone {
+    border: 6px solid #05070c;
+    border-radius: 28px;
+    background: #070a12;
+    padding: 10px;
+    box-shadow: 10px 10px 0 #111827;
+  }
+
+  .screen {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 9 / 16;
+    border: 4px solid #233b77;
+    border-radius: 18px;
+    background: #000;
+  }
+
+  .screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  .skip {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 4;
+    border: 2px solid #fff3bd;
+    background: #111827;
+    color: #fff3bd;
+    padding: 7px 10px;
+    font: 900 13px/1 Impact, "Arial Black", sans-serif;
+    letter-spacing: .5px;
+    box-shadow: 3px 3px 0 #000;
+  }
+
+  .caption {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 3;
+    border: 3px solid #fff3bd;
+    background: rgba(7, 10, 18, .9);
+    color: #fff8d1;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.45;
+    text-shadow: 2px 2px 0 #000;
+    box-shadow: 5px 5px 0 #000;
+  }
+
+  .caption strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--gold);
+    font: 900 22px/1 Impact, "Arial Black", sans-serif;
+    text-shadow: 2px 2px 0 #d3382f, 4px 4px 0 #1d5ed1;
+  }
+
+  .center-copy {
+    position: absolute;
+    inset: 36% 12% auto;
+    z-index: 3;
+    color: #fff8d1;
+    text-align: center;
+    font-size: clamp(18px, 4vw, 24px);
+    font-weight: 1000;
+    line-height: 1.35;
+    text-shadow: 3px 3px 0 #000;
+  }
+
+  .countdown {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    color: #ffd641;
+    font: 900 76px/1 Impact, "Arial Black", sans-serif;
+    text-shadow: 4px 4px 0 #d3382f, 8px 8px 0 #1768df, 0 0 16px #fff;
+    animation: pulse 1.2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(.96); opacity: .78; }
+    45% { transform: scale(1.08); opacity: 1; }
+  }
+
+  .meta {
+    margin-top: 12px;
+    border: 3px solid #f7d35d;
+    background: #101827;
+    color: #e8f7ff;
+    padding: 12px;
+    box-shadow: 6px 6px 0 #000;
+  }
+
+  .meta h2 {
+    margin: 0 0 6px;
+    color: #ffe75a;
+    font: 900 22px/1 Impact, "Arial Black", sans-serif;
+    text-shadow: 2px 2px 0 #d3382f, 4px 4px 0 #1d5ed1;
+  }
+
+  .meta p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 980px) {
+    main {
+      padding: 16px;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      max-width: 390px;
+      margin: 0 auto;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>미니게임 전환 / 결과 v1</h1>
+  <p class="lead">퀴즈 5콤보 후 미니게임 화면 위에 뜨는 중앙 알림, 실패 엔딩, 성공 엔딩입니다. 실제 앱에서는 이미지 위 텍스트와 버튼을 HTML로 얹습니다.</p>
+
+  <section class="grid">
+    <article>
+      <div class="phone">
+        <div class="screen">
+          <img src="minigame-flow/stock-fighter-minigame-popup-v1.png" alt="미니게임 설명 팝업" />
+          <button class="skip" type="button">SKIP</button>
+          <div class="center-copy">
+            장 끝나기 전<br />
+            20초를 불태워야 한다!
+          </div>
+          <div class="caption">
+            <strong>HOW TO FIGHT</strong>
+            빨간 상승봉은 오른쪽! 파란 하락봉은 왼쪽! 늦거나 틀리면 깡패가 다가온다.
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <h2>설명 팝업</h2>
+        <p>미니게임 화면은 정지된 상태로 깔고, 중앙 팝업만 1~2장으로 넘깁니다. SKIP은 바로 카운트다운으로 이동합니다.</p>
+      </div>
+    </article>
+
+    <article>
+      <div class="phone">
+        <div class="screen">
+          <img src="minigame-flow/stock-fighter-minigame-fail-v1.png" alt="실패 엔딩" />
+          <div class="caption">
+            <strong>털렸다...</strong>
+            무지성 매수보다 아픈 엔딩. 광고 보고 1회 부활할 수 있다.
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <h2>실패 엔딩</h2>
+        <p>3번째 실수 또는 지연 입력 누적으로 잡히면 깡패가 주머니를 털어가는 B급 슬랩스틱 결과 화면입니다.</p>
+      </div>
+    </article>
+
+    <article>
+      <div class="phone">
+        <div class="screen">
+          <img src="minigame-flow/stock-fighter-minigame-success-v1.png" alt="성공 엔딩" />
+          <div class="countdown">GO!</div>
+          <div class="caption">
+            <strong>상한가!</strong>
+            오늘의 개미는 살아남았다. 20콤보 달성 시 힌트 +1.
+          </div>
+        </div>
+      </div>
+      <div class="meta">
+        <h2>성공 엔딩</h2>
+        <p>20초 생존 성공 시 돈을 들고 환호하는 개미와 상한가 연출을 보여줍니다. 보상은 힌트 최대 3개까지.</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

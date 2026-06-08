@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import heroImage from "./assets/receipt-monster-hero.jpg";
 import "./App.css";
 import { TossBannerAd } from "./components/TossBannerAd";
-import { NotificationRewardSheet, RewardHub, StickyRewardCTA } from "./components/RewardHub";
+import { RewardHub, StickyRewardCTA } from "./components/RewardHub";
 import { useInAppAds } from "./hooks/useInAppAds";
 import { openContactsViralReward } from "./hooks/useContactsViralReward";
 
@@ -97,7 +97,6 @@ function App() {
   const [combo, setCombo] = useState(0);
   const [stamps, setStamps] = useState<string[]>(() => readStamps());
   const [routineOpen, setRoutineOpen] = useState(false);
-  const [isRewardNotifyOpen, setIsRewardNotifyOpen] = useState(false);
   const [pendingRewardCount, setPendingRewardCount] = useState<number | null>(null);
   const [caughtAt, setCaughtAt] = useState<string | null>(null);
   const ads = useInAppAds(REWARDED_AD_GROUP_ID);
@@ -188,8 +187,6 @@ function App() {
 
   return (
     <main className="app-shell">
-      <RetentionNudge />
-
       {screen === "home" ? (
         <>
           <section className="hero-card">
@@ -314,14 +311,8 @@ function App() {
             questTotal={1}
             links={REWARD_APP_LINKS.filter((link) => link.href !== "intoss://receipt-monster-catcher")}
             onPrimaryReward={openRewardRoutine}
-            onOpenNotification={() => setIsRewardNotifyOpen(true)}
           />
           <StickyRewardCTA label="광고 보고 소비 결과 받기" onClick={openRewardRoutine} />
-          <NotificationRewardSheet
-            open={isRewardNotifyOpen}
-            appLabel="영수증 몬스터 잡기"
-            onClose={() => setIsRewardNotifyOpen(false)}
-          />
           <ResultActionMenu
             items={[
               { label: "AD 몬스터 보상", onClick: openRewardRoutine },
@@ -377,19 +368,6 @@ function Feature({ title, desc }: { title: string; desc: string }) {
       <strong>{title}</strong>
       <span>{desc}</span>
     </div>
-  );
-}
-
-function RetentionNudge() {
-  return (
-    <section
-      className="utility-nudge"
-      aria-label="영수증 몬스터 잡기 알림과 로그인 안내"
-    >
-      <strong>내일도 몬스터 등장</strong>
-      <p>알림을 켜면 내일의 소비 몬스터를 놓치지 않아요.</p>
-      <p>로그인하면 기록을 더 안전하게 이어볼 수 있어요.</p>
-    </section>
   );
 }
 
