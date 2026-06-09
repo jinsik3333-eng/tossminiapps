@@ -291,3 +291,17 @@
 - 구현: 초급 40개, 중급 30개, 고급 30개 총 100개 퀴즈와 기본 1명 + 히든 19명 파이터 데이터를 추가했다. 5연속 정답 후 차트 추격전, 20초 생존, 3실수 KO, 20콤보 무적/힌트 보상을 순수 로직으로 분리했다.
 - 광고: 보상형 광고 bridge가 없거나 로컬이면 `광고 보고` CTA를 활성 광고 버튼으로 보이지 않게 하고 준비 상태로 둔다. 실제 보상은 완료 이벤트 확인 시에만 선택권/부활권을 지급하도록 분리했다.
 - 검증: `apps/18-stock-fighter`에서 `npm run test:logic`, `npm run lint`, `npm run build` 성공. build deploymentId는 `019e7c01-a317-7a5d-89fc-0b7977bf53b0`.
+
+## 2026-06-09: 18 주식 파이터 앱인토스 테스트 이슈 수정
+
+- 원인: 차트 판독 10콤보 보라 무적 효과는 순수 로직상 1.5초였지만, UI 타이머 effect가 `miniGame` 상태에 의존해 입력/틱마다 interval을 재시작했다. 빠르게 입력하면 150ms 차감 틱이 밀려 2~3초처럼 보일 수 있었다.
+- 처리: 차트 타이머를 `performance.now()` 기반 실제 경과 시간으로 차감하고, `miniGame` 리렌더와 무관하게 유지되도록 effect 의존성을 정리했다. 홈은 `min-height: 100svh` 확장형에서 `height: 100dvh` 고정형으로 바꾸고 타이틀/캐릭터 그리드/CTA 높이를 줄여 다른 화면보다 길어 보이는 문제를 줄였다.
+- 검증: `apps/18-stock-fighter`에서 `npm run verify:full` 성공. build deploymentId는 `019eaa43-4568-7a76-9014-c560236763bf`.
+- QA: in-app Browser 390x844에서 홈 document/home 높이가 모두 844px으로 맞고 스크롤 확장 없음 확인. `?preview=chase`에서 10회 연속 정답 후 콤보 효과가 첫 가시 상태 확인 기준 약 1.23초 뒤 해제되어 2~3초 잔류가 없음을 확인했다. 로컬 브라우저 한정 Toss SafeAreaInsets 경고는 기존과 동일하게 남는다.
+
+## 2026-06-09: 18 주식 파이터 도감 헤더 제목 가독성 수정
+
+- 원인: 도감 화면 `캐릭터 카드 도감` 제목이 공통 `strong` 색상 상속에 의존해 로컬 렌더에서 `rgb(33, 37, 41)` 어두운 색으로 계산됐다. 어두운 도감 헤더 배경 위에서 제목이 거의 보이지 않았다.
+- 처리: `.collection-screen .topbar strong`과 `.collection-screen .topbar .kicker`에 밝은 전용 색상과 텍스트 그림자를 지정하고, 도감 헤더 배경을 조금 더 불투명하게 조정했다.
+- 검증: `apps/18-stock-fighter`에서 `npm run verify:full`, `./node_modules/.bin/tsc --noEmit -p tsconfig.app.json`, `git diff --check` 성공. build deploymentId는 `019eaa4d-9b9c-77d5-966a-800b1b08faea`.
+- QA: in-app Browser 모바일 뷰에서 도감 진입 후 제목 계산 색상이 `rgb(255, 239, 99)`, 키커 색상이 `rgb(125, 249, 255)`로 바뀌고 첫 화면 스크린샷에서 제목이 선명하게 보이는 것을 확인했다. 로컬 브라우저 한정 Toss SafeAreaInsets 경고는 기존과 동일하게 남는다.

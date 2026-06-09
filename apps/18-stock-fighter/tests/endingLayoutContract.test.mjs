@@ -65,15 +65,15 @@ describe("ending and hidden fighter reward contract", () => {
     assert.match(appSource, /setEndingIndex\(completionEndingIndex\(nextState\)\)/);
   });
 
-  it("exposes local-only ending, quiz, and chase previews for hidden fighter QA", () => {
-    assert.match(appSource, /type LocalPreviewMode = "ending" \| "quiz" \| "chase" \| null/);
+  it("exposes local-only intro, ending, quiz, and chase previews for QA", () => {
+    assert.match(appSource, /type LocalPreviewMode = "intro" \| "ending" \| "quiz" \| "chase" \| null/);
     assert.match(appSource, /function getLocalPreviewMode\(\): LocalPreviewMode/);
     assert.match(appSource, /hostname === "localhost"/);
     assert.match(appSource, /hostname === "127\.0\.0\.1"/);
     assert.match(appSource, /hostname === "::1"/);
-    assert.match(appSource, /preview !== "ending" && preview !== "quiz" && preview !== "chase"/);
+    assert.match(appSource, /preview !== "intro" && preview !== "ending" && preview !== "quiz" && preview !== "chase"/);
     assert.match(appSource, /function getLocalPreviewFighterId\(\)/);
-    assert.match(appSource, /const initialScreen: Screen = isEndingPreview \? "ending" : isQuizPreview \? "quiz" : isChasePreview \? "chase" : "home"/);
+    assert.match(appSource, /const initialScreen: Screen = isIntroPreview\s*\? "intro"\s*: isEndingPreview\s*\? "ending"\s*: isQuizPreview\s*\? "quiz"\s*: isChasePreview\s*\? "chase"\s*: "home"/);
     assert.match(appSource, /if \(localPreviewMode != null\) \{\s*return;\s*\}/);
   });
 

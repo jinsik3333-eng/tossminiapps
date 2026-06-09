@@ -164,6 +164,16 @@ describe("chart chase layout contract", () => {
     );
   });
 
+  it("keeps the 1.5-second combo effect clock independent from mini-game rerenders", () => {
+    const effect = appSource.match(
+      /useEffect\(\(\) => \{[\s\S]*?const timerDelayMs = CHASE_TICK_MS \/ 4;[\s\S]*?tickMiniGame\(game,\s*elapsedMs,[\s\S]*?\}, \[([^\]]*)\]\);/,
+    );
+
+    assert.ok(effect, "chase timer effect should be present");
+    assert.match(effect[0], /performance\.now\(\)/);
+    assert.doesNotMatch(effect[1], /\bminiGame\b/);
+  });
+
   it("sizes hidden fighter runners large enough for the chart chase", () => {
     assert.match(
       cssSource,

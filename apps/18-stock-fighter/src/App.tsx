@@ -760,18 +760,22 @@ function App() {
   useEffect(() => {
     if (
       screen !== "chase" ||
-      miniGame == null ||
-      miniGame.ended ||
       isChasePaused ||
       chaseOverlay != null
     ) {
       return undefined;
     }
 
-    const elapsedMs = CHASE_TICK_MS / 4;
+    const timerDelayMs = CHASE_TICK_MS / 4;
+    let lastTickMs = performance.now();
     const timer = window.setInterval(() => {
+      const nowMs = performance.now();
+      const elapsedMs = Math.max(0, nowMs - lastTickMs);
+      lastTickMs = nowMs;
+
       setMiniGame((game) => {
-        if (game == null) {
+        if (game == null || game.ended) {
+          window.clearInterval(timer);
           return game;
         }
 
@@ -792,12 +796,16 @@ function App() {
           );
         }
 
+        if (nextGame.ended) {
+          window.clearInterval(timer);
+        }
+
         return nextGame;
       });
-    }, elapsedMs);
+    }, timerDelayMs);
 
     return () => window.clearInterval(timer);
-  }, [advanceCandleBy, chaseOverlay, isChasePaused, miniGame, screen]);
+  }, [advanceCandleBy, chaseOverlay, isChasePaused, screen]);
 
   useEffect(() => {
     if (

@@ -65,6 +65,14 @@ describe("home layout contract", () => {
     assert.doesNotMatch(cssSource, /home-screen-v2\.png/);
   });
 
+  it("pins the home screen to the dynamic viewport instead of expanding taller than other screens", () => {
+    const homeRule = cssSource.match(/\.home-screen\s*{[\s\S]*?\n}/)?.[0] ?? "";
+
+    assert.match(homeRule, /height:\s*100dvh;/);
+    assert.match(homeRule, /min-height:\s*0;/);
+    assert.doesNotMatch(homeRule, /min-height:\s*100svh;/);
+  });
+
   it("only highlights the ant card when the ant is the selected fighter", () => {
     const roster = homeRosterMarkup();
     const mainFighterRule = cssSource.match(/\.home-main-fighter\s*{[\s\S]*?\n}/)?.[0] ?? "";
@@ -90,7 +98,7 @@ describe("home layout contract", () => {
     assert.doesNotMatch(appSource, /100문항 상식을 깨고 투지 10칸마다 차트 추격전에 뛰어든다\./);
     assert.match(
       cssSource,
-      /\.home-title-plate\s*{[\s\S]*?margin-top:\s*clamp\(46px,\s*7svh,\s*72px\);[\s\S]*?min-height:\s*104px;/,
+      /\.home-title-plate\s*{[\s\S]*?margin-top:\s*clamp\(30px,\s*5svh,\s*54px\);[\s\S]*?min-height:\s*96px;/,
     );
     assert.match(
       cssSource,
@@ -119,7 +127,7 @@ describe("home layout contract", () => {
   it("right-aligns square fighter cards so the ant-fighter background remains visible", () => {
     assert.match(
       cssSource,
-      /\.home-roster\s*{[\s\S]*?margin-top:\s*clamp\(54px,\s*7svh,\s*78px\);[\s\S]*?width:\s*min\(45vw,\s*190px\);[\s\S]*?margin-left:\s*auto;/,
+      /\.home-roster\s*{[\s\S]*?margin-top:\s*clamp\(28px,\s*5svh,\s*48px\);[\s\S]*?width:\s*min\(38vw,\s*156px\);[\s\S]*?margin-left:\s*auto;/,
     );
     assert.match(
       cssSource,
@@ -135,7 +143,7 @@ describe("home layout contract", () => {
     );
     assert.match(
       cssSource,
-      /\.home-fighter-tile strong\s*{[\s\S]*?font-size:\s*13px;/,
+      /\.home-fighter-tile strong\s*{[\s\S]*?font-size:\s*10px;/,
     );
   });
 
@@ -199,6 +207,20 @@ describe("home layout contract", () => {
     assert.doesNotMatch(collection, /<RewardPanel/);
     assert.doesNotMatch(collection, /rewardStatus/);
     assert.doesNotMatch(collection, /isRewardReady/);
+  });
+
+  it("keeps the collection title readable over the dark card book header", () => {
+    const collection = collectionMarkup();
+
+    assert.match(collection, /<strong>캐릭터 카드 도감<\/strong>/);
+    assert.match(
+      cssSource,
+      /\.collection-screen \.topbar strong\s*{[\s\S]*?color:\s*#ffef63;[\s\S]*?font-size:\s*18px;[\s\S]*?text-shadow:\s*2px 2px 0 #000;/,
+    );
+    assert.match(
+      cssSource,
+      /\.collection-screen \.topbar \.kicker\s*{[\s\S]*?color:\s*#7df9ff;[\s\S]*?text-shadow:\s*1px 1px 0 #000;/,
+    );
   });
 
   it("adds a yellow rewarded-ad unlock action under the locked hidden fighter waiting button", () => {
