@@ -29,8 +29,8 @@ const COLLECTION_KEY = `${APP_SLUG}-collection-v1`;
 const BANNER_AD_GROUP_ID = import.meta.env.VITE_TOSS_BANNER_AD_GROUP_ID ?? "";
 const REWARDED_AD_GROUP_ID = import.meta.env.VITE_TOSS_REWARDED_AD_GROUP_ID ?? "";
 const todayKst = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
-const DAILY_STAMP = todayKst.replaceAll("-", ".");
-const daySeed = Number(todayKst.replaceAll("-", ""));
+const DAILY_STAMP = todayKst.replace(/-/g, ".");
+const daySeed = Number(todayKst.replace(/-/g, ""));
 
 const RUN_COURSES = ["별비 골목", "구름 터널", "무지개 언덕"];
 const RUN_MISSIONS = ["별 5연속", "구름 사이 통과", "무지개 조각 찾기"];

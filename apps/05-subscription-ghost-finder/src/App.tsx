@@ -609,7 +609,7 @@ function App() {
           <div className="history-grid">
             {Array.from({ length: 7 }).map((_, itemIndex) => {
               const item = history[itemIndex];
-              const score = item?.split(":").at(-1) ?? "-";
+              const score = item?.slice(item.lastIndexOf(":") + 1) ?? "-";
               return <span key={itemIndex}>{score}</span>;
             })}
           </div>
