@@ -15,35 +15,46 @@ export function useTossBanner({ adGroupId, container }: UseTossBannerOptions) {
       return;
     }
 
-    let detached: (() => void) | undefined;
+    const target = container;
+    let destroy: (() => void) | undefined;
     let cancelled = false;
 
-    async function attach() {
+    function onFailure(error: unknown) {
+      if (cancelled) {
+        return;
+      }
+      console.info("배너 광고는 토스앱/샌드박스에서 확인할 수 있어요.", error);
+      setIsSupported(false);
+      setIsRendered(false);
+    }
+
+    function attach() {
       try {
-        if (!TossAds?.initialize || !TossAds?.attachBanner) {
+        if (!TossAds.initialize.isSupported()) {
           setIsSupported(false);
           return;
         }
 
         setIsSupported(true);
-        await TossAds.initialize();
-
-        if (cancelled) {
-          return;
-        }
-
-        detached = TossAds.attachBanner({
-          adGroupId,
-          root: container,
+        TossAds.initialize({
+          callbacks: {
+            onInitialized: () => {
+              if (cancelled) {
+                return;
+              }
+              try {
+                const banner = TossAds.attachBanner(adGroupId, target);
+                destroy = () => banner.destroy();
+                setIsRendered(true);
+              } catch (error) {
+                onFailure(error);
+              }
+            },
+            onInitializationFailed: onFailure,
+          },
         });
-        setIsRendered(true);
       } catch (error) {
-        console.info(
-          "배너 광고는 토스앱/샌드박스에서 확인할 수 있어요.",
-          error,
-        );
-        setIsSupported(false);
-        setIsRendered(false);
+        onFailure(error);
       }
     }
 
@@ -52,7 +63,7 @@ export function useTossBanner({ adGroupId, container }: UseTossBannerOptions) {
     return () => {
       cancelled = true;
       try {
-        detached?.();
+        destroy?.();
       } catch (error) {
         console.error("배너 광고 정리 중 오류", error);
       }

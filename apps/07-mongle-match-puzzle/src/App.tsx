@@ -1707,7 +1707,7 @@ function App() {
   async function handleLeaderboard() {
     setActivePanel("ranking");
     const result = await openLeaderboardSafe();
-    if (result.status !== "success") {
+    if (result.status === "fallback") {
       setMessage("토스 리더보드가 열리지 않으면 게임 안 순위판을 먼저 보여드려요");
     }
   }

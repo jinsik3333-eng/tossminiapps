@@ -686,7 +686,7 @@ function App() {
           <Top.TitleParagraph size={22}>구독료 유령 찾기</Top.TitleParagraph>
         }
         subtitleBottom={
-          <Top.SubtitleParagraph size={16}>
+          <Top.SubtitleParagraph size={15}>
             안 쓰는데 매달 빠지는 돈, 60초 점검
           </Top.SubtitleParagraph>
         }
