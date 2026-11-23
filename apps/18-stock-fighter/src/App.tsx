@@ -582,7 +582,7 @@ function App() {
       return;
     }
 
-    let supported = false;
+    let supported: boolean;
 
     try {
       supported = loadFullScreenAd.isSupported();
