@@ -31,9 +31,11 @@
 
 ## 2026-05-07 — WebView 앱 브랜드 아이콘 공통 규칙
 
-- 결정: 모든 WebView 미니앱은 `public/app-icon.png`를 앱별 고유 아이콘으로 두고, `granite.config.ts`의 `brand.icon`은 `https://{appName}.apps.tossmini.com/app-icon.png` 형식으로 채운다.
-- 이유: `brand.icon` 빈 값은 Apps in Toss 검수에서 콘솔 등록 아이콘과 불일치로 반려될 수 있다.
-- 운영: AIT 업로드 전 콘솔 앱 정보의 브랜드 아이콘에 같은 PNG를 업로드하고, `npm run build` 산출물을 새로 등록한다.
+- 모든 WebView 미니앱은 `public/app-icon.png`에 앱별 아이콘을 보관한다. SDK 3.x에서는 앱 표시 이름, 아이콘, 게임 유형을 앱인토스 콘솔에서 확인한다.
+- `apps-in-toss.config.ts`에 앱 식별자와 WebView 설정을 둔다. 기존 앱의 `brand.primaryColor`는 TDS 및 호스트 호환성을 위해 유지한다.
+- `npm run dev`는 앱별 포트에서 Vite를 실행하고, `npm run build`는 Vite 번들과 `.ait` 파일을 만든다. 콘솔 QR에서 기존 저장 데이터, 공유, 광고, 게임 센터를 확인한다.
+
+[앱인토스 SDK 3.x 마이그레이션](https://developers-apps-in-toss.toss.im/documentation/integration/sdk-3.x)
 
 ## 2026-05-07 — 보조 메뉴와 광고 게이트 분리
 

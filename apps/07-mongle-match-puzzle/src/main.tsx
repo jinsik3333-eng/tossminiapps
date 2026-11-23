@@ -2,7 +2,7 @@
 import { StrictMode, type ComponentType, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 
-import config from "../granite.config.ts";
+import config from "../apps-in-toss.config.ts";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -43,7 +43,11 @@ async function resolveAppProvider(): Promise<ComponentType<AppProviderProps>> {
     const { TDSMobileAITProvider } = (await import("@toss/tds-mobile-ait")) as TDSMobileAITModule;
 
     return function TossProvider({ children }: AppProviderProps) {
-      return <TDSMobileAITProvider brandPrimaryColor={config.brand.primaryColor}>{children}</TDSMobileAITProvider>;
+      return (
+        <TDSMobileAITProvider brandPrimaryColor={config.brand?.primaryColor ?? "#3182F6"}>
+          {children}
+        </TDSMobileAITProvider>
+      );
     };
   } catch (error) {
     console.info("TDS provider unavailable in this browser preview; using fallback.", error);

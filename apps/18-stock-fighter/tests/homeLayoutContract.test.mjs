@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 
 const appSource = readFileSync(new URL("../src/App.tsx", import.meta.url), "utf8");
-const graniteConfigSource = readFileSync(new URL("../granite.config.ts", import.meta.url), "utf8");
+const appsInTossConfigSource = readFileSync(new URL("../apps-in-toss.config.ts", import.meta.url), "utf8");
 const cssSource = readFileSync(new URL("../src/App.css", import.meta.url), "utf8");
 
 function homeRosterMarkup() {
@@ -35,7 +35,7 @@ function collectionMarkup() {
 
 describe("home layout contract", () => {
   it("positions the app as a non-game education quiz miniapp for launch", () => {
-    assert.doesNotMatch(graniteConfigSource, /type:\s*"game"/);
+    assert.doesNotMatch(appsInTossConfigSource, /type:\s*"game"/);
     assert.match(appSource, /퀴즈 학습/);
     assert.match(appSource, /차트 판독 훈련/);
   });

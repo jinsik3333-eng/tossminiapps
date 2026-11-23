@@ -1558,7 +1558,7 @@ function App() {
             </Top.TitleParagraph>
           }
           subtitleBottom={
-            <Top.SubtitleParagraph size={16}>
+            <Top.SubtitleParagraph size={15}>
               {today.theme}
             </Top.SubtitleParagraph>
           }
@@ -1615,7 +1615,7 @@ function App() {
             <Top.TitleParagraph size={22}>오늘 전투 끝</Top.TitleParagraph>
           }
           subtitleBottom={
-            <Top.SubtitleParagraph size={16}>
+            <Top.SubtitleParagraph size={15}>
               스탬프 1개 획득
             </Top.SubtitleParagraph>
           }
@@ -1737,7 +1737,7 @@ function App() {
           <Top.TitleParagraph size={22}>오늘의 헛돈 방어전</Top.TitleParagraph>
         }
         subtitleBottom={
-          <Top.SubtitleParagraph size={16}>
+          <Top.SubtitleParagraph size={15}>
             5초 안에 고르면 방어 성공
           </Top.SubtitleParagraph>
         }
